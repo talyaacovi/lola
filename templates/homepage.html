@@ -1,10 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% if "user_id" in session %}
-  <a href='/logout'>Logout</a>
+<p id='logout-msg'></p>
 
-{% else %}
+
+<div id='logout'
+    {% if not session.get('user_id') %}
+        hidden
+    {% endif %}>
+
+    <button id='logout-btn'>Logout</button>
+
+</div>
+
+<div id='login'
+    {% if session.get('user_id') %}
+        hidden
+    {% endif %}>
+
+    <div id='login-form'>
       <form action='/login' method='POST'>
 
         <label>Email:
@@ -18,12 +32,11 @@
         <input type='submit' value='Login'>
 
       </form>
+    </div>
+    Don't have an account? <a href='/signup-form'>Sign Up</a>
+</div>
 
-  Don't have an account? <a href='/signup-form'>Sign Up</a>
-
-{% endif %}
-
-<h1> Where do the locals eat? </h1>
+<h1>Where do the locals eat?</h1>
 
 
 {% endblock %}

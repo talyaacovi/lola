@@ -9,16 +9,16 @@ def load_zips():
 
     print "Zipcodes"
 
-    for row in open('zipcodes.csv'):
-        row = row.rstrip()
-        zipcode, city, state = row.split(",")
+    with open('zipcodes.csv') as f:
+        for row in f:
+            row = row.rstrip()
+            zipcode, city, state = row.split(",")
 
-        zipcode = Zipcode(zipcode=zipcode,
-                          city=city,
-                          state=state)
+            zipcode = Zipcode(zipcode=zipcode,
+                              city=city,
+                              state=state)
 
-        # We need to add to the session or it won't ever be stored
-        db.session.add(zipcode)
+            db.session.add(zipcode)
 
     db.session.commit()
 

@@ -22,6 +22,36 @@ def index():
     return render_template('homepage.html')
 
 
+@app.route('/login', methods=['POST'])
+def login():
+    """Log user in to their account."""
+
+    email = request.form.get('email')
+    user_password = request.form.get('password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if user.password == user_password:
+        flash('You have successfully logged in!')
+
+        session['user_id'] = user.user_id
+        return redirect('/users/{}'.format(user.username))
+
+    else:
+        flash('Incorrect password, please try again.')
+
+        return redirect('/')
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    """Log out user."""
+
+    del session['user_id']
+
+    return 'You have successfully logged out.'
+
+
 @app.route('/signup-form')
 def signup_page():
     """Display signup page."""
@@ -47,11 +77,14 @@ def signup():
     db.session.add(user)
     db.session.commit()
 
-    return redirect('/users/{}'.format(user.user_id))
+    session['user_id'] = user.user_id
+    print session['user_id']
+
+    return redirect('/users/{}'.format(user.username))
 
 
-@app.route('/users/<int:user_id>')
-def profile_page(user_id):
+@app.route('/users/<username>')
+def profile_page(username):
     """User profile page."""
 
     return render_template('profile.html')
