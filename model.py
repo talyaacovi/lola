@@ -85,7 +85,7 @@ class Restaurant(db.Model):
     lng = db.Column(db.Integer, nullable=False)
     # yelp_rating = db.Column(db.Integer)
     # yelp_price = db.Column(db.String(64))
-    yelp_id = db.Column(db.Integer)
+    yelp_id = db.Column(db.String(128))
     # yelp_location = db.Column(db.String(256))
     yelp_url = db.Column(db.String(256))
     yelp_category = db.Column(db.String(128))  # hot_and_new?

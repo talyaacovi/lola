@@ -3,3 +3,4 @@ env
 .DS_Store
 secrets.sh
 yelp_api.py
+zipcodes.csv

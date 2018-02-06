@@ -3,7 +3,13 @@
 
 <p>Here is what you searched for!</p>
 {% for item in business_results %}
-    <li>{{ item['name'] }}</li>
+    <p>{{ item['name'] }}</p>
+
+    <form action='/add-restaurant' method='POST'>
+        <input hidden id='add-btn' name='restaurant' value='{{ item["id"] }}'>
+        <input type='submit' value='Add Restaurant'>
+    </form>
+
 {% endfor %}
 
 
