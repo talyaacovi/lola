@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if "user_id" in session %}
+  <a href='/logout'>Logout</a>
+
+{% else %}
+      <form action='/login' method='POST'>
+
+        <label>Email:
+            <input type='email' name='email' required>
+        </label>
+
+        <label>Password:
+            <input type='password' name='password' required>
+        </label>
+
+        <input type='submit' value='Login'>
+
+      </form>
+
+  Don't have an account? <a href='/signup-form'>Sign Up</a>
+
+{% endif %}
+
+<h1> Where do the locals eat? </h1>
+
+
+{% endblock %}

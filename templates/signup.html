@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  Signup
+      <form action='/signup' method='POST'>
+
+        <label>Email:
+            <input id='email' type='email' name='email' required>
+        </label>
+
+        <label>Password:
+            <input id='password' type='password' name='password' required>
+        </label>
+
+        <label>Username:
+            <input id='username' type='username' name='username' required>
+        </label>
+
+        <label>Local Zipcode:
+            <input id='zipcode' type='text' name='zipcode' required>
+        </label>
+
+        <input id='signup-form' type='submit' value='Signup'>
+
+      </form>
+
+
+{% endblock %}

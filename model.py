@@ -21,9 +21,10 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(128), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
-    user_name = db.Column(db.String(128, nullable=False, unique=True))
+    username = db.Column(db.String(128), nullable=False, unique=True)
     city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(64), nullable=False)
+    zipcode = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation of user."""
@@ -44,6 +45,8 @@ class List(db.Model):
                         db.ForeignKey('users.user_id'),
                         nullable=False)
     name = db.Column(db.String(128), nullable=False)
+    # lists can be in draft or published status
+    status = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation of list."""
@@ -80,14 +83,13 @@ class Restaurant(db.Model):
     name = db.Column(db.String(128), nullable=False)
     lat = db.Column(db.Integer, nullable=False)
     lng = db.Column(db.Integer, nullable=False)
-    yelp_rating = db.Column(db.Integer)
-    yelp_price = db.Column(db.String(64))
+    # yelp_rating = db.Column(db.Integer)
+    # yelp_price = db.Column(db.String(64))
     yelp_id = db.Column(db.Integer)
-    yelp_location = db.Column(db.String(256))
+    # yelp_location = db.Column(db.String(256))
     yelp_url = db.Column(db.String(256))
     yelp_category = db.Column(db.String(128))  # hot_and_new?
-    yelp_photos = db.Column(db.String(256))  # this returns as an object
-    # facebook rating?
+    yelp_photo = db.Column(db.String(256))  # or IG photo
 
     def __repr__(self):
         """Provide helpful representation of restaurant."""
@@ -96,8 +98,6 @@ class Restaurant(db.Model):
 
 
 class UserRestaurant(db.Model):
-    # can't remember syntax here...camelCase or snake-case??
-
     """Restaurants that have been added by users."""
 
     __tablename__ = 'user_restaurants'
@@ -107,7 +107,7 @@ class UserRestaurant(db.Model):
                         db.ForeignKey('users.user_id'),
                         nullable=False)
     rest_id = db.Column(db.Integer,
-                        db.ForeignKey('rests.rest_id'),
+                        db.ForeignKey('restaurants.rest_id'),
                         nullable=False)
     fav_dish = db.Column(db.String(128))
 
@@ -118,43 +118,28 @@ class UserRestaurant(db.Model):
                                                            self.fav_dish)
 
 
-class GoodForCatg(db.Model):
-    """Categories that restaurants can be good for."""
+class UserRestaurantFavDish(db.Model):
+    """Favorite dishes specified by user for certain restaurant."""
 
-    __tablename__ = 'good_for_catg'
+    __tablename__ = 'user_restaurant_fav_dishes'
 
-    g_f_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(128), nullable=False)
-
-    def __repr__(self):
-        """Provide helpful representation of categories."""
-
-        return "<id={} name={}>".format(self.g_f_id, self.name)
-
-
-class UserGoodForCatg(db.Model):
-    """What category users have indicated a specific restaurant is good for."""
-
-    __tablename__ = 'user_good_for'
-
-    u_g_f_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    dish_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.user_id'),
                         nullable=False)
-    g_f_id = db.Column(db.Integer,
-                       db.ForeignKey('good_for_catg.g_f_id'),
-                       nullable=False)
     rest_id = db.Column(db.Integer,
-                        db.ForeignKey('rests.rest_id'),
+                        db.ForeignKey('restaurants.rest_id'),
                         nullable=False)
+    name = db.Column(db.String(128))
 
     def __repr__(self):
-        """Provide helpful representation of user-selected category."""
+        """Provide helpful representation of favorite dishes."""
 
-        return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
+        return "<dish id={} name={}>".format(self.dish_id,
+                                             self.name)
 
 
-class Friendships(db.Model):
+class Friendship(db.Model):
     """Defines friendships among users based on Facebook data."""
 
     __tablename__ = 'friendships'
@@ -174,11 +159,97 @@ class Friendships(db.Model):
                                                         self.f_2_id)
 
 
+class Zipcode(db.Model):
+    """Table for converting zipcodes to other location info."""
+
+    __tablename__ = 'zipcodes'
+
+    zipcode = db.Column(db.String(128), primary_key=True)
+    city = db.Column(db.String(128))
+    state = db.Column(db.String(128))
+
+
+
+##############################################################################
+# TBD Tables
+
+# class GoodForCatg(db.Model):
+#     """Categories that restaurants can be good for."""
+
+#     __tablename__ = 'good_for_catgs'
+
+#     g_f_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     name = db.Column(db.String(128), nullable=False)
+
+#     def __repr__(self):
+#         """Provide helpful representation of categories."""
+
+#         return "<id={} name={}>".format(self.g_f_id, self.name)
+
+
+# class UserRestaurantGoodForCatg(db.Model):
+#     """What category users have indicated a specific restaurant is good for."""
+
+#     __tablename__ = 'user_restaurant_good_for_catgs'
+
+#     u_g_f_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     user_id = db.Column(db.Integer,
+#                         db.ForeignKey('users.user_id'),
+#                         nullable=False)
+#     g_f_id = db.Column(db.Integer,
+#                        db.ForeignKey('good_for_catgs.g_f_id'),
+#                        nullable=False)
+#     rest_id = db.Column(db.Integer,
+#                         db.ForeignKey('restaurants.rest_id'),
+#                         nullable=False)
+
+#     def __repr__(self):
+#         """Provide helpful representation of user-selected category."""
+
+#         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
+
+
+# class RestaurantPhoto(db.Model):
+#     """Store photos for each restaurant."""
+
+#     __tablename__ = 'restaurant_photos'
+
+#     photo_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     rest_id = db.Column(db.Integer,
+#                         db.ForeignKey('restaurants.rest_id'),
+#                         nullable=False)
+#     url = db.Column(db.String(256))
+
+#     def __repr__(self):
+#         """Provide helpful representation of photo."""
+
+#         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
+
+
+# class RestaurantLike(db.Model):
+#     """What category users have indicated a specific restaurant is good for."""
+
+#     __tablename__ = 'restaurant-likes'
+
+#     like_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     user_id = db.Column(db.Integer,
+#                         db.ForeignKey('users.user_id'),
+#                         nullable=False)
+#     rest_id = db.Column(db.Integer,
+#                         db.ForeignKey('restaurants.rest_id'),
+#                         nullable=False)
+
+#     def __repr__(self):
+#         """Provide helpful representation of user-selected category."""
+
+#         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
+
+
 def connect_to_db(app):
     """Connect the database to Flask app."""
 
     # Configure to use PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///locals'  # DB name
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants'
     app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
@@ -191,4 +262,4 @@ if __name__ == "__main__":
     app = Flask(__name__)
     connect_to_db(app)
     print "Connected to DB."
-    db.create_all()
+    # db.create_all()
