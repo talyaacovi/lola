@@ -12,11 +12,13 @@ def load_zips():
     with open('zipcodes.csv') as f:
         for row in f:
             row = row.rstrip()
-            zipcode, city, state = row.split(",")
+            zipcode, city, state, lat, lng = row.split(",")
 
             zipcode = Zipcode(zipcode=zipcode,
                               city=city,
-                              state=state)
+                              state=state,
+                              lat=lat,
+                              lng=lng)
 
             db.session.add(zipcode)
 

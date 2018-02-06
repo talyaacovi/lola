@@ -30,7 +30,7 @@ class User(db.Model):
         """Provide helpful representation of user."""
 
         return "<User id={} user_name={} city={}, {}>".format(self.user_id,
-                                                              self.user_name,
+                                                              self.username,
                                                               self.city,
                                                               self.state)
 
@@ -167,7 +167,8 @@ class Zipcode(db.Model):
     zipcode = db.Column(db.String(128), primary_key=True)
     city = db.Column(db.String(128))
     state = db.Column(db.String(128))
-
+    lat = db.Column(db.String(128))
+    lng = db.Column(db.String(128))
 
 
 ##############################################################################

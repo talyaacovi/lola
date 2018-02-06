@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Zipcode
-# import zipcode
+from yelp_api import search
 
 app = Flask(__name__)
 
@@ -35,6 +35,9 @@ def login():
         flash('You have successfully logged in!')
 
         session['user_id'] = user.user_id
+        session['city'] = user.city
+        session['state'] = user.state
+
         return redirect('/users/{}'.format(user.username))
 
     else:
@@ -48,6 +51,8 @@ def logout():
     """Log out user."""
 
     del session['user_id']
+    del session['city']
+    del session['state']
 
     return 'You have successfully logged out.'
 
@@ -78,7 +83,8 @@ def signup():
     db.session.commit()
 
     session['user_id'] = user.user_id
-    print session['user_id']
+    session['city'] = user.city
+    session['state'] = user.state
 
     return redirect('/users/{}'.format(user.username))
 
@@ -87,8 +93,33 @@ def signup():
 def profile_page(username):
     """User profile page."""
 
-    return render_template('profile.html')
+    city = session['city'].title()
+    user_id = session['user_id']
+    user = User.query.filter_by(user_id=user_id).first()
+    print type(user)
+    return render_template('profile.html', city=city, user=user)
 
+
+@app.route('/create-list')
+def create_list():
+    """Testing Yelp API."""
+
+    return render_template('create-list.html')
+
+
+@app.route('/search', methods=['POST'])
+def search_yelp():
+    """Testing Yelp API."""
+
+    search_term = request.form.get('term')
+    city = session['city'].title()
+    state = session['state'].title()
+    search_location = city + ', ' + state
+
+    results = search(search_term, search_location)
+    business_results = results['businesses']
+
+    return render_template('yelp.html', business_results=business_results)
 
 
 if __name__ == "__main__":
