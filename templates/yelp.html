@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p>Here is what you searched for!</p>
+{% for item in business_results %}
+    <li>{{ item['name'] }}</li>
+{% endfor %}
+
+
+{% endblock %}

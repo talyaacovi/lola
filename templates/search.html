@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Search for a restaurant you love in {{ session['city'].title() }}!</h1>
+<form action='/search' method='POST'>
+    <input type='text' name='term' required>
+    <input type='submit' value='Search'>
+</form>
+
+{% endblock %}
