@@ -7,6 +7,10 @@
 </head>
 <body>
 
+{% if session.get('user_id') %}
+    <a href='/users/{{ session["username"] }}'>Profile Page</a>
+{% endif %}
+
 <hr>
 
 

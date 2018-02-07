@@ -2,12 +2,13 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Zipcode, Restaurant, List, ListItem
 from yelp_api import search, business
-from restaurant import add_new_restaurant, add_list_item
+from restaurant import *
 from user import check_email, set_session_info, get_user_lists
+# for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
 
@@ -142,24 +143,27 @@ def add_list():
                name=name,
                status=status)
 
+    user = User.query.filter_by(user_id=session['user_id']).first()
+
     db.session.add(lst)
     db.session.commit()
 
-    return redirect('/search')
+    # return redirect('/search')
+    return redirect('/users/{}/lists/{}'.format(user.username, lst.list_id))
 
 
-@app.route('/search')
-def search_restaurant():
-    """Search for a restaurant."""
+# @app.route('/search')
+# def search_restaurant():
+#     """Search for a restaurant."""
 
-    return render_template('search.html')
+#     return render_template('search.html')
 
 
-@app.route('/search-results', methods=['POST'])
-def search_results():
-    """Testing Yelp API."""
+@app.route('/search-results')
+def do_search():
+    """Get search results using Yelp API."""
 
-    search_term = request.form.get('term')
+    search_term = request.args.get('term')
     city = session['city'].title()
     state = session['state'].title()
     search_location = city + ', ' + state
@@ -167,7 +171,14 @@ def search_results():
     results = search(search_term, search_location)
     business_results = results['businesses']
 
-    return render_template('yelp.html', business_results=business_results)
+    results_dict = {'rests': []}
+
+    for item in business_results:
+        results_dict['rests'].append({'name': item['name'],
+                                      'id': item['id'],
+                                      'location': item['location']['display_address']})
+
+    return jsonify(results_dict)
 
 
 @app.route('/add-restaurant', methods=['POST'])
@@ -220,22 +231,11 @@ def add_restaurant():
 def display_list(username, lst_id):
     """Display list."""
 
-    lst_items = db.session.query(ListItem.item_id, ListItem.list_id, Restaurant.name).join(Restaurant).filter(ListItem.list_id == lst_id).all()
-    # lst_items = lst_items.filter_by(list_id=lst_id).all()
+    lst = get_list(lst_id)
+    lst_items = get_list_items(lst_id)
 
-    return render_template('list.html', lst_items=lst_items)
+    return render_template('list.html', lst=lst, lst_items=lst_items)
 
-
-# need to make sure Flask knows about application context
-# def set_session(user):
-#     """set session info when user logs in or signs up."""
-
-#     session['user_id'] = user.user_id
-#     session['city'] = user.city
-#     session['state'] = user.state
-#     session['username'] = user.username
-
-    # return session
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

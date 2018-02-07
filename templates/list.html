@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<h1>{{ lst.name }}</h1>
+<input hidden name='list_id' value='{{ lst.list_id }}'>
+
 {% for item in lst_items %}
-    <p>{{ item[2] }}</p>
+    <p>{{ item.restaurant.name }}</p>
 
 {% endfor %}
 
-<a href='/users/{{ session["username"] }}'>Profile Page</a>
+<div id='search-restaurants'>
+
+    <form action='/search-results'>
+        <h2>Search for a restaurant you love in {{ session['city'].title() }}!</h2>
+            <input type='text' name='term' required>
+            <input type='submit' value='Search'>
+    </form>
+</div>
+
+
 
 {% endblock %}

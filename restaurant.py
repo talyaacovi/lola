@@ -1,6 +1,6 @@
 """Helper functions related to adding restaurants and list items."""
 
-from model import Restaurant, ListItem, db
+from model import Restaurant, ListItem, db, List
 
 
 def add_new_restaurant(data, yelp_id):
@@ -35,3 +35,19 @@ def add_list_item(rest_id, lst_id):
     restaurant_name = Restaurant.query.filter_by(rest_id=rest_id).first().name
 
     return restaurant_name
+
+
+def get_list(lst_id):
+    """Get list object from DB"""
+
+    lst = List.query.filter_by(list_id=lst_id).first()
+
+    return lst
+
+
+def get_list_items(lst_id):
+    """Get list items from DB"""
+
+    lst_items = ListItem.query.join(Restaurant).filter(ListItem.list_id == lst_id).all()
+
+    return lst_items
