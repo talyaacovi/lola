@@ -7,6 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Zipcode, Restaurant, List, ListItem
 from yelp_api import search, business
 from restaurant import add_new_restaurant, add_list_item
+from user import check_email, set_session_info, get_user_lists
 
 app = Flask(__name__)
 
@@ -28,6 +29,21 @@ def index():
 def login():
     """Log user in to their account."""
 
+    # email = request.form.get('email')
+    # user_password = request.form.get('password')
+
+    # result = check_email_and_pw(email, user_password)
+    # if result.username:
+    #     flash('You have successfully logged in !')
+    #     return redirect('/users/{}'.format(result.username))
+    # elif not result:
+    #     flash('Incorrect password, please try again.')
+    #     return redirect('/')
+    # else:
+    #     flash('You do not have an account. Sign up here!')
+    #     return redirect('/signup-form')
+    ###
+
     email = request.form.get('email')
     user_password = request.form.get('password')
 
@@ -38,10 +54,7 @@ def login():
         if user.password == user_password:
             flash('You have successfully logged in!')
 
-            session['user_id'] = user.user_id
-            session['city'] = user.city
-            session['state'] = user.state
-            session['username'] = user.username
+            set_session_info(user)
 
             return redirect('/users/{}'.format(user.username))
 
@@ -78,8 +91,14 @@ def signup():
     """Add new user to database."""
 
     email = request.form.get('email')
+
+    if check_email(email):
+        flash('This email address already has an account. Log in here.')
+        return redirect('/')
+
     password = request.form.get('password')
     username = request.form.get('username')
+    # AJAX request to see if username exists?
     zipcode = request.form.get('zipcode')
     city = Zipcode.query.filter_by(zipcode=zipcode).first().city
     state = Zipcode.query.filter_by(zipcode=zipcode).first().state
@@ -90,11 +109,8 @@ def signup():
     db.session.add(user)
     db.session.commit()
 
-    session['user_id'] = user.user_id
-    session['city'] = user.city
-    session['state'] = user.state
-    session['username'] = user.username
     # helper function
+    set_session_info(user)
 
     return redirect('/users/{}'.format(user.username))
 
@@ -104,7 +120,8 @@ def profile_page(username):
     """User profile page."""
 
     city = session['city'].title()
-    return render_template('profile.html', city=city)
+    lsts = get_user_lists(session['user_id'])
+    return render_template('profile.html', city=city, lsts=lsts)
 
 
 @app.route('/create-list')
@@ -157,6 +174,21 @@ def search_results():
 def add_restaurant():
     """Add Restaurant to Database."""
 
+    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
+
+    yelp_id = request.form.get('restaurant')
+    results = business(yelp_id)
+    rest_id = add_new_restaurant(results, yelp_id)
+    rest_name = add_list_item(rest_id, lst_id)
+
+    user = User.query.filter_by(user_id=session['user_id']).first()
+
+    flash(rest_name + ' has been added!')
+
+    return redirect('/users/{}/lists/{}'.format(user.username, lst_id))
+
+    # OLD METHOD WITHOUT USING HELPER FUNCTIONS FROM restaurant.py
+
     # yelp_id = request.form.get('restaurant')
     # results = business(yelp_id)
     # name = results['name']
@@ -173,7 +205,7 @@ def add_restaurant():
     # db.session.add(restaurant)
     # db.session.commit()
 
-    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
+    # lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
     # lst_item = ListItem(list_id=lst_id, rest_id=restaurant.rest_id)
 
     # db.session.add(lst_item)
@@ -182,17 +214,6 @@ def add_restaurant():
     # flash(restaurant.name + ' has been added!')
 
     # return render_template('search.html')
-
-    yelp_id = request.form.get('restaurant')
-    results = business(yelp_id)
-    rest_id = add_new_restaurant(results, yelp_id)
-    rest_name = add_list_item(rest_id, lst_id)
-
-    user = User.query.filter_by(user_id=session['user_id']).first()
-
-    flash(rest_name + ' has been added!')
-
-    return redirect('/users/{}/lists/{}'.format(user.username, lst_id))
 
 
 @app.route('/users/<username>/lists/<int:lst_id>')
@@ -204,8 +225,9 @@ def display_list(username, lst_id):
 
     return render_template('list.html', lst_items=lst_items)
 
+
 # need to make sure Flask knows about application context
-# def set_session(user, session):
+# def set_session(user):
 #     """set session info when user logs in or signs up."""
 
 #     session['user_id'] = user.user_id
@@ -213,7 +235,7 @@ def display_list(username, lst_id):
 #     session['state'] = user.state
 #     session['username'] = user.username
 
-#     return session
+    # return session
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

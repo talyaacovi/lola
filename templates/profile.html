@@ -7,4 +7,8 @@
 
 <p>You are a local of {{ city }}!</p>
 
+{% for item in lsts %}
+    <a href='/users/{{ session["username"] }}/lists/{{ item.list_id }}'>{{ item.name }}</a>
+{% endfor %}
+
 {% endblock %}

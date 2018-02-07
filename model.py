@@ -48,6 +48,7 @@ class List(db.Model):
     # lists can be in draft or published status
     status = db.Column(db.String(64), nullable=False)
     # this could be a Boolean flag
+    user = db.relationship('User', backref='lists')
 
     def __repr__(self):
         """Provide helpful representation of list."""
@@ -68,6 +69,8 @@ class ListItem(db.Model):
                         db.ForeignKey('restaurants.rest_id'),
                         nullable=False)
     ordinal = db.Column(db.Integer)
+    lst = db.relationship('List', backref='list_items')
+    restaurant = db.relationship('Restaurant', backref='list_items')
 
     def __repr__(self):
         """Provide helpful representation of list items."""
