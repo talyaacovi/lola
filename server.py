@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Zipcode, Restaurant, List, ListItem
 from yelp_api import search, business
+from restaurant import add_new_restaurant, add_list_item
 
 app = Flask(__name__)
 
@@ -127,11 +128,18 @@ def add_list():
     db.session.add(lst)
     db.session.commit()
 
+    return redirect('/search')
+
+
+@app.route('/search')
+def search_restaurant():
+    """Search for a restaurant."""
+
     return render_template('search.html')
 
 
-@app.route('/search', methods=['POST'])
-def search_yelp():
+@app.route('/search-results', methods=['POST'])
+def search_results():
     """Testing Yelp API."""
 
     search_term = request.form.get('term')
@@ -149,38 +157,48 @@ def search_yelp():
 def add_restaurant():
     """Add Restaurant to Database."""
 
+    # yelp_id = request.form.get('restaurant')
+    # results = business(yelp_id)
+    # name = results['name']
+    # lat = results['coordinates']['latitude']
+    # lng = results['coordinates']['longitude']
+    # yelp_url = results['url'].split('?')[0]
+    # yelp_category = results['categories'][0]['title']
+    # yelp_photo = results['image_url']
+
+    # restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
+    #                         yelp_url=yelp_url, yelp_category=yelp_category,
+    #                         yelp_photo=yelp_photo)
+
+    # db.session.add(restaurant)
+    # db.session.commit()
+
+    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
+    # lst_item = ListItem(list_id=lst_id, rest_id=restaurant.rest_id)
+
+    # db.session.add(lst_item)
+    # db.session.commit()
+
+    # flash(restaurant.name + ' has been added!')
+
+    # return render_template('search.html')
+
     yelp_id = request.form.get('restaurant')
     results = business(yelp_id)
-    name = results['name']
-    lat = results['coordinates']['latitude']
-    lng = results['coordinates']['longitude']
-    yelp_url = results['url'].split('?')[0]
-    yelp_category = results['categories'][0]['title']
-    yelp_photo = results['image_url']
+    rest_id = add_new_restaurant(results, yelp_id)
+    rest_name = add_list_item(rest_id, lst_id)
 
-    restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
-                            yelp_url=yelp_url, yelp_category=yelp_category,
-                            yelp_photo=yelp_photo)
+    user = User.query.filter_by(user_id=session['user_id']).first()
 
-    db.session.add(restaurant)
-    db.session.commit()
+    flash(rest_name + ' has been added!')
 
-    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
-    lst_item = ListItem(list_id=lst_id, rest_id=restaurant.rest_id)
-
-    db.session.add(lst_item)
-    db.session.commit()
-
-    flash(restaurant.name + ' has been added!')
-
-    return render_template('search.html')
+    return redirect('/users/{}/lists/{}'.format(user.username, lst_id))
 
 
-@app.route('/display-list')
-def display_list():
+@app.route('/users/<username>/lists/<int:lst_id>')
+def display_list(username, lst_id):
     """Display list."""
 
-    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
     lst_items = db.session.query(ListItem.item_id, ListItem.list_id, Restaurant.name).join(Restaurant).filter(ListItem.list_id == lst_id).all()
     # lst_items = lst_items.filter_by(list_id=lst_id).all()
 

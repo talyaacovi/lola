@@ -3,13 +3,11 @@
 
 <div id='search-restaurants'>
 
-    <form action='/search' method='POST'>
+    <form action='/search-results' method='POST'>
         <h1>Search for a restaurant you love in {{ session['city'].title() }}!</h1>
             <input type='text' name='term' required>
             <input type='submit' value='Search'>
     </form>
 </div>
-
-<a href='/display-list'>Show List</a>
 
 {% endblock %}
