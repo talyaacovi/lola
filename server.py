@@ -4,7 +4,7 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Zipcode, Restaurant
+from model import connect_to_db, db, User, Zipcode, Restaurant, List, ListItem
 from yelp_api import search, business
 
 app = Flask(__name__)
@@ -19,10 +19,6 @@ app.jinja_env.aut_reload = True
 @app.route('/')
 def index():
     """Homepage."""
-
-    # if session['user_id']:
-        # user = #query user table
-        # return render_template('homepage.html', user=user)
 
     return render_template('homepage.html')
 
@@ -112,7 +108,24 @@ def profile_page(username):
 
 @app.route('/create-list')
 def create_list():
-    """Testing Yelp API."""
+    """Start a new list."""
+
+    return render_template('create_list.html')
+
+
+@app.route('/add-list', methods=['POST'])
+def add_list():
+    """Add list to database in draft status."""
+
+    name = request.form.get('name')
+    status = request.form.get('status')
+
+    lst = List(user_id=session['user_id'],
+               name=name,
+               status=status)
+
+    db.session.add(lst)
+    db.session.commit()
 
     return render_template('search.html')
 
@@ -152,9 +165,26 @@ def add_restaurant():
     db.session.add(restaurant)
     db.session.commit()
 
+    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
+    lst_item = ListItem(list_id=lst_id, rest_id=restaurant.rest_id)
+
+    db.session.add(lst_item)
+    db.session.commit()
+
     flash(restaurant.name + ' has been added!')
 
-    return redirect('/create-list')
+    return render_template('search.html')
+
+
+@app.route('/display-list')
+def display_list():
+    """Display list."""
+
+    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
+    lst_items = db.session.query(ListItem.item_id, ListItem.list_id, Restaurant.name).join(Restaurant).filter(ListItem.list_id == lst_id).all()
+    # lst_items = lst_items.filter_by(list_id=lst_id).all()
+
+    return render_template('list.html', lst_items=lst_items)
 
 # need to make sure Flask knows about application context
 # def set_session(user, session):

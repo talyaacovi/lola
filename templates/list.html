@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for item in lst_items %}
+    <p>{{ item[2] }}</p>
+
+{% endfor %}
+
+<a href='/search'>Add more!</a>
+
+{% endblock %}

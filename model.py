@@ -81,8 +81,8 @@ class Restaurant(db.Model):
 
     rest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
-    lat = db.Column(db.Integer, nullable=False)
-    lng = db.Column(db.Integer, nullable=False)
+    lat = db.Column(db.String(128), nullable=False)
+    lng = db.Column(db.String(128), nullable=False)
     # yelp_rating = db.Column(db.Integer)
     # yelp_price = db.Column(db.String(64))
     yelp_id = db.Column(db.String(128))
