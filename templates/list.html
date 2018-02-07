@@ -11,13 +11,13 @@
 
 <div id='search-restaurants'>
 
-    <form action='/search-results'>
+    <form>
         <h2>Search for a restaurant you love in {{ session['city'].title() }}!</h2>
-            <input type='text' name='term' required>
-            <input type='submit' value='Search'>
+            <input type='text' id='search-term' name='term' required>
+            <button id='search-btn'>Search</button>
     </form>
 </div>
 
-
+<div id='results-div'></div>
 
 {% endblock %}

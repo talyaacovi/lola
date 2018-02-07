@@ -159,7 +159,7 @@ def add_list():
 #     return render_template('search.html')
 
 
-@app.route('/search-results')
+@app.route('/search-results.json')
 def do_search():
     """Get search results using Yelp API."""
 
