@@ -3,13 +3,18 @@
 
 <h1>{{ lst.name }}</h1>
 <input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
+<button id='edit-btn'>Edit List</button>
 
 <div id='msg-div'></div>
 
 <div id='list-items'>
     {% for item in lst_items %}
-        <p data-yelp-id='{{ item.restaurant.yelp_id }}'>{{ item.restaurant.name }}</p>
-
+        <h3 data-yelp-id='{{ item.restaurant.yelp_id }}'>{{ item.restaurant.name }}</h3>
+        <p>{{ item.restaurant.yelp_category }}</p>
+        <a href='{{ item.restaurant.yelp_url }}'>Yelp</a>
+        <div class='yelp-img'>
+            <img src='{{ item.restaurant.yelp_photo }}'>
+        </div>
     {% endfor %}
 </div>
 

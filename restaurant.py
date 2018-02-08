@@ -52,6 +52,6 @@ def get_list(lst_id):
 def get_list_items(lst_id):
     """Get list items from DB"""
 
-    lst_items = ListItem.query.join(Restaurant).filter(ListItem.list_id == lst_id).all()
+    lst_items = ListItem.query.filter(ListItem.list_id == lst_id).all()
 
     return lst_items

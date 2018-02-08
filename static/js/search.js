@@ -1,11 +1,11 @@
 "use strict";
 
-// pseudo-code:
 
 $('#search-btn').click(function (evt) {
     evt.preventDefault();
     $.get('/search-results.json', {'term': $('#search-term').val()}, getResults);
 });
+
 
 function getResults(result) {
 
@@ -36,6 +36,7 @@ function getResults(result) {
 
 }
 
+
 function processAjax(result) {
     if (result) {
         addRestaurant(result);
@@ -46,13 +47,34 @@ function processAjax(result) {
     }
 }
 
+
 function addRestaurant(result) {
     $('#msg-div').empty();
     let newRest = $('<p>');
     newRest.append(result.name);
     $('#list-items').append(newRest);
     $('#' + result.id).hide();
-    if ($('#list-items p').length >= 10) {
+    if ($('#list-items h3').length >= 10) {
         $('#search-restaurants').hide();
     }
 }
+
+
+$('#list-items').ready(function () {
+    if ($('#list-items h3').length >= 10) {
+        $('#search-restaurants').hide();
+    }
+});
+
+
+$('#edit-btn').click(function (evt) {
+    let rests = $('#list-items h3');
+    for (let i = 0; i < rests.length; i++) {
+        let btn = $('<button>');
+        // let element = rests[i];
+        btn.attr('data-yelp-id', $(rests[i]).data('yelp-id'));
+        btn.attr('class', 'del-btn');
+        btn.append('Remove restaurant');
+        $(rests[i]).append(btn);
+    }
+});

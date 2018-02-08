@@ -69,6 +69,7 @@ class ListItem(db.Model):
                         db.ForeignKey('restaurants.rest_id'),
                         nullable=False)
     ordinal = db.Column(db.Integer)
+
     lst = db.relationship('List', backref='list_items')
     restaurant = db.relationship('Restaurant', backref='list_items')
 

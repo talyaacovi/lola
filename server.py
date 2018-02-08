@@ -129,11 +129,12 @@ def profile_page(username):
     return render_template('profile.html', city=city, lsts=lsts)
 
 
-@app.route('/create-list')
-def create_list():
-    """Start a new list."""
+# don't need this app route anymore
+# @app.route('/create-list')
+# def create_list():
+#     """Start a new list."""
 
-    return render_template('create_list.html')
+#     return render_template('create_list.html')
 
 
 @app.route('/add-list', methods=['POST'])
