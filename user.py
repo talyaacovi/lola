@@ -7,8 +7,14 @@ from flask import session
 def check_email(user_email):
     """checks if email already exists in DB when user logs in or signs up."""
 
-    return User.query.filter_by(email=user_email).first()
+    return User.query.filter_by(email=user_email).first().email
 
+def check_password(user_email, user_password):
+    """checks pw"""
+
+    password = User.query.filter_by(email=user_email).first().password
+    if password == user_password:
+        return True
 
 def set_session_info(user):
     """Sets session data after successful login or signup."""

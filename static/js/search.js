@@ -32,6 +32,17 @@ function getResults(result) {
 
 }
 
+function processAjax(result) {
+    if (result) {
+        addRestaurant(result);
+    }
+    else {
+    // insert div with message that restaurant already exists in list
+    // clear message when user searches again or adds a diff restaurant
+    }
+
+}
+
 function addRestaurant(result) {
     let newRest = $('<p>');
     newRest.append(result.name);

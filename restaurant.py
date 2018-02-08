@@ -38,7 +38,7 @@ def add_list_item(rest_id, lst_id):
         return restaurant_name
 
     else:
-        return 'This restaurant is already on your list.'
+        return False
 
 
 def get_list(lst_id):

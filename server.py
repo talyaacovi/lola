@@ -45,6 +45,27 @@ def login():
     #     return redirect('/signup-form')
     ###
 
+
+
+# other method
+    user_email = request.form.get('email')
+    email = check_email(user_email)
+    user_password = request.form.get('password')
+
+    if email:
+        if check_password(email, user_password):
+            flash('You have successfully logged in!')
+            set_session_info(user)
+            return redirect('/users/{}'.format(user.username))
+        else:
+            flash('Incorrect password, please try again.')
+            return redirect('/')
+    else:
+        flash('You do not have an account. Sign up here!')
+        return redirect('/signup-form')
+
+
+# original method
     email = request.form.get('email')
     user_password = request.form.get('password')
 
@@ -193,13 +214,17 @@ def add_restaurant():
     # rest_name = add_list_item(rest_id, lst_id)
     rest_name = add_list_item(rest_id, lst_id)
 
-    results_dict = {}
-    results_dict['name'] = rest_name
-    results_dict['id'] = yelp_id
+    if add_list_item(rest_id, lst_id):
 
-    # user = User.query.filter_by(user_id=session['user_id']).first()
-    return jsonify(results_dict)
+        results_dict = {}
+        results_dict['name'] = rest_name
+        results_dict['id'] = yelp_id
 
+        # user = User.query.filter_by(user_id=session['user_id']).first()
+        return jsonify(results_dict)
+
+    else:
+        return ''
 
 @app.route('/users/<username>/lists/<int:lst_id>')
 def display_list(username, lst_id):
