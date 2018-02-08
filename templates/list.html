@@ -9,11 +9,13 @@
 
 <div id='list-items'>
     {% for item in lst_items %}
-        <h3 data-yelp-id='{{ item.restaurant.yelp_id }}'>{{ item.restaurant.name }}</h3>
-        <p>{{ item.restaurant.yelp_category }}</p>
-        <a href='{{ item.restaurant.yelp_url }}'>Yelp</a>
-        <div class='yelp-img'>
-            <img src='{{ item.restaurant.yelp_photo }}'>
+        <div data-yelp-id='{{ item.restaurant.yelp_id }}' data-item-id='{{ item.item_id }}'>
+            <h3>{{ item.restaurant.name }}</h3>
+            <p>{{ item.restaurant.yelp_category }}</p>
+            <a href='{{ item.restaurant.yelp_url }}'>Yelp</a>
+            <div class='yelp-img'>
+                <img src='{{ item.restaurant.yelp_photo }}'>
+            </div>
         </div>
     {% endfor %}
 </div>

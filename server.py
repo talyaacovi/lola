@@ -194,21 +194,41 @@ def add_restaurant():
     yelp_id = request.form.get('id')
 
     results = business(yelp_id)
-    rest_id = add_new_restaurant(results, yelp_id)
-    # rest_name = add_list_item(rest_id, lst_id)
-    rest_name = add_list_item(rest_id, lst_id)
+    restaurant = add_new_restaurant(results, yelp_id)
+    lst_item = add_list_item(restaurant.rest_id, lst_id)
 
-    if rest_name:
+    # rest_id = add_new_restaurant(results, yelp_id)
+    # rest_name = add_list_item(rest_id, lst_id)
+
+    # if rest_name:
+    if lst_item:
 
         results_dict = {}
-        results_dict['name'] = rest_name
-        results_dict['id'] = yelp_id
+        results_dict['name'] = lst_item.restaurant.name
+        results_dict['yelp_id'] = lst_item.restaurant.yelp_id
+        results_dict['item_id'] = lst_item.item_id
+        results_dict['yelp_category'] = lst_item.restaurant.yelp_category
+        results_dict['yelp_url'] = lst_item.restaurant.yelp_url
+        results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
 
-        # user = User.query.filter_by(user_id=session['user_id']).first()
         return jsonify(results_dict)
 
     else:
         return ''
+
+
+@app.route('/del-restaurant.json', methods=['POST'])
+def delete_restaurant():
+    """Remove restaurant from a list."""
+
+    item_id = request.form.get('item_id')
+    restaurant = del_list_item(item_id)
+
+    restaurant_dict = {}
+    restaurant_dict['name'] = restaurant.name
+    restaurant_dict['yelp_id'] = restaurant.yelp_id
+
+    return jsonify(restaurant_dict)
 
 
 @app.route('/users/<username>/lists/<int:lst_id>')

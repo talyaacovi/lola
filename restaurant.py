@@ -21,7 +21,12 @@ def add_new_restaurant(data, yelp_id):
         db.session.add(restaurant)
         db.session.commit()
 
-    return Restaurant.query.filter_by(yelp_id=yelp_id).first().rest_id
+        return restaurant
+    else:
+        return Restaurant.query.filter_by(yelp_id=yelp_id).first()
+
+    # return Restaurant.query.filter_by(yelp_id=yelp_id).first().rest_id
+    # return restaurant
 
 
 def add_list_item(rest_id, lst_id):
@@ -33,12 +38,27 @@ def add_list_item(rest_id, lst_id):
         db.session.add(lst_item)
         db.session.commit()
 
-        restaurant_name = Restaurant.query.filter_by(rest_id=rest_id).first().name
+        # restaurant_name = Restaurant.query.filter_by(rest_id=rest_id).first().name
 
-        return restaurant_name
+        # return restaurant_name
+        return lst_item
 
     else:
         return False
+
+
+def del_list_item(item_id):
+    """Remove list item from DB."""
+
+    lst_item = ListItem.query.get(item_id)
+    rest_id = lst_item.rest_id
+
+    db.session.delete(lst_item)
+    db.session.commit()
+
+    restaurant = Restaurant.query.get(rest_id)
+
+    return restaurant
 
 
 def get_list(lst_id):
