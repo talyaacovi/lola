@@ -16,11 +16,13 @@ function getResults(result) {
         let restDiv = $('<div>');
         restDiv.attr('id', result.rests[i].id);
         restDiv.append(result.rests[i].name);
+        let restLoc = $('<p>');
+        restLoc.append(result.rests[i].location);
         let btn = $('<button>');
         btn.attr('data-yelp-id', result.rests[i].id);
         btn.attr('class', 'add-btn');
-        btn.attr('style', 'margin: 10px;');
         btn.append('Add restaurant');
+        restDiv.append(restLoc);
         restDiv.append(btn);
         $('#results-div').append(restDiv);
     }
@@ -50,7 +52,7 @@ function addRestaurant(result) {
     newRest.append(result.name);
     $('#list-items').append(newRest);
     $('#' + result.id).hide();
-
+    if ($('#list-items p').length >= 10) {
+        $('#search-restaurants').hide();
+    }
 }
-
-

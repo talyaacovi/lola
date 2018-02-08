@@ -180,7 +180,7 @@ def do_search():
     for item in business_results:
         results_dict['rests'].append({'name': item['name'],
                                       'id': item['id'],
-                                      'location': item['location']['display_address']})
+                                      'location': item['location']['display_address'][0]})
 
     return jsonify(results_dict)
 
