@@ -181,50 +181,24 @@ def do_search():
     return jsonify(results_dict)
 
 
-@app.route('/add-restaurant', methods=['POST'])
+@app.route('/add-restaurant.json', methods=['POST'])
 def add_restaurant():
     """Add Restaurant to Database."""
 
-    lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
+    lst_id = request.form.get('list')
+    yelp_id = request.form.get('id')
 
-    yelp_id = request.form.get('restaurant')
     results = business(yelp_id)
     rest_id = add_new_restaurant(results, yelp_id)
+    # rest_name = add_list_item(rest_id, lst_id)
     rest_name = add_list_item(rest_id, lst_id)
 
-    user = User.query.filter_by(user_id=session['user_id']).first()
+    results_dict = {}
+    results_dict['name'] = rest_name
+    results_dict['id'] = yelp_id
 
-    flash(rest_name + ' has been added!')
-
-    return redirect('/users/{}/lists/{}'.format(user.username, lst_id))
-
-    # OLD METHOD WITHOUT USING HELPER FUNCTIONS FROM restaurant.py
-
-    # yelp_id = request.form.get('restaurant')
-    # results = business(yelp_id)
-    # name = results['name']
-    # lat = results['coordinates']['latitude']
-    # lng = results['coordinates']['longitude']
-    # yelp_url = results['url'].split('?')[0]
-    # yelp_category = results['categories'][0]['title']
-    # yelp_photo = results['image_url']
-
-    # restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
-    #                         yelp_url=yelp_url, yelp_category=yelp_category,
-    #                         yelp_photo=yelp_photo)
-
-    # db.session.add(restaurant)
-    # db.session.commit()
-
-    # lst_id = List.query.filter_by(user_id=session['user_id']).first().list_id
-    # lst_item = ListItem(list_id=lst_id, rest_id=restaurant.rest_id)
-
-    # db.session.add(lst_item)
-    # db.session.commit()
-
-    # flash(restaurant.name + ' has been added!')
-
-    # return render_template('search.html')
+    # user = User.query.filter_by(user_id=session['user_id']).first()
+    return jsonify(results_dict)
 
 
 @app.route('/users/<username>/lists/<int:lst_id>')

@@ -27,14 +27,18 @@ def add_new_restaurant(data, yelp_id):
 def add_list_item(rest_id, lst_id):
     """Add list item to DB."""
 
-    lst_item = ListItem(list_id=lst_id, rest_id=rest_id)
+    if not ListItem.query.filter_by(rest_id=rest_id).first():
+        lst_item = ListItem(list_id=lst_id, rest_id=rest_id)
 
-    db.session.add(lst_item)
-    db.session.commit()
+        db.session.add(lst_item)
+        db.session.commit()
 
-    restaurant_name = Restaurant.query.filter_by(rest_id=rest_id).first().name
+        restaurant_name = Restaurant.query.filter_by(rest_id=rest_id).first().name
 
-    return restaurant_name
+        return restaurant_name
+
+    else:
+        return 'This restaurant is already on your list.'
 
 
 def get_list(lst_id):
