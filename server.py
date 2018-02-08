@@ -7,7 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Zipcode, Restaurant, List, ListItem
 from yelp_api import search, business
 from restaurant import *
-from user import check_email, set_session_info, get_user_lists
+from user import *
 # for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
@@ -30,23 +30,6 @@ def index():
 def login():
     """Log user in to their account."""
 
-    # email = request.form.get('email')
-    # user_password = request.form.get('password')
-
-    # result = check_email_and_pw(email, user_password)
-    # if result.username:
-    #     flash('You have successfully logged in !')
-    #     return redirect('/users/{}'.format(result.username))
-    # elif not result:
-    #     flash('Incorrect password, please try again.')
-    #     return redirect('/')
-    # else:
-    #     flash('You do not have an account. Sign up here!')
-    #     return redirect('/signup-form')
-    ###
-
-
-
 # other method
     user_email = request.form.get('email')
     email = check_email(user_email)
@@ -54,6 +37,7 @@ def login():
 
     if email:
         if check_password(email, user_password):
+            user = User.query.filter_by(email=email).first()
             flash('You have successfully logged in!')
             set_session_info(user)
             return redirect('/users/{}'.format(user.username))
@@ -64,29 +48,28 @@ def login():
         flash('You do not have an account. Sign up here!')
         return redirect('/signup-form')
 
-
 # original method
-    email = request.form.get('email')
-    user_password = request.form.get('password')
+    # email = request.form.get('email')
+    # user_password = request.form.get('password')
 
-    user = User.query.filter_by(email=email).first()
+    # user = User.query.filter_by(email=email).first()
 
-    if user:
+    # if user:
 
-        if user.password == user_password:
-            flash('You have successfully logged in!')
+    #     if user.password == user_password:
+    #         flash('You have successfully logged in!')
 
-            set_session_info(user)
+    #         set_session_info(user)
 
-            return redirect('/users/{}'.format(user.username))
+    #         return redirect('/users/{}'.format(user.username))
 
-        else:
-            flash('Incorrect password, please try again.')
+    #     else:
+    #         flash('Incorrect password, please try again.')
 
-            return redirect('/')
+    #         return redirect('/')
 
-    flash('You do not have an account. Sign up here!')
-    return redirect('/signup-form')
+    # flash('You do not have an account. Sign up here!')
+    # return redirect('/signup-form')
 
 
 @app.route('/logout', methods=['POST'])
@@ -214,7 +197,7 @@ def add_restaurant():
     # rest_name = add_list_item(rest_id, lst_id)
     rest_name = add_list_item(rest_id, lst_id)
 
-    if add_list_item(rest_id, lst_id):
+    if rest_name:
 
         results_dict = {}
         results_dict['name'] = rest_name
@@ -225,6 +208,7 @@ def add_restaurant():
 
     else:
         return ''
+
 
 @app.route('/users/<username>/lists/<int:lst_id>')
 def display_list(username, lst_id):

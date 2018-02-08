@@ -10,6 +10,7 @@ $('#search-btn').click(function (evt) {
 function getResults(result) {
 
     $('#results-div').empty();
+    $('#msg-div').empty();
 
     for (let i = 0; i < result.rests.length; i++) {
         let restDiv = $('<div>');
@@ -27,7 +28,8 @@ function getResults(result) {
 
     $('.add-btn').click(function (evt) {
         evt.preventDefault();
-        $.post('/add-restaurant.json', {'id': $(this).data('yelp-id'), 'list': $('#list_id').val()}, addRestaurant);
+        // check if yelp_id on button matches any of the yelp_ids in the list
+        $.post('/add-restaurant.json', {'id': $(this).data('yelp-id'), 'list': $('#list_id').val()}, processAjax);
     });
 
 }
@@ -36,14 +38,14 @@ function processAjax(result) {
     if (result) {
         addRestaurant(result);
     }
-    else {
-    // insert div with message that restaurant already exists in list
-    // clear message when user searches again or adds a diff restaurant
-    }
 
+    else {
+        $('#msg-div').html('This restaurant already exists in your list.');
+    }
 }
 
 function addRestaurant(result) {
+    $('#msg-div').empty();
     let newRest = $('<p>');
     newRest.append(result.name);
     $('#list-items').append(newRest);
