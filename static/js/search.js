@@ -121,6 +121,16 @@ $('#edit-btn').click(function (evt) {
         evt.preventDefault();
         $.post('/del-restaurant.json', {'item_id': $(this).data('item-id')}, removeRestaurant);
     });
+
+    $('#edit-btn').hide();
+    $('#save-btn').show();
+
+    $('#save-btn').click(function (evt) {
+        $('.del-btn').remove();
+        $('#save-btn').hide();
+        $('#edit-btn').show();
+        $('#msg-div').empty();
+    });
 });
 
 

@@ -1,6 +1,6 @@
 """Helper functions related to Users."""
 
-from model import User, List
+from model import *
 from flask import session
 
 
@@ -42,5 +42,20 @@ def get_user(username):
     """Get user by username."""
 
     user = User.query.filter_by(username=username).first()
+
+    return user
+
+
+def register_user(email, password, username, zipcode):
+    """Add user."""
+
+    city = Zipcode.query.filter_by(zipcode=zipcode).first().city
+    state = Zipcode.query.filter_by(zipcode=zipcode).first().state
+
+    user = User(email=email, password=password, username=username,
+                city=city, state=state, zipcode=zipcode)
+
+    db.session.add(user)
+    db.session.commit()
 
     return user

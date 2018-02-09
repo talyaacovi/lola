@@ -4,7 +4,7 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Zipcode, Restaurant, List, ListItem
+from model import *
 from yelp_api import search, business
 from restaurant import *
 from user import *
@@ -30,7 +30,6 @@ def index():
 def login():
     """Log user in to their account."""
 
-# other method
     user_email = request.form.get('email')
     email = check_email(user_email)
     user_password = request.form.get('password')
@@ -80,59 +79,36 @@ def signup():
 
     password = request.form.get('password')
     username = request.form.get('username')
-    # AJAX request to see if username exists?
     zipcode = request.form.get('zipcode')
-    city = Zipcode.query.filter_by(zipcode=zipcode).first().city
-    state = Zipcode.query.filter_by(zipcode=zipcode).first().state
+    user = register_user(email, password, username, zipcode)
+    # AJAX request to see if username exists?
 
-    user = User(email=email, password=password, username=username,
-                city=city, state=state, zipcode=zipcode)
-
-    db.session.add(user)
-    db.session.commit()
-
-    # helper function
     set_session_info(user)
 
-    favorites_list = List(user_id=user.user_id, name='Favorites', status='draft')
+    fav_list = add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
-    return redirect('/users/{}'.format(user.username))
+    return redirect('/users/{}/lists/{}'.format(user.username, fav_list.list_id))
 
 
 @app.route('/users/<username>')
 def profile_page(username):
     """User profile page."""
 
-    # city = session['city'].title()
     user = get_user(username)
     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 
 @app.route('/add-list', methods=['POST'])
-def add_list():
+def add_new_list():
     """Add list to database in draft status."""
 
     name = request.form.get('name')
     status = request.form.get('status')
+    user_id = session['user_id']
 
-    lst = List(user_id=session['user_id'],
-               name=name,
-               status=status)
+    lst = add_list(name, status, user_id)
 
-    user = User.query.filter_by(user_id=session['user_id']).first()
-
-    db.session.add(lst)
-    db.session.commit()
-
-    # return redirect('/search')
-    return redirect('/users/{}/lists/{}'.format(user.username, lst.list_id))
-
-
-# @app.route('/search')
-# def search_restaurant():
-#     """Search for a restaurant."""
-
-#     return render_template('search.html')
+    return redirect('/users/{}/lists/{}'.format(lst.user.username, lst.list_id))
 
 
 @app.route('/search-results.json')
@@ -168,10 +144,6 @@ def add_restaurant():
     restaurant = add_new_restaurant(results, yelp_id)
     lst_item = add_list_item(restaurant.rest_id, lst_id)
 
-    # rest_id = add_new_restaurant(results, yelp_id)
-    # rest_name = add_list_item(rest_id, lst_id)
-
-    # if rest_name:
     if lst_item:
 
         results_dict = {}

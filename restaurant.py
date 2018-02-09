@@ -89,3 +89,31 @@ def delete_list(list_id):
     db.session.commit()
 
     return lst_name + ' has been deleted.'
+
+
+def add_list(name, status, user_id):
+    """Add list to database."""
+
+    lst = List(user_id=user_id,
+               name=name,
+               status=status,
+               category_id=2)
+
+    db.session.add(lst)
+    db.session.commit()
+
+    return lst
+
+
+def add_fav_list(user_id, name, status, category_id):
+    """Create favorite list when user signs up."""
+
+    lst = List(user_id=user_id,
+               name=name,
+               status=status,
+               category_id=category_id)
+
+    db.session.add(lst)
+    db.session.commit()
+
+    return lst

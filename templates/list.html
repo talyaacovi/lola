@@ -4,32 +4,22 @@
 <h1>{{ lst.name }}</h1>
 <input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
 
-<h2>{{ username }}</h2>
+<!-- <h2>{{ username }}</h2> -->
 
 {% if username == session.get('username') %}
     <button id='edit-btn'>Edit List</button>
-    <form action='/delete-list' id='del-list' method='POST'>
-        <input type='hidden' name='list_id' value='{{ lst.list_id }}'>
-        <!-- <button id='del-btn'>Delete List</button> -->
-        <input type='submit' value='Delete List'>
-    </form>
+    <button hidden id='save-btn'>Save List</button>
+
+    {% if lst.list_category.category != 'Favorites' %}
+        <form action='/delete-list' id='del-list' method='POST'>
+            <input type='hidden' name='list_id' value='{{ lst.list_id }}'>
+            <input type='submit' value='Delete List'>
+        </form>
+    {% endif %}
 
 {% endif %}
 
 <div id='msg-div'></div>
-
-<div id='list-items'>
-    {% for item in lst_items %}
-        <div data-yelp-id='{{ item.restaurant.yelp_id }}' data-item-id='{{ item.item_id }}'>
-            <h3>{{ item.restaurant.name }}</h3>
-            <p>{{ item.restaurant.yelp_category }}</p>
-            <a href='{{ item.restaurant.yelp_url }}'>Yelp</a>
-            <div class='yelp-img'>
-                <img src='{{ item.restaurant.yelp_photo }}'>
-            </div>
-        </div>
-    {% endfor %}
-</div>
 
 {% if username == session.get('username') %}
     <div id='search-restaurants'>
@@ -44,5 +34,20 @@
     <div id='results-div'></div>
 
 {% endif %}
+
+<div id='list-items'>
+    {% for item in lst_items %}
+        <div data-yelp-id='{{ item.restaurant.yelp_id }}' data-item-id='{{ item.item_id }}'>
+            <h3>{{ item.restaurant.name }}</h3>
+            <p>{{ item.restaurant.yelp_category }}</p>
+            <a href='{{ item.restaurant.yelp_url }}'>Yelp</a>
+            <div class='yelp-img'>
+                <img src='{{ item.restaurant.yelp_photo }}'>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
 
 {% endblock %}

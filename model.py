@@ -44,16 +44,34 @@ class List(db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.user_id'),
                         nullable=False)
-    name = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(128), nullable=False, unique=True)
     # lists can be in draft or published status
-    status = db.Column(db.String(64), nullable=False)
     # this could be a Boolean flag
+    status = db.Column(db.String(64), nullable=False)
+    category_id = db.Column(db.Integer,
+                            db.ForeignKey('list_categories.list_c_id'))
+
     user = db.relationship('User', backref='lists')
+    list_category = db.relationship('ListCategory', backref='lists')
 
     def __repr__(self):
         """Provide helpful representation of list."""
 
         return "<List id={} name={}>".format(self.list_id, self.name)
+
+
+class ListCategory(db.Model):
+    """Category of list."""
+
+    __tablename__ = 'list_categories'
+
+    list_c_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    category = db.Column(db.String(128))
+
+    def __repr__(self):
+        """Provide helpful representation of list category."""
+
+        return "<Category id={} name={}>".format(self.list_c_id, self.category)
 
 
 class ListItem(db.Model):
