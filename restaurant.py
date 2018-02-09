@@ -1,6 +1,6 @@
 """Helper functions related to adding restaurants and list items."""
 
-from model import Restaurant, ListItem, db, List
+from model import *
 
 
 def add_new_restaurant(data, yelp_id):
@@ -94,22 +94,36 @@ def delete_list(list_id):
 def add_list(name, status, user_id):
     """Add list to database."""
 
-    lst = List(user_id=user_id,
-               name=name,
-               status=status,
-               category_id=2)
+    lists = User.query.filter_by(user_id=user_id).first().lists
 
-    db.session.add(lst)
-    db.session.commit()
+    if check_list(lists, name):
+        # print 'hi'
+        return None
+    else:
+        lst = List(user_id=user_id,
+                   name=name.lower(),
+                   status=status,
+                   category_id=2)
 
-    return lst
+        db.session.add(lst)
+        db.session.commit()
+
+        return lst
+
+
+def check_list(lists, name):
+    """Check if user already has list with that name."""
+
+    for item in lists:
+        if item.name == name.lower():
+            return True
 
 
 def add_fav_list(user_id, name, status, category_id):
     """Create favorite list when user signs up."""
 
     lst = List(user_id=user_id,
-               name=name,
+               name=name.lower(),
                status=status,
                category_id=category_id)
 

@@ -8,7 +8,7 @@
     <h2>Here are her lists!</h2>
     {% for item in lsts %}
         <li>
-            <a href='/users/{{ user.username }}/lists/{{ item.list_id }}'>{{ item.name }}</a>
+            <a href='/users/{{ user.username }}/lists/{{ item.list_id }}'>{{ item.name.title() }}</a>
         </li>
     {% endfor %}
 {% endif %}
@@ -18,13 +18,9 @@
 
         <form action='/add-list' method='POST'>
             <label>Name
-                <input type='text' name='name' required>
-                <input hidden name='status' value='draft'>
-                <!-- <select name='list-cat'>
-                    <option value='favorites'>Favorites</option>
-                    <option value='coffee-shops'>Coffee Shops</option>
-                    <option value='bars'>Bars</option> -->
-                <input type='submit'>
+                <input id='list-name' type='text' name='list-name' required>
+                <input hidden name='status' value='draft' id='list-status'>
+                <input type='submit' id='create-list' value='Create List'>
             </label>
         </form>
 {% endif %}

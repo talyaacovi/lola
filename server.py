@@ -102,13 +102,18 @@ def profile_page(username):
 def add_new_list():
     """Add list to database in draft status."""
 
-    name = request.form.get('name')
+    name = request.form.get('list-name')
     status = request.form.get('status')
     user_id = session['user_id']
 
     lst = add_list(name, status, user_id)
 
-    return redirect('/users/{}/lists/{}'.format(lst.user.username, lst.list_id))
+    if lst:
+        return redirect('/users/{}/lists/{}'.format(lst.user.username, lst.list_id))
+
+    else:
+        flash('You already have a list with this name!')
+        return redirect('/users/{}'.format(session['username']))
 
 
 @app.route('/search-results.json')
@@ -193,16 +198,14 @@ def delete():
     message = delete_list(list_id)
     flash(message)
 
-    return redirect('/')
+    return redirect('/users/{}'.format(session['username']))
 
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
     app.debug = True
-
     connect_to_db(app)
-
     # Use the DebugToolbar
     DebugToolbarExtension(app)
 
