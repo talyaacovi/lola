@@ -38,13 +38,10 @@ def add_list_item(rest_id, lst_id):
         db.session.add(lst_item)
         db.session.commit()
 
-        # restaurant_name = Restaurant.query.filter_by(rest_id=rest_id).first().name
-
-        # return restaurant_name
         return lst_item
 
     else:
-        return False
+        return None
 
 
 def del_list_item(item_id):
@@ -75,3 +72,20 @@ def get_list_items(lst_id):
     lst_items = ListItem.query.filter(ListItem.list_id == lst_id).all()
 
     return lst_items
+
+
+def delete_list(list_id):
+    """Delete list from database."""
+
+    lst = List.query.filter_by(list_id=list_id).first()
+    list_items = lst.list_items
+    lst_name = lst.name
+
+    for item in list_items:
+        db.session.delete(item)
+        db.session.commit()
+
+    db.session.delete(lst)
+    db.session.commit()
+
+    return lst_name + ' has been deleted.'

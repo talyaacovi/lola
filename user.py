@@ -38,8 +38,9 @@ def set_session_info(user):
     # g gets wiped in between requests
 
 
-def get_user_lists(user_id):
-    """Get lists belonging to a user."""
+def get_user(username):
+    """Get user by username."""
 
-    lsts = List.query.filter_by(user_id=user_id).all()
-    return lsts
+    user = User.query.filter_by(username=username).first()
+
+    return user

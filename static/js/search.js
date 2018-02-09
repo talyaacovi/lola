@@ -102,11 +102,6 @@ function checkLength() {
     else {$('#search-restaurants').show();}
 }
 
-// $('#list-items').ready(function () {
-//     if ($('#list-items h3').length >= 10) {
-//         $('#search-restaurants').hide();
-//     }
-// });
 
 $('#list-items').ready(checkLength);
 

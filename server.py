@@ -48,29 +48,6 @@ def login():
         flash('You do not have an account. Sign up here!')
         return redirect('/signup-form')
 
-# original method
-    # email = request.form.get('email')
-    # user_password = request.form.get('password')
-
-    # user = User.query.filter_by(email=email).first()
-
-    # if user:
-
-    #     if user.password == user_password:
-    #         flash('You have successfully logged in!')
-
-    #         set_session_info(user)
-
-    #         return redirect('/users/{}'.format(user.username))
-
-    #     else:
-    #         flash('Incorrect password, please try again.')
-
-    #         return redirect('/')
-
-    # flash('You do not have an account. Sign up here!')
-    # return redirect('/signup-form')
-
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -117,6 +94,8 @@ def signup():
     # helper function
     set_session_info(user)
 
+    favorites_list = List(user_id=user.user_id, name='Favorites', status='draft')
+
     return redirect('/users/{}'.format(user.username))
 
 
@@ -124,17 +103,9 @@ def signup():
 def profile_page(username):
     """User profile page."""
 
-    city = session['city'].title()
-    lsts = get_user_lists(session['user_id'])
-    return render_template('profile.html', city=city, lsts=lsts)
-
-
-# don't need this app route anymore
-# @app.route('/create-list')
-# def create_list():
-#     """Start a new list."""
-
-#     return render_template('create_list.html')
+    # city = session['city'].title()
+    user = get_user(username)
+    return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 
 @app.route('/add-list', methods=['POST'])
@@ -238,7 +209,19 @@ def display_list(username, lst_id):
     lst = get_list(lst_id)
     lst_items = get_list_items(lst_id)
 
-    return render_template('list.html', lst=lst, lst_items=lst_items)
+    return render_template('list.html', lst=lst, lst_items=lst_items, username=username)
+
+
+@app.route('/delete-list', methods=['POST'])
+def delete():
+    """Delete list."""
+
+    list_id = request.form.get('list_id')
+    print list_id
+    message = delete_list(list_id)
+    flash(message)
+
+    return redirect('/')
 
 
 if __name__ == "__main__":

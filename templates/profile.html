@@ -1,16 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>{{ session['username'] }}, a local of {{ city }}</h1>
+<h1>{{ user.username }}, a local of {{ city }}</h1>
 <a href='/'>Home</a>
-
-<!-- <p>You are a local of {{ city }}!</p> -->
 
 {% if lsts %}
     <h2>Here are her lists!</h2>
     {% for item in lsts %}
         <li>
-            <a href='/users/{{ session["username"] }}/lists/{{ item.list_id }}'>{{ item.name }}</a>
+            <a href='/users/{{ user.username }}/lists/{{ item.list_id }}'>{{ item.name }}</a>
         </li>
     {% endfor %}
 {% endif %}
@@ -21,10 +19,10 @@
         <label>Name
             <input type='text' name='name' required>
             <input hidden name='status' value='draft'>
-            <select name='list-cat'>
+            <!-- <select name='list-cat'>
                 <option value='favorites'>Favorites</option>
                 <option value='coffee-shops'>Coffee Shops</option>
-                <option value='bars'>Bars</option>
+                <option value='bars'>Bars</option> -->
             <input type='submit'>
         </label>
     </form>
