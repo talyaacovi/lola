@@ -13,18 +13,20 @@
     {% endfor %}
 {% endif %}
 
-<h2>Create a list</h2>
+{% if user.username == session.get('username') %}
+    <h2>Create a list</h2>
 
-    <form action='/add-list' method='POST'>
-        <label>Name
-            <input type='text' name='name' required>
-            <input hidden name='status' value='draft'>
-            <!-- <select name='list-cat'>
-                <option value='favorites'>Favorites</option>
-                <option value='coffee-shops'>Coffee Shops</option>
-                <option value='bars'>Bars</option> -->
-            <input type='submit'>
-        </label>
-    </form>
+        <form action='/add-list' method='POST'>
+            <label>Name
+                <input type='text' name='name' required>
+                <input hidden name='status' value='draft'>
+                <!-- <select name='list-cat'>
+                    <option value='favorites'>Favorites</option>
+                    <option value='coffee-shops'>Coffee Shops</option>
+                    <option value='bars'>Bars</option> -->
+                <input type='submit'>
+            </label>
+        </form>
+{% endif %}
 
 {% endblock %}

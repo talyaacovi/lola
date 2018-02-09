@@ -130,3 +130,11 @@ function removeRestaurant(result) {
     checkLength();
 
 }
+
+$('#del-list').on('submit', function (evt) {
+    // debugger;
+    var action = confirm('Are you sure you want to delete your list?');
+    if (!action){
+        evt.preventDefault();
+    }
+});

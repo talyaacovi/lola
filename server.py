@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = "ABC"
 # Can comment out below line to avoid jinja errors if variable not defined
 app.jinja_env.undefined = StrictUndefined
-app.jinja_env.aut_reload = True
+app.jinja_env.auto_reload = True
 
 
 @app.route('/')
