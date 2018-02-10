@@ -10,7 +10,9 @@
 </div>
 
 <div id='top-restaurants'>
-
+    {% for restaurant in all_restaurants %}
+        <p>{{ restaurant.name }}</p>
+    {% endfor %}
 </div>
 
 {% endblock %}

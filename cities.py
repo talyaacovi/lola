@@ -21,5 +21,12 @@ def get_users_by_city(state, city):
 def get_restaurants_by_city(state, city):
     """Get restaurants added to lists by users of that city."""
 
-    all_locations = db.session.query(User.city, User.state).distinct().all()
-    return all_locations
+    # get list ids for a specific city + state
+    restaurants = []
+
+    lsts = List.query.join(User).filter(User.state == state.upper(), User.city == city.upper(), List.category_id == 1).all()
+    for lst in lsts:
+        for item in lst.list_items:
+            restaurants.append(item.restaurant)
+
+    return set(restaurants)

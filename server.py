@@ -231,7 +231,7 @@ def display_city_page(state, city):
     all_users = get_users_by_city(state, city)
     all_restaurants = get_restaurants_by_city(state, city)
 
-    return render_template('city-page.html', all_users=all_users, city=city)
+    return render_template('city-page.html', all_users=all_users, city=city, all_restaurants=all_restaurants)
 
 
 if __name__ == "__main__":
