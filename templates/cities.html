@@ -2,7 +2,7 @@
 {% block content %}
 
 {% for location in all_locations %}
-    <a href='/cities/{{ location[1] }}/{{ location[0] }}'>{{ location[0] }}, {{ location[1] }}</a>
+    <a href='/cities/{{ location[1].lower() }}/{{ location[0].lower() }}'>{{ location[0].title() }}, {{ location[1] }}</a>
     <br>
 {% endfor %}
 

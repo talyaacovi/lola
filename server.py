@@ -161,7 +161,7 @@ def add_restaurant():
 
     results = business(yelp_id)
     restaurant = add_new_restaurant(results, yelp_id)
-    lst_item = add_list_item(restaurant.rest_id, lst_id)
+    lst_item = add_list_item(restaurant.rest_id, lst_id, session['user_id'])
 
     if lst_item:
 
@@ -229,8 +229,9 @@ def display_city_page(state, city):
     """Display users and lists for a specific city."""
 
     all_users = get_users_by_city(state, city)
+    all_restaurants = get_restaurants_by_city(state, city)
 
-    return render_template('city-page.html', all_users=all_users)
+    return render_template('city-page.html', all_users=all_users, city=city)
 
 
 if __name__ == "__main__":

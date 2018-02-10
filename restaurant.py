@@ -29,10 +29,10 @@ def add_new_restaurant(data, yelp_id):
     # return restaurant
 
 
-def add_list_item(rest_id, lst_id):
+def add_list_item(rest_id, lst_id, user_id):
     """Add list item to DB."""
 
-    if not ListItem.query.filter_by(rest_id=rest_id).first():
+    if not ListItem.query.join(List).filter(List.user_id == user_id, ListItem.rest_id == rest_id, List.list_id == lst_id).all():
         lst_item = ListItem(list_id=lst_id, rest_id=rest_id)
 
         db.session.add(lst_item)

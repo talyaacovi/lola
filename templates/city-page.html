@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% for user in all_users %}
-    <a href='/users/{{ user.username }}'>{{ user.username }}</a>
-    <br>
-{% endfor %}
+<div id='city-locals'>
+    <h2>Locals of {{ city.title() }}</h2>
+    {% for user in all_users %}
+        <a href='/users/{{ user.username }}'>{{ user.username }}</a>
+        <br>
+    {% endfor %}
+</div>
 
+<div id='top-restaurants'>
+
+</div>
 
 {% endblock %}
