@@ -201,6 +201,24 @@ def delete():
     return redirect('/users/{}'.format(session['username']))
 
 
+@app.route('/cities')
+def cities():
+    """List all cities with lists created."""
+
+    all_locations = db.session.query(User.city, User.state).all()
+
+    return render_template('cities.html', all_locations=all_locations)
+
+
+@app.route('/cities/<state>/<city>')
+def display_city_page(state, city):
+    """Display users and lists for a specific city."""
+
+    all_users = User.query.filter(User.state == state, User.city == city.upper()).all()
+
+    return render_template('city-page.html', all_users=all_users)
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
