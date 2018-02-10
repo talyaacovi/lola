@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for location in all_locations %}
+    <a href='/cities/{{ location[1] }}/{{ location[0] }}'>{{ location[0] }}, {{ location[1] }}</a>
+    <br>
+{% endfor %}
+
+
+{% endblock %}

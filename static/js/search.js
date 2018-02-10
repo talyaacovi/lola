@@ -11,6 +11,30 @@ $('#search-btn').click(function (evt) {
 });
 
 
+// username checks!!!
+
+$('#username').on('keyup', function (evt) {
+    // evt.target.value
+    let username = evt.target.value;
+    $.get('/check-username', {'username': username}, usernameMessage);
+});
+
+
+function usernameMessage(result) {
+    // alert('hi');
+    // debugger;
+    if (result == 'True') {
+        alert('this username is already taken');
+    }
+}
+
+
+
+// $('#username').on('blur', function (evt) {
+    // check length of username input value
+
+
+
 // this gets called after the search results are returned through the AJAX request
 // and first empties out the results div and any messages on the page, and then
 // creates the search results and buttons to add the restaurant

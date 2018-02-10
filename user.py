@@ -20,6 +20,15 @@ def check_password(user_email, user_password):
         return True
 
 
+def check_username(username):
+    """Check if username already exists."""
+
+    if User.query.filter_by(username=username).first():
+        return True
+    else:
+        return False
+
+
 def set_session_info(user):
     """Sets session data after successful login or signup."""
 

@@ -8,6 +8,7 @@ from model import *
 from yelp_api import search, business
 from restaurant import *
 from user import *
+from cities import *
 # for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
@@ -88,6 +89,19 @@ def signup():
     fav_list = add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
     return redirect('/users/{}/lists/{}'.format(user.username, fav_list.list_id))
+
+
+@app.route('/check-username')
+def username():
+    """Check if username already exists."""
+
+    username = request.args.get('username')
+    print username
+
+    if check_username(username):
+        return 'True'
+    else:
+        return 'False'
 
 
 @app.route('/users/<username>')
@@ -205,7 +219,7 @@ def delete():
 def cities():
     """List all cities with lists created."""
 
-    all_locations = db.session.query(User.city, User.state).all()
+    all_locations = get_cities()
 
     return render_template('cities.html', all_locations=all_locations)
 
@@ -214,7 +228,7 @@ def cities():
 def display_city_page(state, city):
     """Display users and lists for a specific city."""
 
-    all_users = User.query.filter(User.state == state, User.city == city.upper()).all()
+    all_users = get_users_by_city(state, city)
 
     return render_template('city-page.html', all_users=all_users)
 
