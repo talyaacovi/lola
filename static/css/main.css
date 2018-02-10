@@ -1,3 +1,7 @@
 .yelp-img img {
     height: 100px;
 }
+
+#logout {
+    display: inline;
+}

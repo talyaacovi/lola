@@ -53,12 +53,16 @@ def login():
 def logout():
     """Log out user."""
 
+    print 'here i am'
+
     del session['user_id']
     del session['city']
     del session['state']
     del session['username']
 
-    return 'You have successfully logged out.'
+    flash('You have successfully logged out.')
+
+    return redirect('/')
 
 
 @app.route('/signup-form')
@@ -215,6 +219,17 @@ def delete():
     return redirect('/users/{}'.format(session['username']))
 
 
+@app.route('/search-city')
+def search_city():
+    """Handle user search for city form."""
+
+    location = request.args.get('city-name')
+    city = location.split(', ')[:-1][0]
+    state = location.split(', ')[:-1][1]
+
+    return redirect('/cities/{}/{}'.format(state.lower(), city.lower()))
+
+
 @app.route('/cities')
 def cities():
     """List all cities with lists created."""
@@ -229,7 +244,7 @@ def display_city_page(state, city):
     """Display users and lists for a specific city."""
 
     all_users = get_users_by_city(state, city)
-    all_restaurants = get_restaurants_by_city(state, city)
+    all_restaurants = count_restaurants_by_city(state, city)
 
     return render_template('city-page.html', all_users=all_users, city=city, all_restaurants=all_restaurants)
 

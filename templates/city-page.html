@@ -11,7 +11,7 @@
 
 <div id='top-restaurants'>
     {% for restaurant in all_restaurants %}
-        <p>{{ restaurant.name }}</p>
+        <p data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}'>{{ restaurant.name }}</p>
     {% endfor %}
 </div>
 

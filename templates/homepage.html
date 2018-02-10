@@ -4,14 +4,14 @@
 <p id='logout-msg'></p>
 
 
-<div id='logout'
+<!-- <div id='logout'
     {% if not session.get('user_id') %}
         hidden
     {% endif %}>
 
     <button id='logout-btn'>Logout</button>
 
-</div>
+</div> -->
 
 <div id='login'
     {% if session.get('user_id') %}
@@ -38,5 +38,24 @@
 
 <h1>Where do the locals eat?</h1>
 
+
+
+<h3>Search for a city</h3>
+
+    <form action='/search-city'>
+        <label>City
+            <input id='autocomplete' type='text' name='city-name' required>
+            <input type='submit' id='search-city' value='Search'>
+        </label>
+    </form>
+
+<script>
+    var input = document.getElementById('autocomplete');
+    var options = {
+        types: ['(cities)']
+    };
+
+    autocomplete = new google.maps.places.Autocomplete(input, options);
+</script>
 
 {% endblock %}

@@ -2,10 +2,9 @@
 {% block content %}
 
 <h1>{{ user.username }}, a local of {{ city }}</h1>
-<a href='/'>Home</a>
 
 {% if lsts %}
-    <h2>Here are her lists!</h2>
+    <h3>Lists</h3>
     {% for item in lsts %}
         <li>
             <a href='/users/{{ user.username }}/lists/{{ item.list_id }}'>{{ item.name.title() }}</a>
@@ -14,7 +13,7 @@
 {% endif %}
 
 {% if user.username == session.get('username') %}
-    <h2>Create a list</h2>
+    <h3>Create a list</h3>
 
         <form action='/add-list' method='POST'>
             <label>Name
