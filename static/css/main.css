@@ -5,3 +5,7 @@
 #logout {
     display: inline;
 }
+
+#map {
+    height: 800px;
+}

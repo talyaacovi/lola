@@ -14,24 +14,24 @@ $('#search-btn').click(function (evt) {
 // username checks!!!
 
 $('#username').on('keyup', function (evt) {
-    // evt.target.value
     let username = evt.target.value;
     $.get('/check-username', {'username': username}, usernameMessage);
 });
 
 
 function usernameMessage(result) {
-    // alert('hi');
-    // debugger;
     if (result == 'True') {
         alert('this username is already taken');
     }
 }
 
 
-
-// $('#username').on('blur', function (evt) {
-    // check length of username input value
+$('#username').on('blur', function (evt) {
+    let username = evt.target.value;
+    if (username.length < 6) {
+        alert('Username must be at least 6 characters.');
+    }
+});
 
 
 
