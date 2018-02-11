@@ -19,22 +19,27 @@ def get_users_by_city(state, city):
     return all_users
 
 
-def get_restaurants_by_city(state, city):
-    """Get restaurants added to lists by users of that city."""
+def check_city_state(state, city):
+    """Check if registered user exists in that city state combination."""
 
-    # get list ids for a specific city + state
-    restaurants = []
+    return User.query.filter(User.state == state.upper(), User.city == city.upper()).all()
 
-    lsts = List.query.join(User).filter(User.state == state.upper(), User.city == city.upper(), List.category_id == 1).all()
-    for lst in lsts:
-        for item in lst.list_items:
-            restaurants.append(item.restaurant)
 
-    return set(restaurants)
+# def get_restaurants_by_city(state, city):
+#     """Get restaurants added to lists by users of that city."""
+
+#     restaurants = []
+
+#     lsts = List.query.join(User).filter(User.state == state.upper(), User.city == city.upper(), List.category_id == 1).all()
+#     for lst in lsts:
+#         for item in lst.list_items:
+#             restaurants.append(item.restaurant)
+
+#     return set(restaurants)
 
 
 def count_restaurants_by_city(state, city):
-    """stuff"""
+    """Get top 10 restaurants for a specific city."""
 
     restaurants = db.session.query(func.count(ListItem.rest_id), ListItem.rest_id).join(List).join(User).filter(User.state == state.upper(), User.city == city.upper(), List.category_id == 1).group_by(ListItem.rest_id).all()
     restaurants.sort(reverse=True)
@@ -43,22 +48,12 @@ def count_restaurants_by_city(state, city):
     for count, rest_id in restaurants:
         restList.append(Restaurant.query.filter_by(rest_id=rest_id).first())
 
-    return restList
-
-    # sf = db.session.query(ListItem.rest_id, func.count(ListItem.rest_id)).join(List).join(User).filter(User.state == 'CA', User.city == 'SAN FRANCISCO').group_by(ListItem.rest_id).all()
-    # restaurants = []
-    # for rest_id, count in sf:
-    #     newDict = {}
-    #     restaurant_object = Restaurant.query.filter_by(rest_id=rest_id).first()
-    #     newDict['restaurant']
+    return restList[:10]
 
 
+def get_city_lat_lng(state, city):
+    """Get lat and lng coordinates for a city."""
 
-    # restaurants = {}
+    location = Zipcode.query.filter(Zipcode.city == city.upper(), Zipcode.state == state.upper()).first()
 
-    # lsts = List.query.join(User).filter(User.state == 'CA', User.city == 'SAN FRANCISCO', List.category_id == 1).all()
-    # for lst in lsts:
-    #     for item in lst.list_items:
-    #         restaurants[item.restaurant.name] = restaurants.get(item.restaurant.name, 0) + 1
-
-    # return restaurants
+    return location

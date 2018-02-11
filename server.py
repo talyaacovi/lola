@@ -227,7 +227,12 @@ def search_city():
     city = location.split(', ')[:-1][0]
     state = location.split(', ')[:-1][1]
 
-    return redirect('/cities/{}/{}'.format(state.lower(), city.lower()))
+    if check_city_state(state, city):
+        return redirect('/cities/{}/{}'.format(state.lower(), city.lower()))
+
+    else:
+        flash('Lists for ' + city + ' have not yet been created. Invite your friends!')
+        return redirect('/')
 
 
 @app.route('/cities')
@@ -245,8 +250,13 @@ def display_city_page(state, city):
 
     all_users = get_users_by_city(state, city)
     all_restaurants = count_restaurants_by_city(state, city)
+    location = get_city_lat_lng(state, city)
 
-    return render_template('city-page.html', all_users=all_users, city=city, all_restaurants=all_restaurants)
+    return render_template('city-page.html',
+                           all_users=all_users,
+                           city=city,
+                           all_restaurants=all_restaurants,
+                           location=location)
 
 
 if __name__ == "__main__":

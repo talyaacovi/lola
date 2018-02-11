@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}</h1>
+
 <div id='city-locals'>
-    <h2>Locals of {{ city.title() }}</h2>
+    <h2>Meet The Locals</h2>
     {% for user in all_users %}
         <a href='/users/{{ user.username }}'>{{ user.username }}</a>
         <br>
@@ -10,9 +12,12 @@
 </div>
 
 <div id='top-restaurants'>
+    <h2>Top 10 Favorite Local Restaurants</h2>
+    <ol>
     {% for restaurant in all_restaurants %}
-        <p data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}'>{{ restaurant.name }}</p>
+        <li data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}'>{{ restaurant.name }}</li>
     {% endfor %}
+</ol>
 </div>
 
 <div id='map'></div>
