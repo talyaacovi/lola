@@ -11,9 +11,10 @@ $('#search-btn').click(function (evt) {
 });
 
 
-// username checks!!!
+// username validation to ensure length is greater than 6 characters and that
+// username is not already taken.
 
-$('#username').on('keyup', function (evt) {
+$('#username').on('blur', function (evt) {
     let username = evt.target.value;
     $.get('/check-username', {'username': username}, usernameMessage);
 });
@@ -21,17 +22,38 @@ $('#username').on('keyup', function (evt) {
 
 function usernameMessage(result) {
     if (result == 'True') {
-        alert('this username is already taken');
+        $('#username-correct').hide();
+        $('#username-taken').attr('style', 'display: inline');
+    }
+    else if (result == 'False') {
+        $('#username-taken').hide();
+        checkUsernameLength();
+    }
+
+}
+
+function checkUsernameLength() {
+    let username = $('#username').val();
+    if (username.length < 6) {
+        $('#username-correct').hide();
+        $('#username-length').attr('style', 'display: inline');
+    }
+    else if (username.length >= 6) {
+        $('#username-length').hide();
+        $('#username-correct').attr('style', 'display: inline');
     }
 }
 
 
-$('#username').on('blur', function (evt) {
-    let username = evt.target.value;
-    if (username.length < 6) {
-        alert('Username must be at least 6 characters.');
-    }
-});
+// $('#username').on('blur', function (evt) {
+//     let username = evt.target.value;
+//     if (username.length < 6) {
+//         $('#username-length').attr('style', 'display: inline');
+//     }
+//     else if (username.length >= 6) {
+//         $('#username-length').hide();
+//     }
+// });
 
 
 
@@ -114,10 +136,13 @@ function displayRestaurant(result) {
     $('#list-items').append(newRest);
     $('#' + result.yelp_id).hide();
 
-    checkLength();
+    checkListLength();
 }
 
-function checkLength() {
+// this checks the length of the list and hides the search functionality if
+// list is greater than or equal to 10.
+
+function checkListLength() {
     if ($('#list-items h3').length >= 10) {
         $('#search-restaurants').hide();
         $('#results-div').empty();
@@ -127,8 +152,13 @@ function checkLength() {
 }
 
 
-$('#list-items').ready(checkLength);
+$('#list-items').ready(checkListLength);
 
+
+// this adds remove buttons to each item on the list if the user clicks on
+// the edit button, and adds event listeners to those remove buttons which
+// make an AJAX post request with the id of the item that the user wants to
+// remove.
 
 $('#edit-btn').click(function (evt) {
     let rests = $('#list-items').children();
@@ -158,15 +188,21 @@ $('#edit-btn').click(function (evt) {
 });
 
 
+// this is the callback function for the AJAX post request to remove an item
+// from. the list and displays a success message, and removes that item
+// from the list on the front-end.
+
 function removeRestaurant(result) {
     $('#msg-div').html(result.name + ' has been removed from your list.');
     $('div').find('[data-yelp-id=' + result.yelp_id + ']').empty();
-    checkLength();
+    checkListLength();
 
 }
 
+// this confirms that user wants to delete their list when they submit the
+// delete list button.
+
 $('#del-list').on('submit', function (evt) {
-    // debugger;
     var action = confirm('Are you sure you want to delete your list?');
     if (!action){
         evt.preventDefault();

@@ -19,7 +19,6 @@ function addMarker(lat, lng) {
       position: nearSydney,
       map: map,
       title: 'Hover text',
-      // icon: myImageURL
   });
   return marker;
 }
@@ -31,12 +30,21 @@ for (let i = 0; i < restArray.length; i++) {
     let lng = restArray[i].dataset.lng;
 
     addMarker(lat, lng);
-    // let marker = addMarker(lat, lng);
 }
-// var map;
-// function initMap() {
-//     map = new google.maps.Map(document.getElementById('map'), {
-//         center: eastAustralia,
-//         zoom: 8
-//     });
-// }
+
+
+function addInfoWindow() {
+
+  let contentString = '<div id="content">' +
+    '<h1>All my custom content</h1>' +
+    '</div>';
+
+  let infoWindow = new google.maps.InfoWindow({
+    content: contentString,
+    maxWidth: 200
+  });
+
+  marker.addListener('click', function() {
+    infoWindow.open(map, marker);
+  });
+}

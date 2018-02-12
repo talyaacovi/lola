@@ -19,21 +19,20 @@
     {% endif %}>
 
     <div id='login-form'>
-      <form action='/login' method='POST'>
+        <p>Login</p>
+        <form action='/login' method='POST'>
+            <label>Email:
+                <input type='email' name='email' required>
+            </label>
 
-        <label>Email:
-            <input type='email' name='email' required>
-        </label>
+            <label>Password:
+                <input type='password' name='password' required>
+            </label>
 
-        <label>Password:
-            <input type='password' name='password' required>
-        </label>
-
-        <input type='submit' value='Login'>
-
-      </form>
+            <input type='submit' value='Submit'>
+        </form>
     </div>
-    Don't have an account? <a href='/signup-form'>Sign Up</a>
+    <p>Don't have an account? <a href='/signup-form'>Sign Up</a></p>
 </div>
 
 <h1>Where do the locals eat?</h1>

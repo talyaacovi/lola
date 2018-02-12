@@ -9,3 +9,16 @@
 #map {
     height: 400px;
 }
+
+#username-length, #username-taken, #username-correct {
+    display: none;
+    font-size: 0.75em;
+}
+
+label {
+    display: block;
+}
+
+#login-form label {
+    display: inline;
+}
