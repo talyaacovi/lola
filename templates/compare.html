@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>comparison page!</h1>
+
+
+
+<h2>you are most similar to {{ most_similar_user }}.</h2>
+
+<p>these are the restaurants you have in common:</p>
+    <ol>
+        {% for rests in rests_in_common %}
+            <li>{{ rests.name }}</li>
+        {% endfor %}
+    </ol>
+
+
+{% endblock %}

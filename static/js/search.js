@@ -98,7 +98,7 @@ function displayRestaurant(result) {
 // list is greater than or equal to 10.
 
 function checkListLength() {
-    if ($('#list-items h3').length >= 10) {
+    if ($('#list-items h3').length >= 20) {
         $('#search-restaurants').hide();
         $('#results-div').empty();
 

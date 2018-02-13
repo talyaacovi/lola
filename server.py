@@ -9,6 +9,7 @@ from yelp_api import search, business
 from restaurant import *
 from user import *
 from cities import *
+from compare import *
 # for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
@@ -52,8 +53,6 @@ def login():
 @app.route('/logout', methods=['POST'])
 def logout():
     """Log out user."""
-
-    print 'here i am'
 
     del session['user_id']
     del session['city']
@@ -268,6 +267,21 @@ def zipcode():
         return 'True'
     else:
         return 'False'
+
+
+@app.route('/compare')
+def do_comparison():
+    """Show a logged in user the local they are most similar to."""
+
+    restaurants = get_user_favorite_restaurants()
+    most_similar_user_dict = get_most_similar_user(restaurants)
+    most_similar_user = most_similar_user_dict.get('name')
+    rests_in_common_ids = most_similar_user_dict.get('rest_ids')
+
+    rests_in_common = get_common_rests(rests_in_common_ids)
+    print rests_in_common
+
+    return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user)
 
 
 @app.route('/list-react')

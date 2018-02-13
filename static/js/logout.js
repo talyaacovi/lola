@@ -6,8 +6,16 @@ function logoutUser(result) {
     $('#logout').hide();
 }
 $('#logout-btn').click(function (evt) {
-    console.log('yo');
     $.post('/logout', logoutUser);
+});
+
+
+// user signup
+
+$('#signup-btn').click(function (evt) {
+    $('#signup-div').show();
+    $('#login').hide();
+    $('#signup-msg').hide();
 });
 
 

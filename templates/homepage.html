@@ -32,7 +32,38 @@
             <input type='submit' value='Submit'>
         </form>
     </div>
-    <p>Don't have an account? <a href='/signup-form'>Sign Up</a></p>
+
+    <p id='signup-msg'>Don't have an account? <input type='submit' id='signup-btn' value='Sign Up'></p>
+    <div id='signup-div' hidden>
+
+        <form action='/signup' method='POST'>
+
+            <label>Email:
+                <input id='email' type='email' name='email' required>
+            </label>
+
+            <label>Password:
+                <input id='password' type='password' name='password' required>
+            </label>
+
+            <label>Username:
+                <input id='username' type='username' name='username' required>
+                <p id='username-length'>&#10060; Username must be at least 6 characters.</p>
+                <p id='username-taken'>&#10060; Username is already taken.</p>
+                <p id='username-correct'>&#9989;</p>
+            </label>
+
+            <label>Zipcode:
+                <input id='zipcode' type='text' name='zipcode' required>
+                <p id='zipcode-invalid'>&#10060; Please enter a valid zipcode.</p>
+                <p id='zipcode-valid'>&#9989;</p>
+            </label>
+
+            <input id='signup-form' type='submit' value='Signup'>
+
+        </form>
+
+    </div>
 </div>
 
 <h1>Where do the locals eat?</h1>
