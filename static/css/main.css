@@ -23,6 +23,10 @@ label {
     display: inline;
 }
 
+#signup-div {
+    display: none;
+}
+
 #list-items {
     display: inline;
 }

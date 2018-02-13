@@ -78,8 +78,8 @@ def signup():
     email = request.form.get('email')
 
     if check_email(email):
-        flash('This email address already has an account. Log in here.')
-        return redirect('/')
+        # flash('This email address already has an account. Log in here.')
+        return ''
 
     password = request.form.get('password')
     username = request.form.get('username')
@@ -91,7 +91,8 @@ def signup():
 
     fav_list = add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
-    return redirect('/users/{}/lists/{}'.format(user.username, fav_list.list_id))
+    # return redirect('/users/{}/lists/{}'.format(user.username, fav_list.list_id))
+    return 'Your account has been created.'
 
 
 @app.route('/check-username')
