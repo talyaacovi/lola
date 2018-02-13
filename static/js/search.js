@@ -11,51 +11,6 @@ $('#search-btn').click(function (evt) {
 });
 
 
-// username validation to ensure length is greater than 6 characters and that
-// username is not already taken.
-
-$('#username').on('blur', function (evt) {
-    let username = evt.target.value;
-    $.get('/check-username', {'username': username}, usernameMessage);
-});
-
-
-function usernameMessage(result) {
-    if (result == 'True') {
-        $('#username-correct').hide();
-        $('#username-taken').attr('style', 'display: inline');
-    }
-    else if (result == 'False') {
-        $('#username-taken').hide();
-        checkUsernameLength();
-    }
-
-}
-
-function checkUsernameLength() {
-    let username = $('#username').val();
-    if (username.length < 6) {
-        $('#username-correct').hide();
-        $('#username-length').attr('style', 'display: inline');
-    }
-    else if (username.length >= 6) {
-        $('#username-length').hide();
-        $('#username-correct').attr('style', 'display: inline');
-    }
-}
-
-
-// $('#username').on('blur', function (evt) {
-//     let username = evt.target.value;
-//     if (username.length < 6) {
-//         $('#username-length').attr('style', 'display: inline');
-//     }
-//     else if (username.length >= 6) {
-//         $('#username-length').hide();
-//     }
-// });
-
-
 
 // this gets called after the search results are returned through the AJAX request
 // and first empties out the results div and any messages on the page, and then

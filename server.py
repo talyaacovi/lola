@@ -100,7 +100,6 @@ def username():
     """Check if username already exists."""
 
     username = request.args.get('username')
-    print username
 
     if check_username(username):
         return 'True'
@@ -257,6 +256,26 @@ def display_city_page(state, city):
                            city=city,
                            all_restaurants=all_restaurants,
                            location=location)
+
+
+@app.route('/check-zipcode')
+def zipcode():
+    """Check that zipcode is valid."""
+
+    zipcode = request.args.get('zipcode')
+
+    if check_zipcode(zipcode):
+        return 'True'
+    else:
+        return 'False'
+
+
+
+@app.route('/list-react')
+def list_react():
+    """React!"""
+
+    return render_template('list-react.html')
 
 
 if __name__ == "__main__":

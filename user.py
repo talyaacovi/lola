@@ -29,6 +29,15 @@ def check_username(username):
         return False
 
 
+def check_zipcode(zipcode):
+    """Check if zipcode is valid."""
+
+    if Zipcode.query.filter_by(zipcode=zipcode).first():
+        return True
+    else:
+        return False
+
+
 def set_session_info(user):
     """Sets session data after successful login or signup."""
 
