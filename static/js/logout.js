@@ -74,3 +74,8 @@ function zipcodeMessage (result) {
         $('#zipcode-invalid').attr('style', 'display: inline');
     }
 }
+
+
+// global variable formValid set to True
+// set to False if any tests fail
+// listen to submit on form and if formValid is false, prevent default and alert

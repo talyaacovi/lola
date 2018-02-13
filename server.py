@@ -96,7 +96,7 @@ def signup():
 
 
 @app.route('/check-username')
-def username():
+def do_check_username():
     """Check if username already exists."""
 
     username = request.args.get('username')
@@ -268,7 +268,6 @@ def zipcode():
         return 'True'
     else:
         return 'False'
-
 
 
 @app.route('/list-react')
