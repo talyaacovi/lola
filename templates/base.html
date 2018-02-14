@@ -6,19 +6,15 @@
     <link rel='stylesheet' type='text/css' href='/static/css/main.css'>
     <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDznN8sa3CGq-S-mYT2yPNB58B5S3me6lg&libraries=places'></script>
 
-
-
-    <!-- <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
-</script>-->
-
-
 </head>
 <body>
 
-{% block nav %}
-
-{% endblock %}
+<div id='home'
+    {% if session.get('user_id') %}
+    hidden
+    {% endif %}>
+    <a href='/'>Home</a>
+</div>
 
 
 <div id='nav'>
@@ -27,7 +23,8 @@
         hidden
     {% endif %}>
         <a href='/'>Home</a>
-        <a id='profile-page' href='/profile'>Profile Page</a>
+        <!-- <a id='profile-page' href='/profile'>Profile Page</a> -->
+        <a id='profile-page' href='/users/{{ session.get("username") }}'>Profile Page</a>
         <a href='/compare'>Compare</a>
         <a href='/cities'>Cities</a>
         <div id='logout-div'>

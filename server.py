@@ -120,6 +120,7 @@ def user_page(username):
     """User profile page."""
 
     user = get_user(username)
+
     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 

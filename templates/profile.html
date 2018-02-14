@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+<!-- {% block nav %}
+    <div id='home'
+        {% if session.get('user_id') %}
+        hidden
+    {% endif %}>
+        <a href='/'>Home</a>
+    </div>
+{% endblock %} -->
+
+{% block content %}
+
+<h1>{{ user.username }}, a local of {{ city }}</h1>
+
+{% if lsts %}
+    <h3>Lists</h3>
+    {% for item in lsts %}
+        <li>
+            <a href='/users/{{ user.username }}/lists/{{ item.list_id }}'>{{ item.name.title() }}</a>
+        </li>
+    {% endfor %}
+{% endif %}
+
+{% if user.username == session.get('username') %}
+    <div id='create-list'>
+        <h3>Create a list</h3>
+
+            <form action='/add-list' method='POST'>
+                <label>Name
+                    <input id='list-name' type='text' name='list-name' required>
+                    <input hidden name='status' value='draft' id='list-status'>
+                    <input type='submit' id='create-list' value='Create List'>
+                </label>
+            </form>
+    </div>
+{% endif %}
+
+{% endblock %}

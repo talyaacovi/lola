@@ -10,6 +10,7 @@ function logoutUser(result) {
     $('#msg-para').html(result);
     $('#main-login').show();
     $('#logged-in-nav').hide();
+    $('#create-list').hide();
     $('#signup-msg').show();
     $('#home').show();
 }
@@ -38,6 +39,7 @@ function loginMessage(result) {
         $('#main-login').hide();
         $('#logged-in-nav').show();
         $('#home').hide();
+        $('#profile-page').attr('href', '/users/' + result.user);
     }
     else if (result == 'Incorrect') {
         $('#msg-para').html('Incorrect password, please try again.');

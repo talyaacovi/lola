@@ -1,14 +1,5 @@
 {% extends 'base.html' %}
 
-{% block nav %}
-    <div id='home'
-        {% if session.get('user_id') %}
-        hidden
-    {% endif %}>
-        <a href='/'>Home</a>
-    </div>
-{% endblock %}
-
 {% block content %}
 
 

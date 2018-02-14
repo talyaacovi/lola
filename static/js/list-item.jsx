@@ -20,6 +20,7 @@ class ListItemContainer extends React.Component {
     }
 
     addListItem(newRestaurant) {
+        alert(newRestaurant);
         // save new restaraunt to DB
         // add new restaurant to local state
         // ^ steps will trigger a render call which updates the UI
@@ -85,13 +86,14 @@ class ListItem extends React.Component {
 
 class SearchItem extends React.Component {
     buttonClickHandler() {
-        this.props.addRestaurantHandler(this.props.yelpid)
+        alert('in button click handler!');
+        this.props.addRestaurantHandler(this.props.yelpid);
     }
     render() {
         return (<div data-yelp-id={ this.props.yelpid }>
                     <p>{ this.props.rest }</p>
                     <p>{ this.props.address }</p>
-                    <button onClick={this.buttonClickHandler} data-yelp-id={ this.props.yelpid } className='add-btn'>Add Restaurant</button>
+                    <button onClick={this.buttonClickHandler.bind(this)} data-yelp-id={ this.props.yelpid } className='add-btn'>Add Restaurant</button>
                 </div>
             );
     }
