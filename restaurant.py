@@ -31,26 +31,6 @@ def add_new_restaurant(yelp_id):
     return restaurant.rest_id
 
 
-    # if not Restaurant.query.filter_by(yelp_id=yelp_id).first():
-    #     name = data['name']
-    #     lat = data['coordinates']['latitude']
-    #     lng = data['coordinates']['longitude']
-    #     yelp_url = data['url'].split('?')[0]
-    #     yelp_category = data['categories'][0]['title']
-    #     yelp_photo = data['image_url']
-
-    #     restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
-    #                             yelp_url=yelp_url, yelp_category=yelp_category,
-    #                             yelp_photo=yelp_photo)
-
-    #     db.session.add(restaurant)
-    #     db.session.commit()
-
-    #     return restaurant
-    # else:
-    #     return Restaurant.query.filter_by(yelp_id=yelp_id).first()
-
-
 def add_list_item(rest_id, lst_id, user_id):
     """Add list item to DB."""
 
@@ -153,17 +133,6 @@ def add_fav_list(user_id, name, status, category_id):
     db.session.commit()
 
     return lst
-
-
-# def check_restaurant(yelp_id):
-#     """Check if restaurant exists in DB."""
-
-#     rest_id = db.session.query(Restaurant.rest_id).filter(Restaurant.yelp_id == yelp_id).first()
-
-#     if rest_id:
-#         return rest_id[0]
-#     else:
-#         return None
 
 
 def get_list_items_react(lst_id):

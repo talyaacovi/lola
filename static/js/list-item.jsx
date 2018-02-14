@@ -13,7 +13,7 @@ class ListItemContainer extends React.Component {
     }
 
     fetchListItems() {
-        fetch('/list-items-react.json?lst_id=' + this.props.listId) // have to add the list id onto the URL somehow...
+        fetch('/list-items-react.json?lst_id=' + this.props.listId)
         .then((response) => response.json())
         .then((data) => this.setState({listItems: data.restaurants})
             );
@@ -21,18 +21,47 @@ class ListItemContainer extends React.Component {
 
     addListItem(newRestaurant) {
         alert(newRestaurant);
-        fetch(`/add-restaurant-react.json?lst_id=${this.props.listId}&yelp_id=${newRestaurant}`)
-        // return the one new restaurant
 
-        // save new restaraunt to DB
-        // add new restaurant to local state
-        // let currItems = this.state.listItems;
-        // currItems.push(myNewObj);
-        // this.setState(listItems: currItems);
-        // ^ steps will trigger a render call which updates the UI
+        let payload = new FormData();
+        payload.append('lst_id', this.props.listId);
+        payload.append('yelp_id', newRestaurant);
+
+        fetch('/add-restaurant-react.json', {
+            method: 'POST',
+            body: payload,
+            credentials: 'same-origin'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data) {
+                let currItems = this.state.listItems;
+                currItems.push(data);
+                this.setState({listItems: currItems});
+            }
+            else {
+                alert('this restaurant already exists on this list!');
+                }
+            });
     }
 
-    fetchSearchItems() {
+
+
+
+// fetch('/add-restaurant-react.json', {
+//     method: 'POST',
+//     headers: {'Content-Type': 'application/json'},
+//     body: {
+//         'lst_id': this.props.listId,
+//         'yelp_id': newRestaurant
+//     }
+// });
+
+
+
+
+
+    fetchSearchItems(evt) {
+        evt.preventDefault();
         fetch(`/search-results-react.json?term=${this.state.inputValue}&username=${this.props.username}`)
         .then((response) => response.json())
         .then((data) => this.setState({searchItems: data.rests})
@@ -56,15 +85,17 @@ class ListItemContainer extends React.Component {
         let searchItems = [];
 
         for (let item of this.state.searchItems) {
-            searchItems.push(<SearchItem yelpid={item.id} addRestaurantHandler={this.addListItem}
+            searchItems.push(<SearchItem yelpid={item.id} addRestaurantHandler={this.addListItem.bind(this)}
                 rest={item.name} address={item.location} key={item.id}/>);
         }
 // change button onClick to form onSubmit!
         return (<div>
                     <div id='search-restaurants'>
                         <h2>Search for a restaurant you love in San Francisco!</h2>
-                        <input value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
-                        <button onClick={this.fetchSearchItems.bind(this)}>Search</button>
+                        <form onSubmit={this.fetchSearchItems.bind(this)}>
+                            <input value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+                            <button>Search</button>
+                        </form>
                     </div>
                     <div id='results-div'>
                         {searchItems}

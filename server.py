@@ -47,19 +47,6 @@ def login_user():
     else:
         return 'No Account'
 
-    # if email:
-    #     if check_password(email, user_password):
-    #         user = User.query.filter_by(email=email).first()
-    #         flash('You have successfully logged in!')
-    #         set_session_info(user)
-    #         return redirect('/users/{}'.format(user.username))
-    #     else:
-    #         flash('Incorrect password, please try again.')
-    #         return redirect('/')
-    # else:
-    #     flash('You do not have an account. Sign up here!')
-    #     return redirect('/signup-form')
-
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -73,13 +60,6 @@ def logout():
     # flash('You have successfully logged out.')
     return 'You have successfully logged out.'
     # return redirect('/')
-
-
-# @app.route('/signup-form')
-# def signup_page():
-#     """Display signup page."""
-
-#     return render_template('signup.html')
 
 
 @app.route('/signup', methods=['POST'])
@@ -176,28 +156,6 @@ def do_search():
 @app.route('/add-restaurant.json', methods=['POST'])
 def add_restaurant():
     """Add Restaurant to Database."""
-
-    # lst_id = request.form.get('list')
-    # yelp_id = request.form.get('id')
-
-    # results = business(yelp_id)
-    # restaurant = add_new_restaurant(results, yelp_id)
-    # lst_item = add_list_item(restaurant.rest_id, lst_id, session['user_id'])
-
-    # if lst_item:
-
-    #     results_dict = {}
-    #     results_dict['name'] = lst_item.restaurant.name
-    #     results_dict['yelp_id'] = lst_item.restaurant.yelp_id
-    #     results_dict['item_id'] = lst_item.item_id
-    #     results_dict['yelp_category'] = lst_item.restaurant.yelp_category
-    #     results_dict['yelp_url'] = lst_item.restaurant.yelp_url
-    #     results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
-
-    #     return jsonify(results_dict)
-
-    # else:
-    #     return ''
 
     lst_id = request.form.get('list')
     yelp_id = request.form.get('id')
@@ -382,6 +340,8 @@ def do_react_search():
 def add_restaurant_react():
     """Add Restaurant to Database using React."""
 
+    print 'in my react route'
+
     lst_id = request.form.get('lst_id')
     yelp_id = request.form.get('yelp_id')
 
@@ -392,12 +352,12 @@ def add_restaurant_react():
     if lst_item:
 
         results_dict = {}
-        results_dict['name'] = lst_item.restaurant.name
+        results_dict['rest_name'] = lst_item.restaurant.name
         results_dict['yelp_id'] = lst_item.restaurant.yelp_id
         results_dict['item_id'] = lst_item.item_id
         results_dict['yelp_category'] = lst_item.restaurant.yelp_category
         results_dict['yelp_url'] = lst_item.restaurant.yelp_url
-        results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
+        results_dict['image'] = lst_item.restaurant.yelp_photo
 
         return jsonify(results_dict)
 
