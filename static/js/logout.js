@@ -62,13 +62,16 @@ function loginMessage(result) {
 $('#signup-btn').click(function (evt) {
     $('#signup-div').show();
     $('#login-div').hide();
+    $('#msg-para').hide();
 });
 
 
-// username validation to ensure length is greater than 6 characters
+////////////////// username validation
+// to ensure length is greater than 6 characters
 // and that username is not already taken.
 
-let formValid = true;
+let usernameValid = true;
+let zipcodeValid = true;
 
 $('#username').on('blur', function (evt) {
     let username = evt.target.value;
@@ -78,11 +81,13 @@ $('#username').on('blur', function (evt) {
 
 function usernameMessage(result) {
     if (result == 'True') {
+        console.log('username is taken');
         $('#username-correct').hide();
         $('#username-taken').attr('style', 'display: inline');
-        formValid = false;
+        usernameValid = false;
     }
     else if (result == 'False') {
+        console.log('username is not taken');
         $('#username-taken').hide();
         checkUsernameLength();
     }
@@ -94,17 +99,17 @@ function checkUsernameLength() {
     if (username.length < 6) {
         $('#username-correct').hide();
         $('#username-length').attr('style', 'display: inline');
-        formValid = false;
+        usernameValid = false;
     }
     else if (username.length >= 6) {
         $('#username-length').hide();
         $('#username-correct').attr('style', 'display: inline');
-        formValid = true;
+        usernameValid = true;
     }
 }
 
 
-// zipcode validation
+////////////////// zipcode validation
 
 
 $('#zipcode').on('blur', function (evt) {
@@ -116,18 +121,20 @@ function zipcodeMessage (result) {
     if (result == 'True') {
         $('#zipcode-invalid').hide();
         $('#zipcode-valid').attr('style', 'display: inline');
-        formValid = true;
+        zipcodeValid = true;
     }
     else if (result == 'False') {
         $('#zipcode-valid').hide();
         $('#zipcode-invalid').attr('style', 'display: inline');
-        formValid = false;
+        zipcodeValid = false;
     }
 }
 
-$('#signup-form').on('submit', function (evt) {
+////////////////// signup form listener to check and submit
+
+$('#signup-form').submit(function (evt) {
     evt.preventDefault();
-    if (formValid == true) {
+    if (usernameValid === true && zipcodeValid === true) {
         let email = evt.target.email.value;
         let password = evt.target.password.value;
         let username = evt.target.username.value;
@@ -136,7 +143,7 @@ $('#signup-form').on('submit', function (evt) {
         $.post('/signup', {'email': email, 'password': password, 'username': username, 'zipcode': zipcode}, signupUser);
     }
 
-    else if (formValid == false) {
+    else {
         alert('Please fix errors!');
     }
 });
@@ -145,9 +152,11 @@ function signupUser(result) {
     let message = $('#msg-para');
 
     if (result) {
-        message.append(result);
+        message.append('Your account has been created.');
         $('#signup-form').hide();
         $('#home').hide();
+        $('#logged-in-nav').show();
+        $('#profile-page').attr('href', '/users/' + result);
     }
 
     else {
@@ -158,10 +167,3 @@ function signupUser(result) {
 
     }
 }
-
-//
-
-
-// global variable formValid set to True
-// set to False if any tests fail
-// listen to submit on form and if formValid is false, prevent default and alert

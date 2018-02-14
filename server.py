@@ -100,7 +100,7 @@ def signup():
 
     fav_list = add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
-    return 'Your account has been created.'
+    return username
 
 
 @app.route('/check-username')
@@ -293,14 +293,18 @@ def do_comparison():
     """Show a logged in user the local they are most similar to."""
 
     restaurants = get_user_favorite_restaurants()
-    most_similar_user_dict = get_most_similar_user(restaurants)
-    most_similar_user = most_similar_user_dict.get('name')
-    rests_in_common_ids = most_similar_user_dict.get('rest_ids')
+    if len(restaurants) >= 20:
+        most_similar_user_dict = get_most_similar_user(restaurants)
+        most_similar_user = most_similar_user_dict.get('name')
+        rests_in_common_ids = most_similar_user_dict.get('rest_ids')
 
-    rests_in_common = get_common_rests(rests_in_common_ids)
-    print rests_in_common
+        rests_in_common = get_common_rests(rests_in_common_ids)
 
-    return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user)
+        return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user)
+
+    else:
+        flash('You must add at least 20 restaurants to your favorites list to access this feature!')
+        return redirect('/users/{}'.format(session['username']))
 
 
 @app.route('/users/<username>/react-lists/<int:lst_id>')
