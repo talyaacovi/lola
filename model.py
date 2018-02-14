@@ -91,10 +91,15 @@ class ListItem(db.Model):
     lst = db.relationship('List', backref='list_items')
     restaurant = db.relationship('Restaurant', backref='list_items')
 
+    def to_dict(self):
+        """Return dict of list item."""
 
-    # def to_dict(self):
-    #     return {'id': self.id,
-    #             ....}
+        return {'rest_name': self.restaurant.name,
+                'yelp_id': self.restaurant.yelp_id,
+                'item_id': self.item_id,
+                'yelp_category': self.restaurant.yelp_category,
+                'yelp_url': self.restaurant.yelp_url,
+                'image': self.restaurant.yelp_photo}
 
     def __repr__(self):
         """Provide helpful representation of list items."""

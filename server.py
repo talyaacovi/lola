@@ -300,13 +300,9 @@ def list_react(username, lst_id):
 def list_items_react():
     """Get user list items using React."""
 
-    # username = request.args.get('username')
     lst_id = request.args.get('lst_id')
     lst_items = get_list_items_react(lst_id)
 
-    print lst_items
-
-    # return jsonify({'data': []})
     return jsonify(lst_items)
 
 
@@ -351,18 +347,10 @@ def add_restaurant_react():
 
     if lst_item:
 
-        results_dict = {}
-        results_dict['rest_name'] = lst_item.restaurant.name
-        results_dict['yelp_id'] = lst_item.restaurant.yelp_id
-        results_dict['item_id'] = lst_item.item_id
-        results_dict['yelp_category'] = lst_item.restaurant.yelp_category
-        results_dict['yelp_url'] = lst_item.restaurant.yelp_url
-        results_dict['image'] = lst_item.restaurant.yelp_photo
-
-        return jsonify(results_dict)
+        return jsonify(lst_item.to_dict())
 
     else:
-        return ''
+        return 'null'
 
 
 if __name__ == "__main__":

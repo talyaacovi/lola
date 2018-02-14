@@ -139,17 +139,11 @@ def get_list_items_react(lst_id):
     """get list items for react."""
 
     lst_items = ListItem.query.filter(ListItem.list_id == lst_id).all()
-    lst_items_dict = {'restaurants': []}
 
+    myList = []
     for item in lst_items:
-        rest_dict = {}
-        rest_dict['rest_name'] = item.restaurant.name
-        rest_dict['yelp_id'] = item.restaurant.yelp_id
-        rest_dict['item_id'] = item.item_id
-        rest_dict['yelp_category'] = item.restaurant.yelp_category
-        rest_dict['yelp_url'] = item.restaurant.yelp_url
-        rest_dict['image'] = item.restaurant.yelp_photo
+        myList.append(item.to_dict())
 
-        lst_items_dict['restaurants'].append(rest_dict)
+    myDict = {'restaurants': myList}
 
-    return lst_items_dict
+    return myDict

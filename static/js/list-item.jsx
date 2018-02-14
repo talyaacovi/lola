@@ -20,7 +20,6 @@ class ListItemContainer extends React.Component {
     }
 
     addListItem(newRestaurant) {
-        alert(newRestaurant);
 
         let payload = new FormData();
         payload.append('lst_id', this.props.listId);
@@ -123,7 +122,6 @@ class ListItem extends React.Component {
 
 class SearchItem extends React.Component {
     buttonClickHandler() {
-        alert('in button click handler!');
         this.props.addRestaurantHandler(this.props.yelpid);
     }
     render() {
