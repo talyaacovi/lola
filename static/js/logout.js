@@ -1,13 +1,15 @@
 "use strict";
 
-function logoutUser(result) {
-    $('#msg-para').html(result);
-    $('#login').show();
-    $('#logout').hide();
-}
-$('#logout-btn').click(function (evt) {
-    $.post('/logout', logoutUser);
-});
+// function logoutUser(result) {
+//     $('#msg-para').html(result);
+//     $('#main-login').show();
+//     $('#logout').hide();
+// }
+
+// $('#logout-form').submit(function (evt) {
+//     evt.preventDefault();
+//     $.post('/logout', logoutUser);
+// });
 
 
 // user signup

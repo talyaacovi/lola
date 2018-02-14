@@ -2,6 +2,10 @@
     height: 100px;
 }
 
+#logout-form {
+    display: inline;
+}
+
 #logout {
     display: inline;
 }

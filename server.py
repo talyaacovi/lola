@@ -59,8 +59,8 @@ def logout():
     del session['state']
     del session['username']
 
-    flash('You have successfully logged out.')
-
+    # flash('You have successfully logged out.')
+    # return 'You have successfully logged out.'
     return redirect('/')
 
 
@@ -285,11 +285,30 @@ def do_comparison():
     return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user)
 
 
-@app.route('/list-react')
-def list_react():
+@app.route('/users/<username>/react-lists/<int:lst_id>')
+def list_react(username, lst_id):
     """React!"""
 
-    return render_template('list-react.html')
+    lst = get_list(lst_id)
+    return render_template('list-react.html', lst_id=lst_id, username=username, lst=lst)
+
+
+@app.route('/list-items-react.json')
+def list_items_react():
+    """Get user list items using React."""
+
+    # username = request.args.get('username')
+    lst_id = request.args.get('lst_id')
+    lst_items = get_list_items_react(lst_id)
+
+    print lst_items
+
+    # return jsonify({'data': []})
+    return jsonify(lst_items)
+
+
+# @app.route('/users/<username>/lists/<int:lst_id>')
+# def display_list(username, lst_id):
 
 
 if __name__ == "__main__":
