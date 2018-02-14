@@ -89,6 +89,9 @@ class ListItemContainer extends React.Component {
         }
 // change button onClick to form onSubmit!
         return (<div>
+                    <div id='list-header'>
+
+                    </div>
                     <div id='search-restaurants'>
                         <h2>Search for a restaurant you love in San Francisco!</h2>
                         <form onSubmit={this.fetchSearchItems.bind(this)}>

@@ -60,10 +60,11 @@ def del_list_item(item_id):
     return restaurant
 
 
-def get_list(lst_id):
+def get_list(username, listname):
     """Get list object from DB"""
 
-    lst = List.query.filter_by(list_id=lst_id).first()
+    user = User.query.filter_by(username=username).first()
+    lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
 
     return lst
 

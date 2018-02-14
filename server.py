@@ -195,12 +195,14 @@ def delete_restaurant():
     return jsonify(restaurant_dict)
 
 
-@app.route('/users/<username>/lists/<int:lst_id>')
-def display_list(username, lst_id):
+@app.route('/users/<username>/lists/<listname>')
+def display_list(username, listname):
     """Display list."""
 
-    lst = get_list(lst_id)
-    lst_items = get_list_items(lst_id)
+    # lst = get_list(lst_id)
+    lst = get_list(username, listname)
+
+    lst_items = get_list_items(lst.list_id)
 
     return render_template('list.html', lst=lst, lst_items=lst_items, username=username)
 
