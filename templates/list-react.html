@@ -1,16 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <title>Lists</title>
+    <title></title>
+    <script src='http://code.jquery.com/jquery-3.2.1.min.js'></script>
     <link rel='stylesheet' type='text/css' href='/static/css/main.css'>
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDznN8sa3CGq-S-mYT2yPNB58B5S3me6lg&libraries=places'></script>
+
+
+
+    <!-- <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
+</script>-->
+
+
 </head>
 <body>
 
-<!-- this is the page on which the list item components will mount -->
-<h1 id='username' name='username' value='{{ username }}'>{{ username }} Favorite's List</h1>
-<input hidden id='list_id' name='list_id' value='{{ lst_id }}'/>
+{% if session.get('user_id') %}
+    <a href='/users/{{ session["username"] }}'>Profile Page</a>
+    <a href='/compare'>Compare</a>
+{% endif %}
 
-<h2>Search for a restaurant you love in San Francisco!</h2>
+<a href='/cities'>Cities</a>
+<a href='/'>Home</a>
+
+{% if session.get('user_id') %}
+    <div id='logout'>
+        <!-- <form id='logout-form'> -->
+        <form action='/logout' id='logout-form' method='POST'>
+            <input type='submit' value='Logout' id='logout-btn'>
+        </form>
+    </div>
+{% endif %}
+
+</div>
+
+<hr>
+
+
+{% for flash in get_flashed_messages() %}
+  {{ flash }}
+{% endfor %}
+
+<!-- this is the page on which the list item components will mount -->
+<h1>{{ lst.name.title() }}</h1>
+<input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
+
+
+{% if username == session.get('username') %}
+    <button id='edit-btn'>Edit List</button>
+    <button hidden id='save-btn'>Save List</button>
+
+    {% if lst.category_id != 1 %}
+        <form action='/delete-list' id='del-list' method='POST'>
+            <input type='hidden' name='list_id' value='{{ lst.list_id }}'>
+            <input type='submit' value='Delete List'>
+        </form>
+    {% endif %}
+
+{% endif %}
+
+<div id='msg-div'></div>
+
+{% if username == session.get('username') %}
+    <div id='search-restaurants'>
+
+        <form>
+            <h2>Search for a restaurant you love in {{ session.get('city').title() }}!</h2>
+                <input type='text' id='search-term' name='term' required>
+                <button id='search-btn'>Search</button>
+        </form>
+
+
+    <div id='results-div'></div>
+    </div>
+
+{% endif %}
 
 <div id="root"></div>
 
@@ -22,5 +87,6 @@
 <script src="/static/js/list-item.jsx" type="text/jsx"></script>
 <script src="/static/js/list-react.jsx" type="text/jsx"></script>
 
+<script src='/static/js/search.js'></script>
 </body>
 </html>

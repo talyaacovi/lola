@@ -4,34 +4,34 @@
 class ListItemContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {listItems: []};
+        this.state = {listItems: [], searchItems: []};
         this.fetchListItems = this.fetchListItems.bind(this);
     }
 
     componentWillMount() {
-        console.log('hi i\'m mounting');
         this.fetchListItems();
-        console.log('after fetch!');
     }
 
     fetchListItems() {
-        fetch('/list-items-react.json?username=' + this.props.username + '&lst_id=' + this.props.listId) // have to add the list id onto the URL somehow...
+        fetch('/list-items-react.json?lst_id=' + this.props.listId) // have to add the list id onto the URL somehow...
         .then((response) => response.json())
         .then((data) => this.setState({listItems: data.restaurants})
             );
         }
 
+    // fetchSearchItems() {
+    //     /route in flask to query yelp API for that search term
+    // }
+
+    // .on(submit 'search button') call fetchListItems
+
     render() {
-        console.log('rendering!');
-        console.log(this.state.listItems);
         let listItems = [];
-        //let myListItemComponents = [<ListItem />, <ListItem />, ...]
-        // access this.state.listItems and loop over
+
         for (let item of this.state.listItems) {
-            console.log(item);
             listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
                 rest={item.rest_name} category={item.yelp_category}
-                url={item.yelp_url} image={item.image}/>);
+                url={item.yelp_url} image={item.image} key={item.item_id}/>);
         }
 
         return (<div id='list-items'>
@@ -52,4 +52,8 @@ class ListItem extends React.Component {
                 </div>
             );
     }
+}
+
+class SearchItem extends React.Component {
+
 }

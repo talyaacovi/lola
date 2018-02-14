@@ -1,15 +1,54 @@
 "use strict";
 
-// function logoutUser(result) {
-//     $('#msg-para').html(result);
-//     $('#main-login').show();
-//     $('#logout').hide();
-// }
 
-// $('#logout-form').submit(function (evt) {
-//     evt.preventDefault();
-//     $.post('/logout', logoutUser);
-// });
+/////////////////////////////////////////////////
+////////////////// user logout //////////////////
+/////////////////////////////////////////////////
+
+
+function logoutUser(result) {
+    $('#msg-para').html(result);
+    $('#main-login').show();
+    $('#logged-in-nav').hide();
+}
+
+$('#logout-form').submit(function (evt) {
+    evt.preventDefault();
+    $.post('/logout', logoutUser);
+});
+
+/////////////////////////////////////////////////
+////////////////// user login //////////////////
+/////////////////////////////////////////////////
+
+
+$('#login-form').submit(function (evt) {
+    evt.preventDefault();
+    let email = evt.target.email.value;
+    let password = evt.target.password.value;
+    $.post('/login-user', {'email': email, 'password': password}, loginMessage);
+});
+
+function loginMessage(result) {
+    console.log(result);
+    if (result.msg == 'Success') {
+        $('#msg-para').html('You have successfully logged in!');
+        $('#main-login').hide();
+        $('#logged-in-nav').show();
+        $('#logged-in-nav').show();
+    }
+    else if (result == 'Incorrect') {
+        $('#msg-para').html('Incorrect password, please try again.');
+        $('input[name=password').val('');
+    }
+
+    else if (result == 'No Account') {
+        $('#msg-para').html('You do not have an account. Sign up here!');
+        $('#login-div').hide();
+        $('#signup-div').show();
+    }
+}
+
 
 
 // user signup

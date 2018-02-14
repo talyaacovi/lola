@@ -2,11 +2,11 @@
     height: 100px;
 }
 
-#logout-form {
+#logout-form, #logout-div {
     display: inline;
 }
 
-#logout {
+#logged-in-nav {
     display: inline;
 }
 
@@ -19,18 +19,20 @@
     font-size: 0.75em;
 }
 
-label {
-    display: block;
-}
-
-#login-form label {
-    display: inline;
-}
-
 #signup-div {
     display: none;
 }
 
-#list-items {
+/*label {
+    display: block;
+}*/
+
+/*#login-form label {
     display: inline;
-}
+}*/
+
+
+
+/*#list-items {
+    display: inline;
+}*/

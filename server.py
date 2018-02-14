@@ -28,26 +28,38 @@ def index():
     return render_template('homepage.html')
 
 
-@app.route('/login', methods=['POST'])
-def login():
+@app.route('/login-user', methods=['POST'])
+def login_user():
     """Log user in to their account."""
 
     user_email = request.form.get('email')
+    print user_email
     email = check_email(user_email)
     user_password = request.form.get('password')
 
     if email:
         if check_password(email, user_password):
             user = User.query.filter_by(email=email).first()
-            flash('You have successfully logged in!')
             set_session_info(user)
-            return redirect('/users/{}'.format(user.username))
+            # return 'Success'
+            return jsonify({'msg': 'Success', 'user': user.username})
         else:
-            flash('Incorrect password, please try again.')
-            return redirect('/')
+            return 'Incorrect'
     else:
-        flash('You do not have an account. Sign up here!')
-        return redirect('/signup-form')
+        return 'No Account'
+
+    # if email:
+    #     if check_password(email, user_password):
+    #         user = User.query.filter_by(email=email).first()
+    #         flash('You have successfully logged in!')
+    #         set_session_info(user)
+    #         return redirect('/users/{}'.format(user.username))
+    #     else:
+    #         flash('Incorrect password, please try again.')
+    #         return redirect('/')
+    # else:
+    #     flash('You do not have an account. Sign up here!')
+    #     return redirect('/signup-form')
 
 
 @app.route('/logout', methods=['POST'])
@@ -60,8 +72,8 @@ def logout():
     del session['username']
 
     # flash('You have successfully logged out.')
-    # return 'You have successfully logged out.'
-    return redirect('/')
+    return 'You have successfully logged out.'
+    # return redirect('/')
 
 
 @app.route('/signup-form')
@@ -108,9 +120,18 @@ def do_check_username():
 
 
 @app.route('/users/<username>')
-def profile_page(username):
+def user_page(username):
     """User profile page."""
 
+    user = get_user(username)
+    return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
+
+
+@app.route('/profile')
+def profile_page():
+    """Homepage."""
+
+    username = session['username']
     user = get_user(username)
     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 

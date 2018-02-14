@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- <p id='logout-msg'></p> -->
 <p id='msg-para'></p>
 
 
+<!-- if session user id exists, entire main-login div is hidden -->
 <div id='main-login'
     {% if session.get('user_id') %}
         hidden
     {% endif %}>
 
-    <div id='login-form'>
+    <div id='login-div'>
+        <!--  -->
         <p>Login</p>
-        <form action='/login' method='POST'>
+        <form id='login-form' method='POST' action='/login-form'>
+
             <label>Email:
                 <input type='email' name='email' required>
             </label>
@@ -22,15 +24,13 @@
             </label>
 
             <input type='submit' value='Submit'>
+
         </form>
         <p id='signup-msg'>Don't have an account? <button id='signup-btn'>Sign Up</button></p>
     </div>
 
 
-    <div id='signup-div'
-        {% if session.get('user_id') %}
-            hidden
-        {% endif %}>
+    <div id='signup-div'>
 
             <form id='signup-form'>
 
@@ -54,8 +54,8 @@
                     <p id='zipcode-invalid'>&#10060; Please enter a valid zipcode.</p>
                     <p id='zipcode-valid'>&#9989;</p>
                 </label>
+
                 <input type='submit' id='submit-signup' value='Submit'>
-                <!-- <button id='submit-signup'>Submit</button> -->
 
             </form>
     </div>
@@ -67,7 +67,7 @@
 <h1>Where do the locals eat?</h1>
 
 
-
+<!-- search for a city which uses Google Places autocomplete -->
 <h3>Search for a city</h3>
 
     <form action='/search-city'>

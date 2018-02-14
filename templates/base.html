@@ -16,24 +16,31 @@
 </head>
 <body>
 
-{% if session.get('user_id') %}
-    <a href='/users/{{ session["username"] }}'>Profile Page</a>
-    <a href='/compare'>Compare</a>
-{% endif %}
 
-<a href='/cities'>Cities</a>
-<a href='/'>Home</a>
 
-{% if session.get('user_id') %}
-    <div id='logout'>
-        <!-- <form id='logout-form'> -->
-        <form action='/logout' id='logout-form' method='POST'>
-            <input type='submit' value='Logout' id='logout-btn'>
-        </form>
+<div id='nav'>
+    <a href='/'>Home</a>
+
+    <div id='logged-in-nav'
+    {% if not session.get('user_id') %}
+        hidden
+    {% endif %}>
+        <a id='profile-page' href='/profile'>Profile Page</a>
+        <a href='/compare'>Compare</a>
+        <a href='/cities'>Cities</a>
+        <div id='logout-div'>
+            <form action='/logout' id='logout-form' method='POST'>
+                <input type='submit' value='Logout' id='logout-btn'>
+            </form>
+        </div>
     </div>
-{% endif %}
-
 </div>
+
+
+<!-- <a href='/cities'>Cities</a> -->
+<!-- <a href='/'>Home</a> -->
+
+
 
 <hr>
 
