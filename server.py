@@ -90,20 +90,17 @@ def signup():
     email = request.form.get('email')
 
     if check_email(email):
-        # flash('This email address already has an account. Log in here.')
         return ''
 
     password = request.form.get('password')
     username = request.form.get('username')
     zipcode = request.form.get('zipcode')
     user = register_user(email, password, username, zipcode)
-    # AJAX request to see if username exists?
 
     set_session_info(user)
 
     fav_list = add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
-    # return redirect('/users/{}/lists/{}'.format(user.username, fav_list.list_id))
     return 'Your account has been created.'
 
 

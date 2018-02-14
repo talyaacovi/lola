@@ -10,6 +10,7 @@ function logoutUser(result) {
     $('#msg-para').html(result);
     $('#main-login').show();
     $('#logged-in-nav').hide();
+    $('#home').show();
 }
 
 $('#logout-form').submit(function (evt) {
@@ -35,7 +36,7 @@ function loginMessage(result) {
         $('#msg-para').html('You have successfully logged in!');
         $('#main-login').hide();
         $('#logged-in-nav').show();
-        $('#logged-in-nav').show();
+        $('#home').hide();
     }
     else if (result == 'Incorrect') {
         $('#msg-para').html('Incorrect password, please try again.');
@@ -51,7 +52,9 @@ function loginMessage(result) {
 
 
 
-// user signup
+/////////////////////////////////////////////////
+////////////////// user signup //////////////////
+/////////////////////////////////////////////////
 
 $('#signup-btn').click(function (evt) {
     $('#signup-div').show();

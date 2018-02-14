@@ -16,15 +16,17 @@
 </head>
 <body>
 
+{% block nav %}
+  Put your body here.
+{% endblock %}
 
 
 <div id='nav'>
-    <a href='/'>Home</a>
-
     <div id='logged-in-nav'
     {% if not session.get('user_id') %}
         hidden
     {% endif %}>
+        <a href='/'>Home</a>
         <a id='profile-page' href='/profile'>Profile Page</a>
         <a href='/compare'>Compare</a>
         <a href='/cities'>Cities</a>
