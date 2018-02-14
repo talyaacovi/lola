@@ -41,7 +41,6 @@ def login_user():
         if check_password(email, user_password):
             user = User.query.filter_by(email=email).first()
             set_session_info(user)
-            # return 'Success'
             return jsonify({'msg': 'Success', 'user': user.username})
         else:
             return 'Incorrect'
@@ -76,11 +75,11 @@ def logout():
     # return redirect('/')
 
 
-@app.route('/signup-form')
-def signup_page():
-    """Display signup page."""
+# @app.route('/signup-form')
+# def signup_page():
+#     """Display signup page."""
 
-    return render_template('signup.html')
+#     return render_template('signup.html')
 
 
 @app.route('/signup', methods=['POST'])
@@ -325,8 +324,30 @@ def list_items_react():
     return jsonify(lst_items)
 
 
-# @app.route('/users/<username>/lists/<int:lst_id>')
-# def display_list(username, lst_id):
+@app.route('/search-results-react.json')
+def do_react_search():
+    """Get search results using Yelp API and React."""
+
+    search_term = request.args.get('term')
+    username = request.args.get('username')
+    # city = session['city'].title()
+    # state = session['state'].title()
+    user_location = get_user_location(username)
+    city = user_location[0]
+    state = user_location[1]
+    search_location = city + ', ' + state
+
+    results = search(search_term, search_location)
+    business_results = results['businesses']
+
+    results_dict = {'rests': []}
+
+    for item in business_results:
+        results_dict['rests'].append({'name': item['name'],
+                                      'id': item['id'],
+                                      'location': item['location']['display_address'][0]})
+
+    return jsonify(results_dict)
 
 
 if __name__ == "__main__":

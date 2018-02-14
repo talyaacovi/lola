@@ -10,6 +10,7 @@ function logoutUser(result) {
     $('#msg-para').html(result);
     $('#main-login').show();
     $('#logged-in-nav').hide();
+    $('#signup-msg').show();
     $('#home').show();
 }
 
@@ -58,12 +59,14 @@ function loginMessage(result) {
 
 $('#signup-btn').click(function (evt) {
     $('#signup-div').show();
-    $('#login-form').hide();
+    $('#login-div').hide();
 });
 
 
-// username validation to ensure length is greater than 6 characters and that
-// username is not already taken.
+// username validation to ensure length is greater than 6 characters
+// and that username is not already taken.
+
+let formValid = true;
 
 $('#username').on('blur', function (evt) {
     let username = evt.target.value;
@@ -75,6 +78,7 @@ function usernameMessage(result) {
     if (result == 'True') {
         $('#username-correct').hide();
         $('#username-taken').attr('style', 'display: inline');
+        formValid = false;
     }
     else if (result == 'False') {
         $('#username-taken').hide();
@@ -88,10 +92,12 @@ function checkUsernameLength() {
     if (username.length < 6) {
         $('#username-correct').hide();
         $('#username-length').attr('style', 'display: inline');
+        formValid = false;
     }
     else if (username.length >= 6) {
         $('#username-length').hide();
         $('#username-correct').attr('style', 'display: inline');
+        formValid = true;
     }
 }
 
@@ -108,22 +114,29 @@ function zipcodeMessage (result) {
     if (result == 'True') {
         $('#zipcode-invalid').hide();
         $('#zipcode-valid').attr('style', 'display: inline');
+        formValid = true;
     }
     else if (result == 'False') {
         $('#zipcode-valid').hide();
         $('#zipcode-invalid').attr('style', 'display: inline');
+        formValid = false;
     }
 }
 
 $('#signup-form').on('submit', function (evt) {
     evt.preventDefault();
-    // debugger;
-    let email = evt.target.email.value;
-    let password = evt.target.password.value;
-    let username = evt.target.username.value;
-    let zipcode = evt.target.zipcode.value;
+    if (formValid == true) {
+        let email = evt.target.email.value;
+        let password = evt.target.password.value;
+        let username = evt.target.username.value;
+        let zipcode = evt.target.zipcode.value;
 
-    $.post('/signup', {'email': email, 'password': password, 'username': username, 'zipcode': zipcode}, signupUser);
+        $.post('/signup', {'email': email, 'password': password, 'username': username, 'zipcode': zipcode}, signupUser);
+    }
+
+    else if (formValid == false) {
+        alert('Please fix errors!');
+    }
 });
 
 function signupUser(result) {
@@ -132,13 +145,14 @@ function signupUser(result) {
     if (result) {
         message.append(result);
         $('#signup-form').hide();
+        $('#home').hide();
     }
 
     else {
         message.append('This email address already has an account.');
         $('#signup-div').hide();
-        $('#login-form').show();
-        $('#signup-msg').hide();
+        $('#login-div').show();
+        // $('#signup-msg').hide();
 
     }
 }

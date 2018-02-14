@@ -4,7 +4,7 @@
 class ListItemContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {listItems: [], searchItems: []};
+        this.state = {listItems: [], searchItems: [], inputValue: ''};
         this.fetchListItems = this.fetchListItems.bind(this);
     }
 
@@ -17,13 +17,25 @@ class ListItemContainer extends React.Component {
         .then((response) => response.json())
         .then((data) => this.setState({listItems: data.restaurants})
             );
-        }
+    }
 
-    // fetchSearchItems() {
-    //     /route in flask to query yelp API for that search term
-    // }
+    addListItem(newRestaurant) {
+        // save new restaraunt to DB
+        // add new restaurant to local state
+        // ^ steps will trigger a render call which updates the UI
+    }
 
-    // .on(submit 'search button') call fetchListItems
+    fetchSearchItems() {
+        fetch(`/search-results-react.json?term=${this.state.inputValue}&username=${this.props.username}`)
+        .then((response) => response.json())
+        .then((data) => this.setState({searchItems: data.rests})
+            );
+    }
+
+    updateInputValue(evt) {
+        // debugger;
+        this.setState({inputValue: evt.target.value});
+    }
 
     render() {
         let listItems = [];
@@ -34,8 +46,25 @@ class ListItemContainer extends React.Component {
                 url={item.yelp_url} image={item.image} key={item.item_id}/>);
         }
 
-        return (<div id='list-items'>
-                    {listItems}
+        let searchItems = [];
+
+        for (let item of this.state.searchItems) {
+            searchItems.push(<SearchItem yelpid={item.id} addRestaurantHandler={this.addListItem}
+                rest={item.name} address={item.location} key={item.id}/>);
+        }
+
+        return (<div>
+                    <div id='search-restaurants'>
+                        <h2>Search for a restaurant you love in San Francisco!</h2>
+                        <input value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+                        <button onClick={this.fetchSearchItems.bind(this)}>Search</button>
+                    </div>
+                    <div id='results-div'>
+                        {searchItems}
+                    </div>
+                    <div id='list-items'>
+                        {listItems}
+                    </div>
                 </div>);
     }
 }
@@ -55,5 +84,16 @@ class ListItem extends React.Component {
 }
 
 class SearchItem extends React.Component {
+    buttonClickHandler() {
+        this.props.addRestaurantHandler(this.props.yelpid)
+    }
+    render() {
+        return (<div data-yelp-id={ this.props.yelpid }>
+                    <p>{ this.props.rest }</p>
+                    <p>{ this.props.address }</p>
+                    <button onClick={this.buttonClickHandler} data-yelp-id={ this.props.yelpid } className='add-btn'>Add Restaurant</button>
+                </div>
+            );
+    }
 
 }

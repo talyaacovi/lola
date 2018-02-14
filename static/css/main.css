@@ -2,7 +2,7 @@
     height: 100px;
 }
 
-#logout-form, #logout-div {
+#logout-form, #logout-div, #logout {
     display: inline;
 }
 

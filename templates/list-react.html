@@ -17,7 +17,7 @@
 <body>
 
 {% if session.get('user_id') %}
-    <a href='/users/{{ session["username"] }}'>Profile Page</a>
+    <a href='/profile'>Profile Page</a>
     <a href='/compare'>Compare</a>
 {% endif %}
 
@@ -37,14 +37,10 @@
 
 <hr>
 
-
-{% for flash in get_flashed_messages() %}
-  {{ flash }}
-{% endfor %}
-
 <!-- this is the page on which the list item components will mount -->
 <h1>{{ lst.name.title() }}</h1>
 <input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
+<input hidden id='username' name='username' value='{{ username }}'>
 
 
 {% if username == session.get('username') %}
@@ -62,20 +58,7 @@
 
 <div id='msg-div'></div>
 
-{% if username == session.get('username') %}
-    <div id='search-restaurants'>
 
-        <form>
-            <h2>Search for a restaurant you love in {{ session.get('city').title() }}!</h2>
-                <input type='text' id='search-term' name='term' required>
-                <button id='search-btn'>Search</button>
-        </form>
-
-
-    <div id='results-div'></div>
-    </div>
-
-{% endif %}
 
 <div id="root"></div>
 

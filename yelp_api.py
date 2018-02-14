@@ -12,7 +12,7 @@ BUSINESS_PATH = '/v3/businesses/'
 
 DEFAULT_TERM = 'pizza'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 10
+SEARCH_LIMIT = 5
 
 
 def request(host, path, api_key, url_params=None):

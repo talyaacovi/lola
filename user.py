@@ -64,6 +64,12 @@ def get_user(username):
     return user
 
 
+def get_user_location(username):
+    """Get city and state for a username."""
+
+    return db.session.query(User.city, User.state).filter(User.username == username).first()
+
+
 def register_user(email, password, username, zipcode):
     """Add user."""
 
