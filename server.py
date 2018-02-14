@@ -177,12 +177,35 @@ def do_search():
 def add_restaurant():
     """Add Restaurant to Database."""
 
+    # lst_id = request.form.get('list')
+    # yelp_id = request.form.get('id')
+
+    # results = business(yelp_id)
+    # restaurant = add_new_restaurant(results, yelp_id)
+    # lst_item = add_list_item(restaurant.rest_id, lst_id, session['user_id'])
+
+    # if lst_item:
+
+    #     results_dict = {}
+    #     results_dict['name'] = lst_item.restaurant.name
+    #     results_dict['yelp_id'] = lst_item.restaurant.yelp_id
+    #     results_dict['item_id'] = lst_item.item_id
+    #     results_dict['yelp_category'] = lst_item.restaurant.yelp_category
+    #     results_dict['yelp_url'] = lst_item.restaurant.yelp_url
+    #     results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
+
+    #     return jsonify(results_dict)
+
+    # else:
+    #     return ''
+
     lst_id = request.form.get('list')
     yelp_id = request.form.get('id')
+    print yelp_id
 
-    results = business(yelp_id)
-    restaurant = add_new_restaurant(results, yelp_id)
-    lst_item = add_list_item(restaurant.rest_id, lst_id, session['user_id'])
+    rest_id = add_new_restaurant(yelp_id)
+
+    lst_item = add_list_item(rest_id, lst_id, session['user_id'])
 
     if lst_item:
 
@@ -353,6 +376,33 @@ def do_react_search():
                                       'location': item['location']['display_address'][0]})
 
     return jsonify(results_dict)
+
+
+@app.route('/add-restaurant-react.json', methods=['POST'])
+def add_restaurant_react():
+    """Add Restaurant to Database using React."""
+
+    lst_id = request.form.get('lst_id')
+    yelp_id = request.form.get('yelp_id')
+
+    rest_id = add_new_restaurant(yelp_id)
+
+    lst_item = add_list_item(rest_id, lst_id, session['user_id'])
+
+    if lst_item:
+
+        results_dict = {}
+        results_dict['name'] = lst_item.restaurant.name
+        results_dict['yelp_id'] = lst_item.restaurant.yelp_id
+        results_dict['item_id'] = lst_item.item_id
+        results_dict['yelp_category'] = lst_item.restaurant.yelp_category
+        results_dict['yelp_url'] = lst_item.restaurant.yelp_url
+        results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
+
+        return jsonify(results_dict)
+
+    else:
+        return ''
 
 
 if __name__ == "__main__":

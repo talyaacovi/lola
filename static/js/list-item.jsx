@@ -21,8 +21,14 @@ class ListItemContainer extends React.Component {
 
     addListItem(newRestaurant) {
         alert(newRestaurant);
+        fetch(`/add-restaurant-react.json?lst_id=${this.props.listId}&yelp_id=${newRestaurant}`)
+        // return the one new restaurant
+
         // save new restaraunt to DB
         // add new restaurant to local state
+        // let currItems = this.state.listItems;
+        // currItems.push(myNewObj);
+        // this.setState(listItems: currItems);
         // ^ steps will trigger a render call which updates the UI
     }
 
@@ -53,7 +59,7 @@ class ListItemContainer extends React.Component {
             searchItems.push(<SearchItem yelpid={item.id} addRestaurantHandler={this.addListItem}
                 rest={item.name} address={item.location} key={item.id}/>);
         }
-
+// change button onClick to form onSubmit!
         return (<div>
                     <div id='search-restaurants'>
                         <h2>Search for a restaurant you love in San Francisco!</h2>

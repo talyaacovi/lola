@@ -1,18 +1,25 @@
 """Helper functions related to adding restaurants and list items."""
 
 from model import *
+from yelp_api import business
 
 
-def add_new_restaurant(data, yelp_id):
-    """Check if restaurant exists in DB before adding it."""
+def add_new_restaurant(yelp_id):
+    """Return restaurant id to create list item."""
 
-    if not Restaurant.query.filter_by(yelp_id=yelp_id).first():
-        name = data['name']
-        lat = data['coordinates']['latitude']
-        lng = data['coordinates']['longitude']
-        yelp_url = data['url'].split('?')[0]
-        yelp_category = data['categories'][0]['title']
-        yelp_photo = data['image_url']
+    rest = Restaurant.query.filter(Restaurant.yelp_id == yelp_id).first()
+
+    if rest:
+        return rest.rest_id
+    else:
+        results = business(yelp_id)
+
+        name = results['name']
+        lat = results['coordinates']['latitude']
+        lng = results['coordinates']['longitude']
+        yelp_url = results['url'].split('?')[0]
+        yelp_category = results['categories'][0]['title']
+        yelp_photo = results['image_url']
 
         restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
                                 yelp_url=yelp_url, yelp_category=yelp_category,
@@ -21,12 +28,27 @@ def add_new_restaurant(data, yelp_id):
         db.session.add(restaurant)
         db.session.commit()
 
-        return restaurant
-    else:
-        return Restaurant.query.filter_by(yelp_id=yelp_id).first()
+    return restaurant.rest_id
 
-    # return Restaurant.query.filter_by(yelp_id=yelp_id).first().rest_id
-    # return restaurant
+
+    # if not Restaurant.query.filter_by(yelp_id=yelp_id).first():
+    #     name = data['name']
+    #     lat = data['coordinates']['latitude']
+    #     lng = data['coordinates']['longitude']
+    #     yelp_url = data['url'].split('?')[0]
+    #     yelp_category = data['categories'][0]['title']
+    #     yelp_photo = data['image_url']
+
+    #     restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
+    #                             yelp_url=yelp_url, yelp_category=yelp_category,
+    #                             yelp_photo=yelp_photo)
+
+    #     db.session.add(restaurant)
+    #     db.session.commit()
+
+    #     return restaurant
+    # else:
+    #     return Restaurant.query.filter_by(yelp_id=yelp_id).first()
 
 
 def add_list_item(rest_id, lst_id, user_id):
@@ -131,6 +153,17 @@ def add_fav_list(user_id, name, status, category_id):
     db.session.commit()
 
     return lst
+
+
+# def check_restaurant(yelp_id):
+#     """Check if restaurant exists in DB."""
+
+#     rest_id = db.session.query(Restaurant.rest_id).filter(Restaurant.yelp_id == yelp_id).first()
+
+#     if rest_id:
+#         return rest_id[0]
+#     else:
+#         return None
 
 
 def get_list_items_react(lst_id):
