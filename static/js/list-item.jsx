@@ -1,6 +1,9 @@
 "use strict";
 
 
+// how to add elements to the page, specifically messages like 'this item
+// already exists' or 'this item was deleted'
+
 class ListItemContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -12,7 +15,6 @@ class ListItemContainer extends React.Component {
     componentWillMount() {
         // this.fetchListItems();
         this.fetchListItemsAjax();
-        console.log('in component will mount', this.state.listItems);
     }
 
     // GET LIST ITEMS USING FETCH
@@ -27,7 +29,6 @@ class ListItemContainer extends React.Component {
     // GET LIST ITEMS USING AJAX
 
     fetchListItemsAjax() {
-        console.log('in ajax request');
         $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
             this.setState({listItems: data.restaurants});
         });
@@ -53,7 +54,7 @@ class ListItemContainer extends React.Component {
                 this.setState({listItems: currItems});
             }
             else {
-                alert('this restaurant already exists on this list!');
+                alert('This restaurant already exists on this list!');
                 }
             });
     }
@@ -68,23 +69,35 @@ class ListItemContainer extends React.Component {
     }
 
     updateInputValue(evt) {
-        // debugger;
         this.setState({inputValue: evt.target.value});
     }
 
     toggleEditMode() {
-        console.log('toggle button');
         this.setState(prevState => ({editMode: !prevState.editMode}));
     }
 
-    removeItem() {
-        console.log('remove button');
+    removeItem(evt) {
+
+        let itemId = evt.target.getAttribute('item-id');
+        let payload = new FormData();
+
+        payload.append('item_id', itemId);
+        payload.append('lst_id', this.props.listId);
+
+        fetch('/delete-restaurant-react.json', {
+            method: 'POST',
+            body: payload,
+            credentials: 'same-origin'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            this.setState({listItems: data.restaurants});
+            console.log('successfully deleted restaurant');
+        });
     }
 
     render() {
         let listItems = [];
-        console.log('end logging, ', this.state.listItems);
-        // for (let item of this.state.listItems) {
         for (let i = 0; i < this.state.listItems.length; i++) {
 
             let item = this.state.listItems[i];
@@ -94,7 +107,7 @@ class ListItemContainer extends React.Component {
                 url={item.yelp_url} image={item.image} key={item.item_id}/>);
 
             if (this.state.editMode) {
-                listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} key={i}>Remove Restaurant</button>);
+                listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
             }
         }
 

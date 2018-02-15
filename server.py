@@ -340,8 +340,6 @@ def do_react_search():
 def add_restaurant_react():
     """Add Restaurant to Database using React."""
 
-    print 'in my react route'
-
     lst_id = request.form.get('lst_id')
     yelp_id = request.form.get('yelp_id')
 
@@ -355,6 +353,22 @@ def add_restaurant_react():
 
     else:
         return 'null'
+
+
+@app.route('/delete-restaurant-react.json', methods=['POST'])
+def delete_restaurant_react():
+    """Delete Restaurant to Database using React."""
+
+    print 'in my delete react route'
+
+    item_id = request.form.get('item_id')
+    del_list_item(item_id)
+
+    lst_id = request.form.get('lst_id')
+    lst_items = get_list_items_react(lst_id)
+
+    return jsonify(lst_items)
+
 
 
 if __name__ == "__main__":
