@@ -5,15 +5,17 @@ class ListItemContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false};
-        this.fetchListItems = this.fetchListItems.bind(this);
+        // this.fetchListItems = this.fetchListItems.bind(this);
+        this.fetchListItems();
+        console.log(this.state);
     }
 
-    componentWillMount() {
-        // if i want to get the username, listname, list_id before the page loads,
-        // do i make a fetch request here? how do i fetch based on the requested URL?
-        // example: http://localhost:5000/users/talyaac/react-lists/favorites
-        this.fetchListItems();
-    }
+    // componentWillMount() {
+    //     // if i want to get the username, listname, list_id before the page loads,
+    //     // do i make a fetch request here? how do i fetch based on the requested URL?
+    //     // example: http://localhost:5000/users/talyaac/react-lists/favorites
+    //     this.fetchListItems();
+    // }
 
     fetchListItems() {
         fetch('/list-items-react.json?lst_id=' + this.props.listId)
@@ -55,22 +57,35 @@ class ListItemContainer extends React.Component {
             );
     }
 
-    updateInputValue(evt) {
+    updateInputValue() {
         // debugger;
         this.setState({inputValue: evt.target.value});
     }
 
     toggleEditMode(evt) {
-        alert('toggle edit!');
+        console.log('toggle button');
+        this.setState(prevState => ({editMode: !prevState.editMode}));
+    }
+
+    removeItem() {
+        console.log('remove button');
     }
 
     render() {
         let listItems = [];
+        console.log('end logging, ', this.state.listItems);
+        // for (let item of this.state.listItems) {
+        for (let i = 0; i < this.state.listItems.length; i++) {
 
-        for (let item of this.state.listItems) {
+            let item = this.state.listItems[i];
+
             listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
                 rest={item.rest_name} category={item.yelp_category}
                 url={item.yelp_url} image={item.image} key={item.item_id}/>);
+
+            if (this.state.editMode) {
+                listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} key={i}>Remove Restaurant</button>);
+            }
         }
 
         let searchItems = [];
@@ -79,18 +94,37 @@ class ListItemContainer extends React.Component {
             searchItems.push(<SearchItem yelpid={item.id} addRestaurantHandler={this.addListItem.bind(this)}
                 rest={item.name} address={item.location} key={item.id}/>);
         }
-// change button onClick to form onSubmit!
+
+        let buttonText;
+        let listControls;
+
+        if (this.state.editMode) {
+            buttonText = 'Save List';
+        }
+
+        else {
+            buttonText = 'Edit List';
+        }
+
+        if (viewingOwnPage) {
+            listControls =
+                    <div>
+                        <div id='edit-list'>
+                            <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
+                        </div>
+                        <div id='search-restaurants'>
+                            <h2>Search for a restaurant you love in San Francisco!</h2>
+                            <form onSubmit={this.fetchSearchItems.bind(this)}>
+                                <input value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+                                <button>Search</button>
+                            </form>
+                        </div>
+                    </div>
+        }
+
+// how do i only display this button if the list owner is the one logged in?
         return (<div>
-                    <div id='edit-list'>
-                        <button onClick={this.toggleEditMode.bind(this)}>Edit List</button>
-                    </div>
-                    <div id='search-restaurants'>
-                        <h2>Search for a restaurant you love in San Francisco!</h2>
-                        <form onSubmit={this.fetchSearchItems.bind(this)}>
-                            <input value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
-                            <button>Search</button>
-                        </form>
-                    </div>
+                    {listControls}
                     <div id='results-div'>
                         {searchItems}
                     </div>
