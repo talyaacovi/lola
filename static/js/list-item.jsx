@@ -6,23 +6,33 @@ class ListItemContainer extends React.Component {
         super(props);
         this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false};
         // this.fetchListItems = this.fetchListItems.bind(this);
-        this.fetchListItems();
-        console.log(this.state);
+        this.fetchListItemsAjax = this.fetchListItemsAjax.bind(this);
     }
 
-    // componentWillMount() {
-    //     // if i want to get the username, listname, list_id before the page loads,
-    //     // do i make a fetch request here? how do i fetch based on the requested URL?
-    //     // example: http://localhost:5000/users/talyaac/react-lists/favorites
-    //     this.fetchListItems();
+    componentWillMount() {
+        // this.fetchListItems();
+        this.fetchListItemsAjax();
+        console.log('in component will mount', this.state.listItems);
+    }
+
+    // GET LIST ITEMS USING FETCH
+
+    // fetchListItems() {
+    //     fetch('/list-items-react.json?lst_id=' + this.props.listId)
+    //     .then((response) => response.json())
+    //     .then((data) => this.setState({listItems: data.restaurants})
+    //         );
     // }
 
-    fetchListItems() {
-        fetch('/list-items-react.json?lst_id=' + this.props.listId)
-        .then((response) => response.json())
-        .then((data) => this.setState({listItems: data.restaurants})
-            );
+    // GET LIST ITEMS USING AJAX
+
+    fetchListItemsAjax() {
+        console.log('in ajax request');
+        $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
+            this.setState({listItems: data.restaurants});
+        });
     }
+
 
     addListItem(newRestaurant) {
 
@@ -57,12 +67,12 @@ class ListItemContainer extends React.Component {
             );
     }
 
-    updateInputValue() {
+    updateInputValue(evt) {
         // debugger;
         this.setState({inputValue: evt.target.value});
     }
 
-    toggleEditMode(evt) {
+    toggleEditMode() {
         console.log('toggle button');
         this.setState(prevState => ({editMode: !prevState.editMode}));
     }
@@ -122,7 +132,6 @@ class ListItemContainer extends React.Component {
                     </div>
         }
 
-// how do i only display this button if the list owner is the one logged in?
         return (<div>
                     {listControls}
                     <div id='results-div'>
