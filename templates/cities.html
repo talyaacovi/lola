@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% for location in all_locations %}
-    <a href='/cities/{{ location[1].lower() }}/{{ location[0].lower() }}'>{{ location[0].title() }}, {{ location[1] }}</a>
-    <br>
-{% endfor %}
+<div id='city-div'>
+    <ul>
+        {% for location in all_locations %}
+            <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
+                <a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a>
+            <!-- <br> -->
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<div id='map'></div>
+<script src='/static/js/main-map.js'></script>
 
 
 {% endblock %}

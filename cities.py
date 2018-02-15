@@ -8,7 +8,20 @@ def get_cities():
     """Get distinct cities and states for which at least one user exists."""
 
     all_locations = db.session.query(User.city, User.state).distinct().all()
-    return all_locations
+
+    # [{'city': 'san francisco', 'state': 'CA', 'lat': 'lat'}, {'city'}]
+
+    location_list = []
+
+    for city, state in all_locations:
+        location_obj = get_city_lat_lng(state, city)
+        location_dict = {'city': city,
+                         'state': state,
+                         'lat': location_obj.lat,
+                         'lng': location_obj.lng}
+        location_list.append(location_dict)
+
+    return location_list
 
 
 def get_users_by_city(state, city):

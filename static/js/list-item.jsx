@@ -92,7 +92,6 @@ class ListItemContainer extends React.Component {
         .then((response) => response.json())
         .then((data) => {
             this.setState({listItems: data.restaurants});
-            console.log('successfully deleted restaurant');
         });
     }
 

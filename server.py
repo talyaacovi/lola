@@ -124,7 +124,7 @@ def add_new_list():
     lst = add_list(name, status, user_id)
 
     if lst:
-        return redirect('/users/{}/lists/{}'.format(lst.user.username, lst.list_id))
+        return redirect('/users/{}/lists/{}'.format(lst.user.username, lst.name))
 
     else:
         flash('You already have a list with this name!')
@@ -239,6 +239,7 @@ def cities():
     """List all cities with lists created."""
 
     all_locations = get_cities()
+    print all_locations
 
     return render_template('cities.html', all_locations=all_locations)
 
