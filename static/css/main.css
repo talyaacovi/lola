@@ -10,6 +10,10 @@
     height: 400px;
 }
 
+#main-map {
+    height: 600px;
+}
+
 #username-length, #username-taken, #username-correct, #zipcode-valid, #zipcode-invalid {
     display: none;
     font-size: 0.75em;

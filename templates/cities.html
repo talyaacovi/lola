@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div id='city-div'>
+
+<h1>Check out what locals in these cities recommend!</h1>
+<div id='city-div' hidden>
     <ul>
         {% for location in all_locations %}
             <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
@@ -13,7 +15,7 @@
 </div>
 
 
-<div id='map'></div>
+<div id='main-map'></div>
 <script src='/static/js/main-map.js'></script>
 
 

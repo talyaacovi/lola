@@ -10,11 +10,13 @@ class ListItemContainer extends React.Component {
         this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false};
         // this.fetchListItems = this.fetchListItems.bind(this);
         this.fetchListItemsAjax = this.fetchListItemsAjax.bind(this);
+        this.checkLength = this.checkLength.bind(this);
     }
 
     componentWillMount() {
         // this.fetchListItems();
         this.fetchListItemsAjax();
+
     }
 
     // GET LIST ITEMS USING FETCH
@@ -31,7 +33,10 @@ class ListItemContainer extends React.Component {
     fetchListItemsAjax() {
         $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
             this.setState({listItems: data.restaurants});
+            this.checkLength(data.restaurants);
         });
+
+
     }
 
 
@@ -57,6 +62,20 @@ class ListItemContainer extends React.Component {
                 alert('This restaurant already exists on this list!');
                 }
             });
+
+        this.setState({searchItems: []});
+        this.setState({inputValue: ''});
+    }
+
+    checkLength() {
+
+        if (this.state.listItems.length < 20) {
+            return true;
+        }
+
+        else {
+            return false;
+        }
     }
 
 
@@ -119,6 +138,7 @@ class ListItemContainer extends React.Component {
 
         let buttonText;
         let listControls;
+        let searchControls;
 
         if (this.state.editMode) {
             buttonText = 'Save List';
@@ -128,27 +148,34 @@ class ListItemContainer extends React.Component {
             buttonText = 'Edit List';
         }
 
+        if (this.checkLength(this.state.listItems)) {
+            searchControls =
+                    <div>
+                        <div id='search-restaurants'>
+                            <h2>Search for a restaurant you love in San Francisco!</h2>
+                            <form onSubmit={this.fetchSearchItems.bind(this)}>
+                                <input name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+                                <button>Search</button>
+                            </form>
+                        </div>
+                        <div id='results-div'>
+                            {searchItems}
+                        </div>
+                    </div>
+        }
+
         if (viewingOwnPage) {
             listControls =
                     <div>
                         <div id='edit-list'>
                             <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
                         </div>
-                        <div id='search-restaurants'>
-                            <h2>Search for a restaurant you love in San Francisco!</h2>
-                            <form onSubmit={this.fetchSearchItems.bind(this)}>
-                                <input value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
-                                <button>Search</button>
-                            </form>
-                        </div>
                     </div>
         }
 
         return (<div>
                     {listControls}
-                    <div id='results-div'>
-                        {searchItems}
-                    </div>
+                    {searchControls}
                     <div id='list-items'>
                         {listItems}
                     </div>

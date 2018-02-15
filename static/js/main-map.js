@@ -7,7 +7,7 @@ function initMap() {
     // let city = {lat: $('#city').data('lat'), lng: $('#city').data('lng')};
 
     // google map with city as center
-    window.map = new google.maps.Map(document.querySelector('#map'), {
+    window.map = new google.maps.Map(document.querySelector('#main-map'), {
         center: {lat: 40, lng: -95},
         zoom: 4.4,
         mapTypeControl: false,
@@ -43,8 +43,8 @@ function initMap() {
         // define contents for info window
         html = (
               '<div class="window-content">' +
-                    '<p>' + cityArray[i].innerText + '</p>' +
-                    '<a href="/cities/' + state + '/' + city + '">Page</a>' +
+                    // '<p>' + cityArray[i].innerText + '</p>' +
+                    '<a href="/cities/' + state + '/' + city + '">' + cityArray[i].innerText + '</a>' +
               '</div>');
 
         restaurant = cityArray[i];
