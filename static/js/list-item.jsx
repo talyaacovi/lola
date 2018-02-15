@@ -57,6 +57,7 @@ class ListItemContainer extends React.Component {
                 let currItems = this.state.listItems;
                 currItems.push(data);
                 this.setState({listItems: currItems});
+
             }
             else {
                 alert('This restaurant already exists on this list!');
@@ -129,6 +130,8 @@ class ListItemContainer extends React.Component {
             }
         }
 
+        let searchControls;
+
         let searchItems = [];
 
         for (let item of this.state.searchItems) {
@@ -136,19 +139,7 @@ class ListItemContainer extends React.Component {
                 rest={item.name} address={item.location} key={item.id}/>);
         }
 
-        let buttonText;
-        let listControls;
-        let searchControls;
-
-        if (this.state.editMode) {
-            buttonText = 'Save List';
-        }
-
-        else {
-            buttonText = 'Edit List';
-        }
-
-        if (this.checkLength(this.state.listItems)) {
+        if (this.state.editMode && this.checkLength(this.state.listItems)) {
             searchControls =
                     <div>
                         <div id='search-restaurants'>
@@ -162,7 +153,35 @@ class ListItemContainer extends React.Component {
                             {searchItems}
                         </div>
                     </div>
+
         }
+
+        let buttonText;
+        let listControls;
+
+        if (this.state.editMode) {
+            buttonText = 'Save List';
+        }
+
+        else {
+            buttonText = 'Edit List';
+        }
+
+        // if (this.checkLength(this.state.listItems)) {
+        //     searchControls =
+        //             <div>
+        //                 <div id='search-restaurants'>
+        //                     <h2>Search for a restaurant you love in San Francisco!</h2>
+        //                     <form onSubmit={this.fetchSearchItems.bind(this)}>
+        //                         <input name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+        //                         <button>Search</button>
+        //                     </form>
+        //                 </div>
+        //                 <div id='results-div'>
+        //                     {searchItems}
+        //                 </div>
+        //             </div>
+        // }
 
         if (viewingOwnPage) {
             listControls =
@@ -170,12 +189,12 @@ class ListItemContainer extends React.Component {
                         <div id='edit-list'>
                             <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
                         </div>
+                        {searchControls}
                     </div>
         }
 
         return (<div>
                     {listControls}
-                    {searchControls}
                     <div id='list-items'>
                         {listItems}
                     </div>
