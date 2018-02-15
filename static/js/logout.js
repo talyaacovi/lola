@@ -8,11 +8,11 @@
 
 function logoutUser(result) {
     $('#msg-para').html(result);
-    $('#main-login').show();
-    $('#logged-in-nav').hide();
-    $('#create-list').hide();
-    $('#signup-msg').show();
-    $('#home').show();
+    $('.logged-out-toggle').show();
+    $('.logged-in-toggle').hide();
+    // $('#create-list').hide();
+    // $('#signup-msg').show();
+    // $('#home').show();
 }
 
 $('#logout-form').submit(function (evt) {
@@ -25,8 +25,9 @@ $('#logout-form').submit(function (evt) {
 /////////////////////////////////////////////////
 
 
-$('#login-form').submit(function (evt) {
+$('#login-form-bootstrap').submit(function (evt) {
     evt.preventDefault();
+    console.log('in bootstrap form handler');
     let email = evt.target.email.value;
     let password = evt.target.password.value;
     $.post('/login-user', {'email': email, 'password': password}, loginMessage);
@@ -36,20 +37,22 @@ function loginMessage(result) {
     console.log(result);
     if (result.msg == 'Success') {
         $('#msg-para').html('You have successfully logged in!');
-        $('#main-login').hide();
-        $('#logged-in-nav').show();
-        $('#home').hide();
+        $('.logged-out-toggle').hide();
+        $('.logged-in-toggle').show();
+        // $('#home').hide();
+        $('#myModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result.user);
     }
     else if (result == 'Incorrect') {
-        $('#msg-para').html('Incorrect password, please try again.');
+        $('#myModalMsg').html('Incorrect password, please try again.');
         $('input[name=password').val('');
     }
 
     else if (result == 'No Account') {
-        $('#msg-para').html('You do not have an account. Sign up here!');
-        $('#login-div').hide();
-        $('#signup-div').show();
+        $('#myModalMsg').html('You do not have an account. Please sign up!');
+        // pop open signup modal!
+        // $('#login-div').hide();
+        // $('#signup-div').show();
     }
 }
 

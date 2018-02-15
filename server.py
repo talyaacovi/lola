@@ -32,8 +32,9 @@ def index():
 def login_user():
     """Log user in to their account."""
 
+    print 'in server route for bootstrap login'
+
     user_email = request.form.get('email')
-    print user_email
     email = check_email(user_email)
     user_password = request.form.get('password')
 

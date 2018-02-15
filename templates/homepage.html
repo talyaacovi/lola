@@ -12,8 +12,7 @@
         hidden
     {% endif %}>
 
-    <div id='login-div'>
-        <!--  -->
+<!--     <div id='login-div'>
         <p>Login</p>
         <form id='login-form' method='POST' action='/login-form'>
 
@@ -29,7 +28,7 @@
 
         </form>
         <p id='signup-msg'>Don't have an account? <button id='signup-btn'>Sign Up</button></p>
-    </div>
+    </div> -->
 
 
     <div id='signup-div'>
@@ -86,6 +85,10 @@
     };
 
     autocomplete = new google.maps.places.Autocomplete(input, options);
+</script>
+
+<script>
+    let idOfOptionToBold = '';
 </script>
 
 {% endblock %}

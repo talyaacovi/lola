@@ -10,78 +10,6 @@
 </head>
 <body>
 
-<!-- <div id='home'
-    {% if session.get('user_id') %}
-    hidden
-    {% endif %}>
-    <a href='/'>Home</a>
-</div>
-
-
-<div id='nav'>
-    <div id='logged-in-nav'
-    {% if not session.get('user_id') %}
-        hidden
-    {% endif %}>
-        <a href='/'>Home</a>
-        <a id='profile-page' href='/users/{{ session.get("username") }}'>Profile Page</a>
-        <a href='/compare'>Compare</a>
-        <a href='/cities'>Cities</a>
-        <div id='logout-div'>
-            <form action='/logout' id='logout-form' method='POST'>
-                <input type='submit' value='Logout' id='logout-btn'>
-            </form>
-        </div>
-    </div>
-</div> -->
-
-
-<!-- FROM BOOTSTRAP -->
-
-<!-- <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Eat Local</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href='#'>Login</a></li>
-        <li><a href='#'>Signup</a></li>
-      </ul>
-    </div>
-  </div>
-</nav> -->
-
-
 <!-- MAIN NAV WHEN NOT SIGNED IN -->
 
 
@@ -98,26 +26,59 @@
     </div>
 
     {% if not session.get('user_id') %}
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href='#'>Login</a></li>
-            <li><a href='#'>Signup</a></li>
-          </ul>
-        </div>
-    {% else %}
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href='/users/{{ session.get("username") }}'>Profile</a></li>
-            <li><a href='/cities'>Cities</a></li>
-            <li><a href='/compare'>Compare</a></li>
-            <form class="nav navbar-form navbar-right">
-                <button type="submit" class="btn btn-default">Logout</button>
-            </form>
-          </ul>
+        <div class='logged-out-toggle'>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href='#' data-toggle='modal' data-target='#myModal'>Login</a></li>
+                <li><a href='#'>Signup</a></li>
+              </ul>
+            </div>
         </div>
     {% endif %}
+        <div class='logged-in-toggle'
+            {% if not session.get('user_id') %} hidden {% endif %}>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li id='profile-page-link'><a href='/users/{{ session.get("username") }}'>Profile</a></li>
+                <li id='city-page-link'><a href='/cities'>Cities</a></li>
+                <li id='compare-page-link'><a href='/compare'>Compare</a></li>
+                <form action='/logout' id='logout-form' method='POST' class="nav navbar-form navbar-right">
+                    <input type="submit" class="btn btn-default" value='Logout'>
+                </form>
+              </ul>
+            </div>
+        </div>
   </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Login</h4>
+      </div>
+      <div class="modal-body">
+        <p class="modal-title" id="myModalMsg"></p>
+        <form id='login-form-bootstrap' method='POST' action='/login-form'>
+          <div class="form-group">
+            <label for="Email">Email address</label>
+            <input type="email" name='email' class="form-control" id="exampleInputEmail1" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="Password">Password</label>
+            <input type="password" name='password' class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+      </div>
+<!--       <div class="modal-footer">
+      </div> -->
+    </div>
+  </div>
+</div>
 
 
 <!-- END MAIN NAV -->
@@ -134,13 +95,14 @@
 <script src='/static/js/search.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
 <script>
-    // let navLinks = document.getElementById('bs-example-navbar-collapse-1').getElementsByTagName('li');
-    // for (i = 0; i < navLinks.length; i++) {
-    //     navLinks[i].addEventListener('click', function(evt) {
-    //         // evt.preventDefault();
-    //         $(this).addClass('active');
-    //     });
-    // }
+
+    function makeTheRightOneActive(){
+        $(idOfOptionToBold).addClass("active");
+        console.log('hi');
+    }
+
+    makeTheRightOneActive();
+
 </script>
 
 </body>
