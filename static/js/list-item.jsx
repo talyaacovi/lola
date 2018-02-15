@@ -4,11 +4,14 @@
 class ListItemContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {listItems: [], searchItems: [], inputValue: ''};
+        this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false};
         this.fetchListItems = this.fetchListItems.bind(this);
     }
 
     componentWillMount() {
+        // if i want to get the username, listname, list_id before the page loads,
+        // do i make a fetch request here? how do i fetch based on the requested URL?
+        // example: http://localhost:5000/users/talyaac/react-lists/favorites
         this.fetchListItems();
     }
 
@@ -44,21 +47,6 @@ class ListItemContainer extends React.Component {
     }
 
 
-
-
-// fetch('/add-restaurant-react.json', {
-//     method: 'POST',
-//     headers: {'Content-Type': 'application/json'},
-//     body: {
-//         'lst_id': this.props.listId,
-//         'yelp_id': newRestaurant
-//     }
-// });
-
-
-
-
-
     fetchSearchItems(evt) {
         evt.preventDefault();
         fetch(`/search-results-react.json?term=${this.state.inputValue}&username=${this.props.username}`)
@@ -70,6 +58,10 @@ class ListItemContainer extends React.Component {
     updateInputValue(evt) {
         // debugger;
         this.setState({inputValue: evt.target.value});
+    }
+
+    toggleEditMode(evt) {
+        alert('toggle edit!');
     }
 
     render() {
@@ -89,8 +81,8 @@ class ListItemContainer extends React.Component {
         }
 // change button onClick to form onSubmit!
         return (<div>
-                    <div id='list-header'>
-
+                    <div id='edit-list'>
+                        <button onClick={this.toggleEditMode.bind(this)}>Edit List</button>
                     </div>
                     <div id='search-restaurants'>
                         <h2>Search for a restaurant you love in San Francisco!</h2>

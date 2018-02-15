@@ -47,6 +47,7 @@ def get_most_similar_user(my_restaurants):
 
         user_restaurants_list = list(map(lambda x: x[0], user_restaurants))
         similar_restaurants = [x for x in user_restaurants_list if x in my_restaurants_list]
+        dissimilar_restaurants = [x for x in user_restaurants_list if x not in my_restaurants_list]
 
         points = 10 * len(similar_restaurants)
 
@@ -54,7 +55,9 @@ def get_most_similar_user(my_restaurants):
             max_points = points
             most_similar_user['name'] = user.username
             most_similar_user['rest_ids'] = similar_restaurants
+            most_similar_user['uncommon'] = dissimilar_restaurants
 
+    print most_similar_user
     return most_similar_user
 
 

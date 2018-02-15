@@ -199,7 +199,6 @@ def delete_restaurant():
 def display_list(username, listname):
     """Display list."""
 
-    # lst = get_list(lst_id)
     lst = get_list(username, listname)
 
     lst_items = get_list_items(lst.list_id)
@@ -280,22 +279,25 @@ def do_comparison():
         most_similar_user_dict = get_most_similar_user(restaurants)
         most_similar_user = most_similar_user_dict.get('name')
         rests_in_common_ids = most_similar_user_dict.get('rest_ids')
+        not_common_ids = most_similar_user_dict.get('uncommon')
 
         rests_in_common = get_common_rests(rests_in_common_ids)
+        not_common = get_common_rests(not_common_ids)
 
-        return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user)
+        return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
         return redirect('/users/{}'.format(session['username']))
 
 
-@app.route('/users/<username>/react-lists/<int:lst_id>')
-def list_react(username, lst_id):
+@app.route('/users/<username>/react-lists/<listname>')
+def list_react(username, listname):
     """React!"""
 
-    lst = get_list(lst_id)
-    return render_template('list-react.html', lst_id=lst_id, username=username, lst=lst)
+    lst = get_list(username, listname)
+
+    return render_template('list-react.html', lst_id=lst.list_id, username=username, lst=lst)
 
 
 @app.route('/list-items-react.json')
