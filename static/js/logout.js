@@ -1,13 +1,15 @@
 "use strict";
 
 
-/////////////////////////////////////////////////
-////////////////// user logout //////////////////
-/////////////////////////////////////////////////
 
 $('.modal').click(function (evt) {
     $('#msg-para').text('');
 });
+
+
+/////////////////////////////////////////////////
+////////////////// user logout //////////////////
+/////////////////////////////////////////////////
 
 
 // function logoutUser(result) {
@@ -31,19 +33,17 @@ $('.modal').click(function (evt) {
 
 $('#login-form-bootstrap').submit(function (evt) {
     evt.preventDefault();
-    console.log('in bootstrap form handler');
     let email = evt.target.email.value;
     let password = evt.target.password.value;
     $.post('/login-user', {'email': email, 'password': password}, loginMessage);
 });
 
 function loginMessage(result) {
-    console.log(result);
     if (result.msg == 'Success') {
         $('#msg-para').html('You have successfully logged in!');
         $('.logged-out-toggle').hide();
         $('.logged-in-toggle').show();
-        // $('#home').hide();
+        $('#main-home-div').show();
         $('#loginModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result.user);
     }
@@ -53,10 +53,11 @@ function loginMessage(result) {
     }
 
     else if (result == 'No Account') {
-        $('#loginModalMsg').html('You do not have an account. Please sign up!');
-        // pop open signup modal!
-        // $('#login-div').hide();
-        // $('#signup-div').show();
+        let userEmail = $('#LoginEmail').val();
+        $('#loginModal').modal('hide');
+        $('#signupModal').modal('show');
+        $('#SignupEmail').val(userEmail);
+        $('#signupModalMsg').html('You do not have an account. Please sign up!');
     }
 }
 
@@ -117,26 +118,26 @@ function checkUsernameLength() {
 }
 
 
-////////////////// zipcode validation
+////////////////// UNDER CONSTRUCTION: zipcode validation
 
 
-$('#zipcode').on('blur', function (evt) {
-    let zipcode = evt.target.value;
-    $.get('/check-zipcode', {'zipcode': zipcode}, zipcodeMessage);
-});
+// $('#zipcode').on('blur', function (evt) {
+//     let zipcode = evt.target.value;
+//     $.get('/check-zipcode', {'zipcode': zipcode}, zipcodeMessage);
+// });
 
-function zipcodeMessage (result) {
-    if (result == 'True') {
-        $('#zipcode-invalid').hide();
-        $('#zipcode-valid').attr('style', 'display: inline');
-        zipcodeValid = true;
-    }
-    else if (result == 'False') {
-        $('#zipcode-valid').hide();
-        $('#zipcode-invalid').attr('style', 'display: inline');
-        zipcodeValid = false;
-    }
-}
+// function zipcodeMessage (result) {
+//     if (result == 'True') {
+//         $('#zipcode-invalid').hide();
+//         $('#zipcode-valid').attr('style', 'display: inline');
+//         zipcodeValid = true;
+//     }
+//     else if (result == 'False') {
+//         $('#zipcode-valid').hide();
+//         $('#zipcode-invalid').attr('style', 'display: inline');
+//         zipcodeValid = false;
+//     }
+// }
 
 
 ////////////////// email validation
@@ -186,6 +187,7 @@ function signupUser(result) {
         $('.logged-in-toggle').show();
         $('#signupModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result);
+        $('#main-home-div').show();
     }
 
 

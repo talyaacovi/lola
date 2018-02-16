@@ -7,15 +7,34 @@
 <h1>Where do the locals eat?</h1>
 
 
+<div id='main-home-div'
+    {% if not session.get('user_id') %} hidden {% endif %}>
 <!-- search for a city which uses Google Places autocomplete -->
-<h3>Search for a city</h3>
+    <div id='search-div'>
+        <h3>Search for a city</h3>
 
-    <form action='/search-city'>
-        <label>City
-            <input id='autocomplete' type='text' name='city-name' required>
-            <input type='submit' id='search-city' value='Search'>
-        </label>
-    </form>
+            <form action='/search-city'>
+                <label>City
+                    <input id='autocomplete' type='text' name='city-name' required>
+                    <input type='submit' id='search-city' value='Search'>
+                </label>
+            </form>
+    </div>
+
+    <div id='city-div' hidden>
+        <ul>
+            {% for location in all_locations %}
+                <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
+                    <a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a>
+                <!-- <br> -->
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id='main-map'></div>
+
+</div>
 
 <script>
     var input = document.getElementById('autocomplete');
@@ -29,5 +48,7 @@
 <script>
     let idOfOptionToBold = '';
 </script>
+
+<script src='/static/js/main-map.js'></script>
 
 {% endblock %}

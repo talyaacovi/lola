@@ -26,7 +26,9 @@ app.jinja_env.auto_reload = True
 def index():
     """Homepage."""
 
-    return render_template('homepage.html')
+    all_locations = get_cities()
+
+    return render_template('homepage.html', all_locations=all_locations)
 
 
 @app.route('/login-user', methods=['POST'])
@@ -392,10 +394,11 @@ def send_list_email():
 
     print 'in my email route.'
 
-    lst_id = request.form.get('list_id')
+    lst_id = request.form.get('lst_id')
+    to_email = request.form.get('email')
     lst_items_dict = get_list_items_react(lst_id)
 
-    to_email = 'talyaacovi@gmail.com'
+    # to_email = 'talyaacovi@gmail.com'
     from_email = 'talyaacovi@gmail.com'
     email_body = ""
 
@@ -403,13 +406,13 @@ def send_list_email():
 
     for item in restaurants:
         email_body = email_body + item['rest_name'] + ", "
-    # lst_items_dict['restaurants'][0]['rest_name']
-    # email_body = jsonify(lst_items_dict)
 
     send_mail(to_email, from_email, email_body)
 
-    flash('Email sent to ' + to_email + ' !')
-    return redirect('/')
+    # flash('Email sent to ' + to_email + ' !')
+    # return redirect('/')
+
+    return 'Email sent to ' + to_email + ' !'
 
 
 if __name__ == "__main__":
