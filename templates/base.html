@@ -10,6 +10,9 @@
 </head>
 <body>
 
+
+
+
 <!-- MAIN NAV WHEN NOT SIGNED IN -->
 
 
@@ -25,34 +28,38 @@
       <a class="navbar-brand" href="/">Eat Local</a>
     </div>
 
-    {% if not session.get('user_id') %}
-        <div class='logged-out-toggle'>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href='#' data-toggle='modal' data-target='#myModal'>Login</a></li>
-                <li><a href='#'>Signup</a></li>
-              </ul>
-            </div>
+    <div class='logged-out-toggle'
+        {% if session.get('user_id') %} hidden {% endif %}>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href='#' data-toggle='modal' data-target='#loginModal'>Login</a></li>
+            <li><a href='#' data-toggle='modal' data-target='#signupModal'>Signup</a></li>
+          </ul>
         </div>
-    {% endif %}
-        <div class='logged-in-toggle'
-            {% if not session.get('user_id') %} hidden {% endif %}>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav navbar-right">
-                <li id='profile-page-link'><a href='/users/{{ session.get("username") }}'>Profile</a></li>
-                <li id='city-page-link'><a href='/cities'>Cities</a></li>
-                <li id='compare-page-link'><a href='/compare'>Compare</a></li>
-                <form action='/logout' id='logout-form' method='POST' class="nav navbar-form navbar-right">
-                    <input type="submit" class="btn btn-default" value='Logout'>
-                </form>
-              </ul>
-            </div>
+    </div>
+    <div class='logged-in-toggle'
+        {% if not session.get('user_id') %} hidden {% endif %}>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li id='profile-page-link'><a id='profile-page' href='/users/{{ session.get("username") }}'>Profile</a></li>
+            <li id='city-page-link'><a href='/cities'>Cities</a></li>
+            <li id='compare-page-link'><a href='/compare'>Compare</a></li>
+            <form action='/logout' id='logout-form' method='POST' class="nav navbar-form navbar-right">
+                <input type="submit" class="btn btn-default" value='Logout'>
+            </form>
+          </ul>
         </div>
+    </div>
   </div>
 </nav>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+<!-- END MAIN NAV -->
+
+
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -60,15 +67,15 @@
         <h4 class="modal-title" id="myModalLabel">Login</h4>
       </div>
       <div class="modal-body">
-        <p class="modal-title" id="myModalMsg"></p>
+        <p class="modal-title" id="loginModalMsg"></p>
         <form id='login-form-bootstrap' method='POST' action='/login-form'>
           <div class="form-group">
             <label for="Email">Email address</label>
-            <input type="email" name='email' class="form-control" id="exampleInputEmail1" placeholder="Email" required>
+            <input type="email" name='email' class="form-control" id="LoginEmail" placeholder="Email" required>
           </div>
           <div class="form-group">
             <label for="Password">Password</label>
-            <input type="password" name='password' class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+            <input type="password" name='password' class="form-control" id="LoginPassword" placeholder="Password" required>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
@@ -81,7 +88,51 @@
 </div>
 
 
-<!-- END MAIN NAV -->
+<!-- Signup Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Signup</h4>
+      </div>
+      <div class="modal-body">
+        <p class="modal-title" id="signupModalMsg"></p>
+        <form id='signup-form-bootstrap' method='POST'>
+          <div class="form-group has-feedback">
+            <label for="Email">Email address</label>
+            <input type="email" name='email' class="form-control" id="SignupEmail" placeholder="Email" required>
+          </div>
+          <div class="form-group has-feedback">
+            <label for="Password">Password</label>
+            <input type="password" name='password' class="form-control" id="SignupPassword" placeholder="Password" required>
+          </div>
+          <div class="form-group has-feedback">
+            <label for="Username">Username</label>
+            <input type="username" name='username' class="form-control" id="SignupUsername" placeholder="Username" required>
+            <span id="usernameHelpBlock" class="help-block"></span>
+<!--             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            <span id="inputSuccess2Status" class="sr-only">(success)</span> -->
+          </div>
+          <div class="form-group has-feedback">
+            <label for="Zipcode">Zipcode</label>
+            <input type="zipcode" name='zipcode' class="form-control" id="SignupZipcode" placeholder="Zipcode" required>
+          </div>
+          <button type="submit" class="btn btn-default" id="submit-signup">Submit</button>
+        </form>
+
+      </div>
+<!--       <div class="modal-footer">
+      </div> -->
+    </div>
+  </div>
+</div>
+
+                <!-- <input type='submit' id='submit-signup' value='Submit'> -->
+
+
+<p id='msg-para'></p>
+
 
 {% for flash in get_flashed_messages() %}
   {{ flash }}
@@ -98,7 +149,6 @@
 
     function makeTheRightOneActive(){
         $(idOfOptionToBold).addClass("active");
-        console.log('hi');
     }
 
     makeTheRightOneActive();

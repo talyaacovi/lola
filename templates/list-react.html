@@ -1,41 +1,7 @@
-<!doctype html>
-<html>
-<head>
-    <title></title>
-    <script src='http://code.jquery.com/jquery-3.2.1.min.js'></script>
-    <link rel='stylesheet' type='text/css' href='/static/css/main.css'>
-    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDznN8sa3CGq-S-mYT2yPNB58B5S3me6lg&libraries=places'></script>
+{% extends 'base.html' %}
+{% block content %}
 
 
-
-    <!-- <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
-</script>-->
-
-
-</head>
-<body>
-
-{% if session.get('user_id') %}
-    <a href='/profile'>Profile Page</a>
-    <a href='/compare'>Compare</a>
-{% endif %}
-
-<a href='/cities'>Cities</a>
-<a href='/'>Home</a>
-
-{% if session.get('user_id') %}
-    <div id='logout'>
-        <!-- <form id='logout-form'> -->
-        <form action='/logout' id='logout-form' method='POST'>
-            <input type='submit' value='Logout' id='logout-btn'>
-        </form>
-    </div>
-{% endif %}
-
-</div>
-
-<hr>
 
 <h1 id='list_name'>{{ lst.name.title() }}</h1>
 <input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
@@ -79,5 +45,6 @@
 
 <script src='/static/js/search.js'></script>
 
-</body>
-</html>
+{% endblock %}
+<!-- </body>
+</html> -->

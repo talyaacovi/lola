@@ -5,20 +5,24 @@
 ////////////////// user logout //////////////////
 /////////////////////////////////////////////////
 
-
-function logoutUser(result) {
-    $('#msg-para').html(result);
-    $('.logged-out-toggle').show();
-    $('.logged-in-toggle').hide();
-    // $('#create-list').hide();
-    // $('#signup-msg').show();
-    // $('#home').show();
-}
-
-$('#logout-form').submit(function (evt) {
-    evt.preventDefault();
-    $.post('/logout', logoutUser);
+$('.modal').click(function (evt) {
+    $('#msg-para').text('');
 });
+
+
+// function logoutUser(result) {
+//     $('#msg-para').html(result);
+//     $('.logged-out-toggle').show();
+//     $('.logged-in-toggle').hide();
+//     $('#create-list').hide();
+//     // $('#signup-msg').show();
+//     // $('#home').show();
+// }
+
+// $('#logout-form').submit(function (evt) {
+//     evt.preventDefault();
+//     $.post('/logout', logoutUser);
+// });
 
 /////////////////////////////////////////////////
 ////////////////// user login //////////////////
@@ -40,16 +44,16 @@ function loginMessage(result) {
         $('.logged-out-toggle').hide();
         $('.logged-in-toggle').show();
         // $('#home').hide();
-        $('#myModal').modal('hide');
+        $('#loginModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result.user);
     }
     else if (result == 'Incorrect') {
-        $('#myModalMsg').html('Incorrect password, please try again.');
+        $('#loginModalMsg').html('Incorrect password, please try again.');
         $('input[name=password').val('');
     }
 
     else if (result == 'No Account') {
-        $('#myModalMsg').html('You do not have an account. Please sign up!');
+        $('#loginModalMsg').html('You do not have an account. Please sign up!');
         // pop open signup modal!
         // $('#login-div').hide();
         // $('#signup-div').show();
@@ -76,7 +80,7 @@ $('#signup-btn').click(function (evt) {
 let usernameValid = true;
 let zipcodeValid = true;
 
-$('#username').on('blur', function (evt) {
+$('#SignupUsername').on('blur', function (evt) {
     let username = evt.target.value;
     $.get('/check-username', {'username': username}, usernameMessage);
 });
@@ -84,29 +88,30 @@ $('#username').on('blur', function (evt) {
 
 function usernameMessage(result) {
     if (result == 'True') {
-        console.log('username is taken');
-        $('#username-correct').hide();
-        $('#username-taken').attr('style', 'display: inline');
+        $('#SignupUsername').parent('div').addClass('has-error');
+        $('#usernameHelpBlock').text('This username is already taken.');
         usernameValid = false;
     }
     else if (result == 'False') {
-        console.log('username is not taken');
-        $('#username-taken').hide();
+        $('#SignupUsername').parent('div').removeClass('has-error');
+        $('#SignupUsername').parent('div').addClass('has-success');
+        $('#usernameHelpBlock').text('');
         checkUsernameLength();
     }
 
 }
 
 function checkUsernameLength() {
-    let username = $('#username').val();
+    let username = $('#SignupUsername').val();
     if (username.length < 6) {
-        $('#username-correct').hide();
-        $('#username-length').attr('style', 'display: inline');
+        $('#SignupUsername').parent('div').addClass('has-error');
+        $('#usernameHelpBlock').text('Username should be at least 6 characters.');
         usernameValid = false;
     }
     else if (username.length >= 6) {
-        $('#username-length').hide();
-        $('#username-correct').attr('style', 'display: inline');
+        $('#SignupUsername').parent('div').removeClass('has-error');
+        $('#SignupUsername').parent('div').addClass('has-success');
+        $('#usernameHelpBlock').text('');
         usernameValid = true;
     }
 }
@@ -133,9 +138,30 @@ function zipcodeMessage (result) {
     }
 }
 
+
+////////////////// email validation
+
+
+$('#SignupEmail').on('blur', function (evt) {
+    let email = evt.target.value;
+    $.get('/check-email', {'email': email}, emailMessage);
+});
+
+function emailMessage (result) {
+    if (result == 'True') {
+        $('#signupModal').modal('hide');
+        $('#loginModal').modal('show');
+        $('#loginModalMsg').html('This email address already has an account. Please login.');
+    }
+    else if (result == 'False') {
+        $('#SignupEmail').parent('div').addClass('has-success');
+    }
+}
+
+
 ////////////////// signup form listener to check and submit
 
-$('#signup-form').submit(function (evt) {
+$('#signup-form-bootstrap').submit(function (evt) {
     evt.preventDefault();
     if (usernameValid === true && zipcodeValid === true) {
         let email = evt.target.email.value;
@@ -156,17 +182,18 @@ function signupUser(result) {
 
     if (result) {
         message.append('Your account has been created.');
-        $('#signup-form').hide();
-        $('#home').hide();
-        $('#logged-in-nav').show();
+        $('.logged-out-toggle').hide();
+        $('.logged-in-toggle').show();
+        $('#signupModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result);
     }
 
+
+
     else {
-        message.append('This email address already has an account.');
-        $('#signup-div').hide();
-        $('#login-div').show();
-        // $('#signup-msg').hide();
+        $('#signupModal').modal('hide');
+        $('#loginModal').modal('show');
+        $('#loginModalMsg').html('This email address already has an account. Please login.');
 
     }
 }

@@ -3,67 +3,6 @@
 {% block content %}
 
 
-<p id='msg-para'></p>
-
-
-<!-- if session user id exists, entire main-login div is hidden -->
-<div id='main-login'
-    {% if session.get('user_id') %}
-        hidden
-    {% endif %}>
-
-<!--     <div id='login-div'>
-        <p>Login</p>
-        <form id='login-form' method='POST' action='/login-form'>
-
-            <label>Email:
-                <input type='email' name='email' required>
-            </label>
-
-            <label>Password:
-                <input type='password' name='password' required>
-            </label>
-
-            <input type='submit' value='Submit'>
-
-        </form>
-        <p id='signup-msg'>Don't have an account? <button id='signup-btn'>Sign Up</button></p>
-    </div> -->
-
-
-    <div id='signup-div'>
-
-            <form id='signup-form'>
-
-                <label>Email:
-                    <input id='email' type='email' name='email' required>
-                </label>
-
-                <label>Password:
-                    <input id='password' type='password' name='password' required>
-                </label>
-
-                <label>Username:
-                    <input id='username' type='username' name='username' required>
-                    <p id='username-length'>&#10060; Username must be at least 6 characters.</p>
-                    <p id='username-taken'>&#10060; Username is already taken.</p>
-                    <p id='username-correct'>&#9989;</p>
-                </label>
-
-                <label>Zipcode:
-                    <input id='zipcode' type='text' name='zipcode' required>
-                    <p id='zipcode-invalid'>&#10060; Please enter a valid zipcode.</p>
-                    <p id='zipcode-valid'>&#9989;</p>
-                </label>
-
-                <input type='submit' id='submit-signup' value='Submit'>
-
-            </form>
-    </div>
-
-<!-- close main login div -->
-</div>
-
 
 <h1>Where do the locals eat?</h1>
 

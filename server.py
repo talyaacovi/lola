@@ -59,8 +59,8 @@ def logout():
     del session['username']
 
     # flash('You have successfully logged out.')
-    return 'You have successfully logged out.'
-    # return redirect('/')
+    # return 'You have successfully logged out.'
+    return redirect('/')
 
 
 @app.route('/signup', methods=['POST'])
@@ -91,6 +91,18 @@ def do_check_username():
     username = request.args.get('username')
 
     if check_username(username):
+        return 'True'
+    else:
+        return 'False'
+
+
+@app.route('/check-email')
+def do_check_email():
+    """Check if email already exists."""
+
+    email = request.args.get('email')
+
+    if check_email(email):
         return 'True'
     else:
         return 'False'
