@@ -5,11 +5,12 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import *
-from yelp_api import search, business
+from yelp_api import search
 from restaurant import *
 from user import *
 from cities import *
 from compare import *
+from sendgrid import *
 # for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
@@ -252,7 +253,6 @@ def cities():
     """List all cities with lists created."""
 
     all_locations = get_cities()
-    print all_locations
 
     return render_template('cities.html', all_locations=all_locations)
 
@@ -263,6 +263,8 @@ def display_city_page(state, city):
 
     all_users = get_users_by_city(state, city)
     all_restaurants = count_restaurants_by_city(state, city)
+    for item in all_restaurants:
+        print item.yelp_url
     location = get_city_lat_lng(state, city)
 
     return render_template('city-page.html',
@@ -383,6 +385,31 @@ def delete_restaurant_react():
 
     return jsonify(lst_items)
 
+
+@app.route('/send-list-email', methods=['POST'])
+def send_list_email():
+    """Send list to email address."""
+
+    print 'in my email route.'
+
+    lst_id = request.form.get('list_id')
+    lst_items_dict = get_list_items_react(lst_id)
+
+    to_email = 'talyaacovi@gmail.com'
+    from_email = 'talyaacovi@gmail.com'
+    email_body = ""
+
+    restaurants = lst_items_dict['restaurants']
+
+    for item in restaurants:
+        email_body = email_body + item['rest_name'] + ", "
+    # lst_items_dict['restaurants'][0]['rest_name']
+    # email_body = jsonify(lst_items_dict)
+
+    send_mail(to_email, from_email, email_body)
+
+    flash('Email sent to ' + to_email + ' !')
+    return redirect('/')
 
 
 if __name__ == "__main__":

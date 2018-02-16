@@ -3,7 +3,9 @@
 
 <h1>{{ lst.name.title() }}</h1>
 <input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
-
+<form action='/send-list-email' id='send-list' method='POST'>
+    <button id='send-btn'>Send</button>
+</form>
 
 {% if username == session.get('username') %}
     <button id='edit-btn'>Edit List</button>

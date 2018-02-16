@@ -14,7 +14,6 @@ class ListItemContainer extends React.Component {
     }
 
     componentWillMount() {
-        // console.log('in component will mount');
         // this.fetchListItems();
         this.fetchListItemsAjax();
 
@@ -27,16 +26,8 @@ class ListItemContainer extends React.Component {
 
     //     fetch('/list-items-react.json?lst_id=' + this.props.listId, {cache: 'no-cache'})
     //     .then(() => console.log('in second promise'))
-    //     .then((response) => {
-    //         console.log(response.bodyUsed);
-    //         // debugger;
-    //         return response.json();
-    //     })
-    //     .then((data) => {
-    //         debugger;
-    //         this.setState({listItems: data.restaurants});
-    //     }
-    //         )
+    //     .then((response) => response.json())
+    //     .then((data) => this.setState({listItems: data.restaurants}))
     //     .catch(console.log.bind(console));
     // }
 

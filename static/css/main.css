@@ -23,6 +23,10 @@
     display: none;
 }
 
+ul > li {
+    list-style: none;
+}
+
 /*label {
     display: block;
 }*/

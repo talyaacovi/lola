@@ -5,23 +5,34 @@
 
 <div id='city-locals'>
     <h2>Meet The Locals</h2>
+    <ul>
     {% for user in all_users %}
+    <li>
         <a href='/users/{{ user.username }}'>{{ user.username }}</a>
         <br>
+    </li>
     {% endfor %}
+    </ul>
 </div>
 
 <div id='top-restaurants'>
     <h2>Top 10 Favorite Local Restaurants</h2>
     <ol>
     {% for restaurant in all_restaurants %}
-        <li data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}'>{{ restaurant.name }}</li>
+        <li data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}' data-yelp='{{ restaurant.yelp_url }}'>{{ restaurant.name }}</li>
     {% endfor %}
-</ol>
+    </ol>
+    <form style='margin: 0 20px' action='/send-list-email' method='POST'>
+        <input type='submit' value='Send List'>
+    </form>
+</br>
 </div>
 
 <div id='map'></div>
 <script src='/static/js/maps.js'></script>
 
+<script>
+    let idOfOptionToBold = '';
+</script>
 
 {% endblock %}

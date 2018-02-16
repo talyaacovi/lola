@@ -20,7 +20,14 @@
     {% endif %}
 
 {% endif %}
-
+<br>
+<div id='email-list'>
+    <form action='/send-list-email' method='POST'>
+        <input type='hidden' name='list_id' value='{{ lst.list_id }}'>
+        <input type='submit' value='Send List'>
+    </form>
+</div>
+<br>
 <div id='msg-div'></div>
 
 

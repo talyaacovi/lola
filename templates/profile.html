@@ -6,9 +6,11 @@
 {% if lsts %}
     <h3>Lists</h3>
     {% for item in lsts %}
+    <ul>
         <li>
             <a href='/users/{{ user.username }}/react-lists/{{ item.name }}'>{{ item.name.title() }}</a>
         </li>
+    </ul>
     {% endfor %}
 {% endif %}
 

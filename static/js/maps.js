@@ -26,6 +26,7 @@ function initMap() {
     for (let i = 0; i < restArray.length; i++) {
         let lat = restArray[i].dataset.lat;
         let lng = restArray[i].dataset.lng;
+        let url = restArray[i].dataset.yelp;
         // restArray[i].addEventListener('click', changeMapCenter);
 
 
@@ -34,13 +35,14 @@ function initMap() {
                     position: new google.maps.LatLng(lat, lng),
                     map: map,
                     title: 'Hover text',
-                    // icon: myImageURL
+                    // icon: '/static/img/pizza.jpeg'
                 });
 
         // define contents for info window
         html = (
               '<div class="window-content">' +
                     '<p>' + restArray[i].innerText + '</p>' +
+                    '<a href="' + url + '">Yelp</a>' +
               '</div>');
 
         restaurant = restArray[i];
