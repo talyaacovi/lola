@@ -22,14 +22,43 @@
         <li data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}' data-yelp='{{ restaurant.yelp_url }}'>{{ restaurant.name }}</li>
     {% endfor %}
     </ol>
-    <form style='margin: 0 20px' action='/send-list-email' method='POST'>
-        <input type='submit' value='Send List'>
-    </form>
 </br>
 </div>
 
+<div id='email-list'>
+    <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+</div>
+
+<!-- EMAIL MODAL -->
+
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Login</h4>
+      </div>
+      <div class="modal-body">
+        <p class="modal-title" id="emailModalMsg"></p>
+        <form id='city-email-form-bootstrap' method='POST' action='/send-city-email'>
+          <div class="form-group">
+            <label for="Email">To Email:</label>
+            <input type="email" name='email' class="form-control" id="SendEmail" placeholder="Email" required>
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<br>
+
 <div id='map'></div>
 <script src='/static/js/maps.js'></script>
+<script src='/static/js/send-email.js'></script>
 
 <script>
     let idOfOptionToBold = '';

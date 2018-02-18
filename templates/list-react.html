@@ -21,14 +21,9 @@
 
 {% endif %}
 <br>
+
 <div id='email-list'>
-<!--     <form action='/send-list-email' method='POST'>
-        <input type='hidden' name='list_id' value='{{ lst.list_id }}'>
-        <input type='submit' value='Send List'>
-    </form> -->
     <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
-
-
 </div>
 
 <!-- EMAIL MODAL -->
@@ -47,16 +42,14 @@
             <label for="Email">To Email:</label>
             <input type="email" name='email' class="form-control" id="SendEmail" placeholder="Email" required>
           </div>
-          <!-- <div class="form-group">
-            <label for="Password">Password</label>
-            <input type="password" name='password' class="form-control" id="LoginPassword" placeholder="Password" required>
-          </div> -->
+          <div class="form-group">
+            <label for="From">From:</label>
+            <input type="text" name='from' class="form-control" id="FromEmail" placeholder="From" required>
+          </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
 
       </div>
-<!--       <div class="modal-footer">
-      </div> -->
     </div>
   </div>
 </div>

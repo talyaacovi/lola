@@ -265,8 +265,6 @@ def display_city_page(state, city):
 
     all_users = get_users_by_city(state, city)
     all_restaurants = count_restaurants_by_city(state, city)
-    for item in all_restaurants:
-        print item.yelp_url
     location = get_city_lat_lng(state, city)
 
     return render_template('city-page.html',
@@ -396,21 +394,49 @@ def send_list_email():
 
     lst_id = request.form.get('lst_id')
     to_email = request.form.get('email')
+    from_name = request.form.get('from')
+    username = request.form.get('username')
+
+    location = get_user_location(username)
+
     lst_items_dict = get_list_items_react(lst_id)
 
     # to_email = 'talyaacovi@gmail.com'
     from_email = 'talyaacovi@gmail.com'
     email_body = ""
 
+    city = location[0].title()
+    state = location[1]
+
     restaurants = lst_items_dict['restaurants']
 
-    for item in restaurants:
-        email_body = email_body + item['rest_name'] + ", "
+    for index, item in enumerate(restaurants):
+        email_body = email_body + str(index + 1) + '. ' + item['rest_name'] + "<br/>"
 
-    send_mail(to_email, from_email, email_body)
+    send_mail(to_email, from_email, email_body, city, state, username, from_name)
 
     # flash('Email sent to ' + to_email + ' !')
     # return redirect('/')
+
+    return 'Email sent to ' + to_email + ' !'
+
+
+@app.route('/send-city-email', methods=['POST'])
+def send_city_email():
+    """Send list to email address."""
+
+    lst_items = request.form.get('lst_items')
+    to_email = request.form.get('email')
+
+    from_email = 'talyaacovi@gmail.com'
+    email_body = ""
+
+    # restaurants = lst_items_dict['restaurants']
+
+    for item in lst_items:
+        email_body = email_body + item + ", "
+
+    send_mail(to_email, from_email, email_body)
 
     return 'Email sent to ' + to_email + ' !'
 
