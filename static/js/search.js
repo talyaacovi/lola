@@ -163,16 +163,3 @@ $('#del-list').on('submit', function (evt) {
         evt.preventDefault();
     }
 });
-
-
-// PSEUDO-CODE TO CHECK IF LIST NAME ALREADY EXISTS USING AJAX
-// $('#add-list').on('submit', function (evt) {
-//     evt.preventDefault();
-//     // AJAX get request with the name to check if it already exists
-//     // if list doesn't already exist, make second AJAX post request
-//     // if list does exist, alert user
-
-//     name = $('#list-name').val();
-//     status = $('#list-status').val();
-//     $.post('/add-list', {'list_name': name, 'status': status}, createList);
-// });

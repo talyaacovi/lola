@@ -271,6 +271,7 @@ def display_city_page(state, city):
     return render_template('city-page.html',
                            all_users=all_users,
                            city=city,
+                           state=state,
                            all_restaurants=all_restaurants,
                            location=location)
 
@@ -387,57 +388,61 @@ def delete_restaurant_react():
     return jsonify(lst_items)
 
 
-@app.route('/send-list-email', methods=['POST'])
-def send_list_email():
-    """Send list to email address."""
+@app.route('/send-user-list', methods=['POST'])
+def send_user_list():
+    """Send user list to email address."""
 
     to_email = request.form.get('email')
     from_name = request.form.get('from')
     username = request.form.get('username')
     lst_items = request.form.getlist('lst_items[]')
+    lst_name = request.form.get('lst_name')
 
     location = get_user_location(username)
 
     lst_items_dict = get_list_items_email(lst_items)
+    restaurants = lst_items_dict['restaurants']
 
-    # to_email = 'talyaacovi@gmail.com'
     from_email = 'talyaacovi@gmail.com'
     email_body = ""
 
     city = location[0].title()
     state = location[1]
 
-    restaurants = lst_items_dict['restaurants']
-
     for index, item in enumerate(restaurants):
         email_body = email_body + str(index + 1) + '. ' + '<a href="' + item['yelp_url'] + '">' + item['rest_name'] + '</a>' + "<br/>"
 
-    send_mail(to_email, from_email, email_body, city, state, username, from_name)
+    if lst_name == 'Favorites':
+        list_type = 'favorite restaurants'
+    else:
+        list_type = 'favorite ' + lst_name.lower()
 
-    # flash('Email sent to ' + to_email + ' !')
-    # return redirect('/')
+    send_user_list_email(to_email, from_email, email_body, city, state, username, from_name, list_type)
 
     return 'Email sent to ' + to_email + ' !'
 
 
-# @app.route('/send-city-email', methods=['POST'])
-# def send_city_email():
-#     """Send list to email address."""
+@app.route('/send-city-list', methods=['POST'])
+def send_city_list():
+    """Send city list to email address."""
 
-#     lst_items = request.form.get('lst_items')
-#     to_email = request.form.get('email')
+    lst_items = request.form.getlist('lst_items[]')
+    to_email = request.form.get('email')
+    from_name = request.form.get('from')
+    city_state = request.form.get('city_state')
 
-#     from_email = 'talyaacovi@gmail.com'
-#     email_body = ""
+    lst_items_dict = get_list_items_email(lst_items)
+    restaurants = lst_items_dict['restaurants']
 
-#     # restaurants = lst_items_dict['restaurants']
+    from_email = 'talyaacovi@gmail.com'
+    email_body = ""
 
-#     for item in lst_items:
-#         email_body = email_body + item + ", "
+    for index, item in enumerate(restaurants):
+        email_body = email_body + str(index + 1) + '. ' + '<a href="' + item['yelp_url'] + '">' + item['rest_name'] + '</a>' + "<br/>"
 
-#     send_mail(to_email, from_email, email_body)
+    send_city_list_email(to_email, from_email, email_body, city_state, from_name)
 
-#     return 'Email sent to ' + to_email + ' !'
+    return 'Email sent to ' + to_email + ' !'
 
 
 if __name__ == "__main__":

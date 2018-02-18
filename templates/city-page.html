@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}</h1>
+<h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}, {{ state.upper() }}</h1>
 
 <div id='city-locals'>
     <h2>Meet The Locals</h2>
@@ -17,17 +17,17 @@
 
 <div id='top-restaurants'>
     <h2>Top 10 Favorite Local Restaurants</h2>
+    <div id='email-list'>
+      <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+    </div>
     <ol>
     {% for restaurant in all_restaurants %}
-        <li data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}' data-yelp='{{ restaurant.yelp_url }}'>{{ restaurant.name }}</li>
+        <li data-yelp-id='{{ restaurant.yelp_id }}' data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}' data-yelp='{{ restaurant.yelp_url }}'>{{ restaurant.name }}</li>
     {% endfor %}
     </ol>
 </br>
 </div>
 
-<div id='email-list'>
-    <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
-</div>
 
 <!-- EMAIL MODAL -->
 
@@ -36,7 +36,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Login</h4>
+        <h4 class="modal-title" id="myModalLabel">Send List</h4>
       </div>
       <div class="modal-body">
         <p class="modal-title" id="emailModalMsg"></p>
@@ -44,6 +44,10 @@
           <div class="form-group">
             <label for="Email">To Email:</label>
             <input type="email" name='email' class="form-control" id="SendEmail" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="From">From:</label>
+            <input type="text" name='from' class="form-control" id="FromEmail" placeholder="From" required>
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
