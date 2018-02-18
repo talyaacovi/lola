@@ -141,10 +141,25 @@ def get_list_items_react(lst_id):
 
     lst_items = ListItem.query.filter(ListItem.list_id == lst_id).all()
 
-    myList = []
+    restList = []
     for item in lst_items:
-        myList.append(item.to_dict())
+        restList.append(item.to_dict())
 
-    myDict = {'restaurants': myList}
+    restDict = {'restaurants': restList}
 
-    return myDict
+    return restDict
+
+
+def get_list_items_email(lst_items):
+    """get restaurants for email."""
+
+    restList = []
+    for item in lst_items:
+        print item
+        restaurant = Restaurant.query.filter(Restaurant.yelp_id == item).first()
+        print restaurant
+        restList.append(restaurant.to_dict())
+
+    restDict = {'restaurants': restList}
+
+    return restDict

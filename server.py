@@ -11,6 +11,7 @@ from user import *
 from cities import *
 from compare import *
 from sendgrid import *
+import json
 # for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
@@ -390,16 +391,14 @@ def delete_restaurant_react():
 def send_list_email():
     """Send list to email address."""
 
-    print 'in my email route.'
-
-    lst_id = request.form.get('lst_id')
     to_email = request.form.get('email')
     from_name = request.form.get('from')
     username = request.form.get('username')
+    lst_items = request.form.getlist('lst_items[]')
 
     location = get_user_location(username)
 
-    lst_items_dict = get_list_items_react(lst_id)
+    lst_items_dict = get_list_items_email(lst_items)
 
     # to_email = 'talyaacovi@gmail.com'
     from_email = 'talyaacovi@gmail.com'
@@ -411,7 +410,7 @@ def send_list_email():
     restaurants = lst_items_dict['restaurants']
 
     for index, item in enumerate(restaurants):
-        email_body = email_body + str(index + 1) + '. ' + item['rest_name'] + "<br/>"
+        email_body = email_body + str(index + 1) + '. ' + '<a href="' + item['yelp_url'] + '">' + item['rest_name'] + '</a>' + "<br/>"
 
     send_mail(to_email, from_email, email_body, city, state, username, from_name)
 
@@ -421,24 +420,24 @@ def send_list_email():
     return 'Email sent to ' + to_email + ' !'
 
 
-@app.route('/send-city-email', methods=['POST'])
-def send_city_email():
-    """Send list to email address."""
+# @app.route('/send-city-email', methods=['POST'])
+# def send_city_email():
+#     """Send list to email address."""
 
-    lst_items = request.form.get('lst_items')
-    to_email = request.form.get('email')
+#     lst_items = request.form.get('lst_items')
+#     to_email = request.form.get('email')
 
-    from_email = 'talyaacovi@gmail.com'
-    email_body = ""
+#     from_email = 'talyaacovi@gmail.com'
+#     email_body = ""
 
-    # restaurants = lst_items_dict['restaurants']
+#     # restaurants = lst_items_dict['restaurants']
 
-    for item in lst_items:
-        email_body = email_body + item + ", "
+#     for item in lst_items:
+#         email_body = email_body + item + ", "
 
-    send_mail(to_email, from_email, email_body)
+#     send_mail(to_email, from_email, email_body)
 
-    return 'Email sent to ' + to_email + ' !'
+#     return 'Email sent to ' + to_email + ' !'
 
 
 if __name__ == "__main__":

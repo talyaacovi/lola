@@ -124,6 +124,15 @@ class Restaurant(db.Model):
     yelp_category = db.Column(db.String(128))  # hot_and_new?
     yelp_photo = db.Column(db.String(256))  # or IG photo
 
+    def to_dict(self):
+        """Return dict of list item."""
+
+        return {'rest_name': self.name,
+                'yelp_id': self.yelp_id,
+                'yelp_category': self.yelp_category,
+                'yelp_url': self.yelp_url,
+                'image': self.yelp_photo}
+
     def __repr__(self):
         """Provide helpful representation of restaurant."""
 
