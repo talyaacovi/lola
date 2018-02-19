@@ -106,25 +106,12 @@ def check_active(username):
 def check_user_id(user_id):
     """Check if user is active."""
 
-    # favorites = (db.session.query(User.user_id, func.count(ListItem.item_id))
-    #                        .join(List)
-    #                        .join(ListItem)
-    #                        .filter(User.user_id == user_id,
-    #                                List.category_id == 1)
-    #                        .group_by(User.user_id)
-    #                        .all())
-
     favorites = (db.session.query(ListItem.item_id)
                            .join(List)
                            .join(User)
                            .filter(User.user_id == user_id,
                                    List.category_id == 1)
                            .count())
-
-    # if favorites and int(favorites[0][1]) >= 5:
-    #     return 'True'
-    # else:
-    #     return 'False'
 
     if int(favorites) >= 5:
         return 'True'

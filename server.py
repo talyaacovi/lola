@@ -449,7 +449,6 @@ def send_city_list():
 def check_active_user_id():
     """"""
 
-    print 'in check if active ROUTE'
     user_id = session.get('user_id')
     is_active = check_user_id(user_id)
 

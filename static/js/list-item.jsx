@@ -141,6 +141,11 @@ class ListItemContainer extends React.Component {
 
     render() {
 
+
+        // RENDER HEADING OF PAGE
+        // let header =
+        //         <h1 id='list_name'>{data['list_name']}</h1>;
+
         // CREATING LIST ITEM COMPONENTS
         let listItems = [];
         for (let i = 0; i < this.state.listItems.length; i++) {
@@ -197,6 +202,9 @@ class ListItemContainer extends React.Component {
             buttonText = 'Edit List';
         }
 
+        // DISPLAY DELETE LIST BUTTON IF USER VIEWING OWN PAGE AND IT IS NOT
+        // THEIR FAVORITES LIST
+
         let deleteControl;
 
         if (this.state.editMode && this.props.lstName != 'Favorites') {
@@ -224,7 +232,15 @@ class ListItemContainer extends React.Component {
                     </div>
         }
 
+        // DISPLAY SEND LIST BUTTON
+
+        let sendList =
+                <div id='email-list'>
+                    <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+                </div>
+
         return (<div>
+                    {sendList}
                     {listControls}
                     <div id='list-items'>
                         {listItems}

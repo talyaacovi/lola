@@ -1,59 +1,47 @@
 "use strict";
 
 
-
+// clear message paragraph whenever user clicks on a modal.
 
 $('.modal').click(function (evt) {
     $('#msg-para').text('');
 });
-
-
-/////////////////////////////////////////////////
-////////////////// user logout //////////////////
-/////////////////////////////////////////////////
-
-
-// function logoutUser(result) {
-//     $('#msg-para').html(result);
-//     $('.logged-out-toggle').show();
-//     $('.logged-in-toggle').hide();
-//     $('#create-list').hide();
-//     // $('#signup-msg').show();
-//     // $('#home').show();
-// }
-
-// $('#logout-form').submit(function (evt) {
-//     evt.preventDefault();
-//     $.post('/logout', logoutUser);
-// });
 
 /////////////////////////////////////////////////
 ////////////////// user login //////////////////
 /////////////////////////////////////////////////
 
 
-$('#login-form-bootstrap').submit(function (evt) {
+
+// AJAX POST REQUEST FOR LOGIN, returns:
+// 'Incorrect' if wrong password
+// 'No Account' if no account exists for that email
+// {'msg': 'Success', 'user': user.username, 'isActive': is_active} if login
+// successful. isActive is boolean true / false if user has added at least
+// 5 restaurants to their favorites list.
+
+$('#login-form').submit(function (evt) {
     evt.preventDefault();
     let email = evt.target.email.value;
     let password = evt.target.password.value;
+
     $.post('/login-user', {'email': email, 'password': password}, loginMessage);
 });
 
 function loginMessage(result) {
     if (result.msg == 'Success') {
-        $('#msg-para').html('You have successfully logged in!');
         $('.logged-out-toggle').hide();
         $('.logged-in-toggle').show();
         $('#main-home-div').show();
         $('#loginModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result.user);
         if (result.isActive === 'True') {
-            isActive = true;
-            console.log('this user is active');
+            isActive = true; // global variable defined in base.html
+            $('#msg-para').html('You have successfully logged in!');
         }
         else {
-            console.log('this user is not active');
             $('#search-div').hide();
+            $('#msg-para').html('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/react-lists/favorites">Favorites</a> list to access more content.');
         }
     }
     else if (result == 'Incorrect') {
@@ -70,10 +58,6 @@ function loginMessage(result) {
     }
 }
 
-// function checkIfActive(username) {
-
-//     $.get('/check-active', {'username': username}, loginMessage);
-// }
 
 /////////////////////////////////////////////////
 ////////////////// user signup //////////////////
@@ -211,3 +195,26 @@ function signupUser(result) {
 
     }
 }
+
+
+
+
+/////////////////////////////////////////////////
+////////////////// user logout //////////////////
+/////////////////////////////////////////////////
+
+
+// function logoutUser(result) {
+//     $('#msg-para').html(result);
+//     $('.logged-out-toggle').show();
+//     $('.logged-in-toggle').hide();
+//     $('#create-list').hide();
+//     // $('#signup-msg').show();
+//     // $('#home').show();
+// }
+
+// $('#logout-form').submit(function (evt) {
+//     evt.preventDefault();
+//     $.post('/logout', logoutUser);
+// });
+

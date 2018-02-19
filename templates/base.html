@@ -68,7 +68,7 @@
       </div>
       <div class="modal-body">
         <p class="modal-title" id="loginModalMsg"></p>
-        <form id='login-form-bootstrap' method='POST' action='/login-form'>
+        <form id='login-form' method='POST' action='/login-form'>
           <div class="form-group">
             <label for="Email">Email address</label>
             <input type="email" name='email' class="form-control" id="LoginEmail" placeholder="Email" required>
@@ -154,14 +154,22 @@
     makeTheRightOneActive();
 
     let isActive = false;
+
     {% if session.get('user_id') %}
-        console.log('in check if active script');
         $.post('/check-active', checkIfActive);
     {% endif %}
+
+
+    let usernameForLink = '{{ session.get("username") }}';
 
     function checkIfActive(result) {
       if (result == 'True') {
         isActive = true;
+      }
+
+      else if (result == 'False' && window.location.pathname == '/') {
+        $('#search-div').hide();
+        $('#msg-para').html('Please add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/react-lists/favorites">Favorites</a> list to see where locals of these cities are eating!');
       }
     }
 
