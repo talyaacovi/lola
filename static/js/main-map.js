@@ -46,14 +46,14 @@ function initMap() {
               '</div>');
 
         // call function to bind info window to map
-        bindInfoWindow(marker, map, infoWindow, html);
+        bindInfoWindow(marker, map, infoWindow, activeHtml, inactiveHtml);
 
     }
 
     // function adds event listener to markers, closes any opened when one is
     // clicked, sets content based on passed in html, opens info window with
     // new content on the marker that was clicked.
-    function bindInfoWindow(marker, map, infoWindow, html) {
+    function bindInfoWindow(marker, map, infoWindow, activeHtml, inactiveHtml) {
         google.maps.event.addListener(marker, 'click', function () {
             infoWindow.close();
             // infoWindow.setContent(html);

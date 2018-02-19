@@ -155,9 +155,7 @@ def get_list_items_email(lst_items):
 
     restList = []
     for item in lst_items:
-        print item
         restaurant = Restaurant.query.filter(Restaurant.yelp_id == item).first()
-        print restaurant
         restList.append(restaurant.to_dict())
 
     restDict = {'restaurants': restList}

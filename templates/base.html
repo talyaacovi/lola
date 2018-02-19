@@ -154,6 +154,15 @@
     makeTheRightOneActive();
 
     let isActive = false;
+    {% if session.get('user_id') %}
+        $.post('/check-active', checkIfActive);
+    {% endif %}
+
+    function checkIfActive(result) {
+      if (result == 'True') {
+        isActive = true;
+      }
+    }
 
 </script>
 
