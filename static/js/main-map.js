@@ -16,7 +16,7 @@ function initMap() {
 
     // get array of all cities in DB
     let cityArray = $('#city-div li');
-    let marker, html, restaurant;
+    let marker, html, restaurant, inactiveHtml, activeHtml;
     let newLat, newLng, newCenter;
 
     // iterate over cities in array
@@ -35,10 +35,14 @@ function initMap() {
                 });
 
         // define contents for info window
-        html = (
+        activeHtml = (
               '<div class="window-content">' +
-                    // '<p>' + cityArray[i].innerText + '</p>' +
-                    '<a href="/cities/' + state + '/' + city + '">' + cityArray[i].innerText + '</a>' +
+                    '<a class="main-markers" href="/cities/' + state + '/' + city + '">' + cityArray[i].innerText + '</a>' +
+              '</div>');
+
+        inactiveHtml = (
+              '<div class="window-content">' +
+                    '<p>' + cityArray[i].innerText + '</p>' +
               '</div>');
 
         // call function to bind info window to map
@@ -52,7 +56,13 @@ function initMap() {
     function bindInfoWindow(marker, map, infoWindow, html) {
         google.maps.event.addListener(marker, 'click', function () {
             infoWindow.close();
-            infoWindow.setContent(html);
+            // infoWindow.setContent(html);
+            if (isActive) {
+                infoWindow.setContent(activeHtml);
+            }
+            else {
+                infoWindow.setContent(inactiveHtml);
+            }
             infoWindow.open(map, marker);
         });
     }

@@ -1,7 +1,7 @@
 "use strict";
 
 
-let isActive = false;
+
 
 $('.modal').click(function (evt) {
     $('#msg-para').text('');
@@ -53,6 +53,7 @@ function loginMessage(result) {
         }
         else {
             console.log('this user is not active');
+            $('#search-div').hide();
         }
     }
     else if (result == 'Incorrect') {

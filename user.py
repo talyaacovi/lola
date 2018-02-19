@@ -97,7 +97,7 @@ def check_active(username):
                            .group_by(User.username)
                            .all())
 
-    if int(favorites[0][1]) >= 5:
+    if favorites and int(favorites[0][1]) >= 5:
         return 'True'
     else:
         return 'False'

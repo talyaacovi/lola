@@ -27,16 +27,7 @@ ul > li {
     list-style: none;
 }
 
-/*label {
-    display: block;
-}*/
-
-/*#login-form label {
-    display: inline;
-}*/
-
-
-
-/*#list-items {
-    display: inline;
-}*/
+.not-active {
+  pointer-events: none;
+  cursor: default;
+}
