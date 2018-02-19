@@ -2,6 +2,7 @@
 
 from model import *
 from flask import session
+from sqlalchemy import func
 
 
 def check_email(user_email):
@@ -83,3 +84,20 @@ def register_user(email, password, username, zipcode):
     db.session.commit()
 
     return user
+
+
+def check_active(username):
+    """Check if user is active."""
+
+    favorites = (db.session.query(User.username, func.count(ListItem.item_id))
+                           .join(List)
+                           .join(ListItem)
+                           .filter(User.username == username,
+                                   List.category_id == 1)
+                           .group_by(User.username)
+                           .all())
+
+    if int(favorites[0][1]) >= 5:
+        return 'True'
+    else:
+        return 'False'

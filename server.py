@@ -36,8 +36,6 @@ def index():
 def login_user():
     """Log user in to their account."""
 
-    print 'in server route for bootstrap login'
-
     user_email = request.form.get('email')
     email = check_email(user_email)
     user_password = request.form.get('password')
@@ -46,7 +44,8 @@ def login_user():
         if check_password(email, user_password):
             user = User.query.filter_by(email=email).first()
             set_session_info(user)
-            return jsonify({'msg': 'Success', 'user': user.username})
+            is_active = check_active(user.username)
+            return jsonify({'msg': 'Success', 'user': user.username, 'isActive': is_active})
         else:
             return 'Incorrect'
     else:
@@ -443,6 +442,8 @@ def send_city_list():
     send_city_list_email(to_email, from_email, email_body, city_state, from_name)
 
     return 'Email sent to ' + to_email + ' !'
+
+
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 "use strict";
 
 
+let isActive = false;
 
 $('.modal').click(function (evt) {
     $('#msg-para').text('');
@@ -46,6 +47,13 @@ function loginMessage(result) {
         $('#main-home-div').show();
         $('#loginModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result.user);
+        if (result.isActive === 'True') {
+            isActive = true;
+            console.log('this user is active');
+        }
+        else {
+            console.log('this user is not active');
+        }
     }
     else if (result == 'Incorrect') {
         $('#loginModalMsg').html('Incorrect password, please try again.');
@@ -61,7 +69,10 @@ function loginMessage(result) {
     }
 }
 
+// function checkIfActive(username) {
 
+//     $.get('/check-active', {'username': username}, loginMessage);
+// }
 
 /////////////////////////////////////////////////
 ////////////////// user signup //////////////////
