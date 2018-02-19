@@ -1,8 +1,8 @@
 "use strict";
 
 
-// how to add elements to the page, specifically messages like 'this item
-// already exists' or 'this item was deleted'
+// ListItemContainer is the parent component which attaches to the 'root' div
+// and renders the ListItem and Search components.
 
 class ListItemContainer extends React.Component {
     constructor(props) {
@@ -19,7 +19,18 @@ class ListItemContainer extends React.Component {
 
     }
 
-    // GET LIST ITEMS USING FETCH
+    // GET LIST ITEMS USING AJAX
+
+    fetchListItemsAjax() {
+        $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
+            this.setState({listItems: data.restaurants});
+            this.checkLength(data.restaurants);
+        });
+
+
+    }
+
+    // GET LIST ITEMS USING FETCH (doesn't work)
 
     // fetchListItems() {
     //     console.log('in fetch list items');
@@ -32,18 +43,7 @@ class ListItemContainer extends React.Component {
     // }
 
 
-
-    // GET LIST ITEMS USING AJAX
-
-    fetchListItemsAjax() {
-        $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
-            this.setState({listItems: data.restaurants});
-            this.checkLength(data.restaurants);
-        });
-
-
-    }
-
+    // METHOD TO ADD A NEW RESTAURANT TO THE DB AND TO THE LIST
 
     addListItem(newRestaurant) {
 
@@ -73,6 +73,8 @@ class ListItemContainer extends React.Component {
         this.setState({inputValue: ''});
     }
 
+    // CHECK LENGTH OF LIST TO DETERMINE IF IT HAS REACHED LIMIT OF 20
+
     checkLength() {
 
         if (this.state.listItems.length < 20) {
@@ -84,6 +86,7 @@ class ListItemContainer extends React.Component {
         }
     }
 
+    // METHOD TO FETCH SEARCH ITEMS FROM YELP
 
     fetchSearchItems(evt) {
         evt.preventDefault();
@@ -97,9 +100,23 @@ class ListItemContainer extends React.Component {
         this.setState({inputValue: evt.target.value});
     }
 
+    // METHOD TO TOGGLE EDIT MODE, WHICH HIDES AND DISPLAYS LIST EDIT CONTROLS
+
     toggleEditMode() {
         this.setState(prevState => ({editMode: !prevState.editMode}));
     }
+
+    deleteList(evt) {
+        console.log('in delete list method');
+
+        var action = confirm('Are you sure you want to delete your list?');
+
+        if (!action) {
+            evt.preventDefault();
+        }
+    }
+
+    // METHOD TO REMOVE AN ITEM FROM A LIST
 
     removeItem(evt) {
 
@@ -120,7 +137,11 @@ class ListItemContainer extends React.Component {
         });
     }
 
+    // RENDER METHOD
+
     render() {
+
+        // CREATING LIST ITEM COMPONENTS
         let listItems = [];
         for (let i = 0; i < this.state.listItems.length; i++) {
 
@@ -139,10 +160,14 @@ class ListItemContainer extends React.Component {
 
         let searchItems = [];
 
+        // CREATING SEARCH ITEM COMPONENTS
+
         for (let item of this.state.searchItems) {
             searchItems.push(<SearchItem yelpid={item.id} addRestaurantHandler={this.addListItem.bind(this)}
                 rest={item.name} address={item.location} key={item.id}/>);
         }
+
+        // DISPLAY SEARCH CONTROLS IF EDIT MODE ENABLED AND LIST LENGTH < 20
 
         if (this.state.editMode && this.checkLength(this.state.listItems)) {
             searchControls =
@@ -172,21 +197,21 @@ class ListItemContainer extends React.Component {
             buttonText = 'Edit List';
         }
 
-        // if (this.checkLength(this.state.listItems)) {
-        //     searchControls =
-        //             <div>
-        //                 <div id='search-restaurants'>
-        //                     <h2>Search for a restaurant you love in San Francisco!</h2>
-        //                     <form onSubmit={this.fetchSearchItems.bind(this)}>
-        //                         <input name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
-        //                         <button>Search</button>
-        //                     </form>
-        //                 </div>
-        //                 <div id='results-div'>
-        //                     {searchItems}
-        //                 </div>
-        //             </div>
-        // }
+        let deleteControl;
+
+        if (this.state.editMode && this.props.lstName != 'Favorites') {
+            deleteControl =
+                    <div>
+                        <div id='del-list'>
+                            <form action='/delete-list' method='POST' onSubmit={this.deleteList.bind(this)}>
+                                <input type='hidden' name='list_id' value={this.props.listId}></input>
+                                <button>Delete List</button>
+                            </form>
+                        </div>
+                    </div>
+        }
+
+        // DISPLAY LIST CONTROLS IF USER IS VIEWING THEIR OWN PAGE
 
         if (viewingOwnPage) {
             listControls =
@@ -194,6 +219,7 @@ class ListItemContainer extends React.Component {
                         <div id='edit-list'>
                             <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
                         </div>
+                        {deleteControl}
                         {searchControls}
                     </div>
         }

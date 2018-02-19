@@ -226,8 +226,9 @@ def display_list(username, listname):
 def delete():
     """Delete list."""
 
+    print 'in delete list route'
+
     list_id = request.form.get('list_id')
-    print list_id
     message = delete_list(list_id)
     flash(message)
 
@@ -305,7 +306,7 @@ def do_comparison():
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
-        return redirect('/users/{}'.format(session['username']))
+        return redirect('/users/{}/react-lists/favorites'.format(session['username']))
 
 
 @app.route('/users/<username>/react-lists/<listname>')

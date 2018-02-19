@@ -54,21 +54,17 @@ def check_city_state(state, city):
 def count_restaurants_by_city(state, city):
     """Get top 10 restaurants for a specific city."""
 
-    # restaurants = (db.session.query(func.count(ListItem.rest_id), ListItem.rest_id)
+    # query to get COUNT with Restaurant object.
+    # restaurants = (db.session.query(Restaurant, func.count(ListItem.rest_id))
+    #                          .join(ListItem)
     #                          .join(List)
     #                          .join(User)
-    #                          .filter(User.state == state.upper(),
-    #                                  User.city == city.upper(),
+    #                          .filter(User.state == 'CA',
+    #                                  User.city == 'SAN FRANCISCO',
     #                                  List.category_id == 1)
-    #                          .group_by(ListItem.rest_id)
-    #                          .all())
-
-    # restaurants.sort(reverse=True)
-    # restList = []
-    # for count, rest_id in restaurants:
-    #     restList.append(Restaurant.query.filter_by(rest_id=rest_id).first())
-
-    # return restList[:10]
+    #                          .group_by(Restaurant.rest_id)
+    #                          .order_by(db.desc(func.count(ListItem.rest_id)))
+    #                          .limit(10).all())
 
     restaurants = (db.session.query(Restaurant)
                              .join(ListItem)

@@ -157,9 +157,9 @@ function removeRestaurant(result) {
 // this confirms that user wants to delete their list when they submit the
 // delete list button.
 
-$('#del-list').on('submit', function (evt) {
-    var action = confirm('Are you sure you want to delete your list?');
-    if (!action){
-        evt.preventDefault();
-    }
-});
+// $('#del-list').on('submit', function (evt) {
+//     var action = confirm('Are you sure you want to delete your list?');
+//     if (!action){
+//         evt.preventDefault();
+//     }
+// });
