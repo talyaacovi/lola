@@ -67,16 +67,21 @@ def get_instagram_location(yelp_id):
 def get_instagram_photos(location):
     """"""
 
-    os.system('instagram-scraper --location ' + location + ' --maximum 2 --media-metadata --media-types none --destination ig_photos')
+    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
     json_file = 'ig_photos/' + location + '.json'
+
+    photo_list = []
 
     with open(json_file) as json_data:
         results = json.load(json_data)
         for photo in results:
-            print photo['urls'][0]
+            # print photo['urls'][0]
+            photo_list.append(photo['urls'][0])
 
     os.system('rm -R ig_photos/')
+
+    return photo_list
 
 
 # pink onion location ID: 1179108628832028

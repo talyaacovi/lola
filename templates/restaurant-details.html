@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<h1>Restaurant Details Page!</h1>
+
+{% for photo in photos %}
+    <div class='ig-photo'>
+        <img src='{{ photo }}'/>
+    </div>
+{% endfor %}
+
+<script>
+    let idOfOptionToBold = '';
+</script>
+
+{% endblock %}

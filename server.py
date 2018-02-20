@@ -465,13 +465,10 @@ def check_active_user_id():
 def get_ig_location():
     """"""
 
-    location_id = 1179108628832028
+    location_id = '1179108628832028'
+    photos = get_instagram_photos(location_id)
 
-    print location_id
-
-    # photo_json = get_instagram_photos(location_id)
-
-    return redirect('/')
+    return render_template('restaurant-details.html', photos=photos)
 
 
 if __name__ == "__main__":

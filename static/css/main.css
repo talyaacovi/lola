@@ -31,3 +31,8 @@ ul > li {
   pointer-events: none;
   cursor: default;
 }
+
+.ig-photo img {
+    height: 400px;
+    width: 400px;
+}
