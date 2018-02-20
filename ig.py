@@ -5,10 +5,11 @@ import json
 import subprocess
 
 
-def get_instagram_location(name):
+def get_instagram_location(yelp_id):
     """"""
 
-    restaurant = Restaurant.query.filter_by(name=name).first()
+    print 'in my get IG location stuff!'
+    restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
     restaurant_name = restaurant.name
     restaurant_lat = restaurant.lat
     restaurant_lng = restaurant.lng
@@ -66,10 +67,46 @@ def get_instagram_location(name):
 def get_instagram_photos(location):
     """"""
 
-    os.system('instagram-scraper --location ' + location + ' --maximum 10 --media-metadata --media-types none --destination ig_photos')
+    os.system('instagram-scraper --location ' + location + ' --maximum 2 --media-metadata --media-types none --destination ig_photos')
 
-    # with open('/ig_photos/' + location + '.json') as f:
-    #     results = f.read()
-    #     print 'this may have worked!'
-    #     print results
-    #     os.system('rm -r ig_photos/')
+    json_file = 'ig_photos/' + location + '.json'
+
+    with open(json_file) as json_data:
+        results = json.load(json_data)
+        for photo in results:
+            print photo['urls'][0]
+
+    os.system('rm -R ig_photos/')
+
+
+# pink onion location ID: 1179108628832028
+
+# # JSON FILE FOR ONE RESULT:
+# a list of dictionaries
+# each dictionary has these keys:
+#     edge_liked_by           {u'count': 46}
+#     tags                    [u'sfeats', u'sfrestaurants', u'sanfransiscofood', u'sicilianfood']
+#     taken_at_timestamp      1489016232
+#     owner                   {u'id': u'3258662596'}
+#     id                      u'1466296893453577079'
+#     edge_media_to_caption   {u'edges':
+#                                 [{u'node': {u'text': u'Where can you enjoy great food made with Amphora Nueva products? Check out Pink Onion SF. This salad made with our blood orange fused oil was spectacular! @pinkonionpizza #sfeats #sicilianfood #sfrestaurants #sanfransiscofood'}}]}
+#     dimensions              {u'width': 1080, u'height': 1080}
+#     display_url             u'https://instagram.fsnc1-1.fna.fbcdn.net/vp/f0141bbc960d069d8856bac3144df70b/5B05A583/t51.2885-15/e35/17817412_1364674040283324_1574237133256785920_n.jpg'
+#     edge_media_to_comment   {u'count': 4}
+#     urls                    [u'https://instagram.fsnc1-1.fna.fbcdn.net/vp/f0141bbc960d069d8856bac3144df70b/5B05A583/t51.2885-15/e35/17817412_1364674040283324_1574237133256785920_n.jpg']
+#     thumbnail_src           u'https://instagram.fsnc1-1.fna.fbcdn.net/vp/d8dd1056a6862b5f3cb2a3cc778409de/5B0C0CA9/t51.2885-15/s640x640/sh0.08/e35/17817412_1364674040283324_1574237133256785920_n.jpg'
+#     shortcode               u'BRZVUF9jyt3'
+#     is_video                False
+
+# [{u'urls':
+# [u'https://instagram.fsnc1-1.fna.fbcdn.net/vp/f0141bbc960d069d8856bac3144df70b/5B05A583/t51.2885-15/e35/17817412_1364674040283324_1574237133256785920_n.jpg'],
+# u'edge_media_to_caption':
+#     {u'edges':
+#         [{u'node': {u'text': u'Where can you enjoy great food made with Amphora Nueva products? Check out Pink Onion SF. This salad made with our blood orange fused oil was spectacular! @pinkonionpizza #sfeats #sicilianfood #sfrestaurants #sanfransiscofood'}}]},
+#         u'dimensions': {u'width': 1080, u'height': 1080},
+#         u'display_url': u'https://instagram.fsnc1-1.fna.fbcdn.net/vp/f0141bbc960d069d8856bac3144df70b/5B05A583/t51.2885-15/e35/17817412_1364674040283324_1574237133256785920_n.jpg',
+#         u'edge_media_to_comment': {u'count': 4}, u'tags': [u'sfeats', u'sfrestaurants', u'sanfransiscofood', u'sicilianfood'],
+#         u'taken_at_timestamp': 1489016232, u'edge_liked_by': {u'count': 46}, u'shortcode': u'BRZVUF9jyt3', u'owner': {u'id': u'3258662596'},
+#         u'thumbnail_src': u'https://instagram.fsnc1-1.fna.fbcdn.net/vp/d8dd1056a6862b5f3cb2a3cc778409de/5B0C0CA9/t51.2885-15/s640x640/sh0.08/e35/17817412_1364674040283324_1574237133256785920_n.jpg',
+#         u'is_video': False, u'id': u'1466296893453577079'}]

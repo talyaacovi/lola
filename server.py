@@ -363,8 +363,15 @@ def add_restaurant_react():
     yelp_id = request.form.get('yelp_id')
 
     rest_id = add_new_restaurant(yelp_id)
-
     lst_item = add_list_item(rest_id, lst_id, session['user_id'])
+
+    location_id = get_instagram_location(yelp_id)
+    # get_instagram_photos(location_id)
+
+    # QUESTION FOR KATIE -- SHOULD I STORE THE IG LOCATION ID ON THE RESTAURANT?
+    # THAT WAY IF RESTAURANT IS ALREADY IN DB, I KNOW I ALREADY HAVE THE LOCATION
+    # AND DON'T HAVE TO QUERY YELP API OR RUN THE IG SCRAPER
+    # print location_id
 
     if lst_item:
 
@@ -377,8 +384,6 @@ def add_restaurant_react():
 @app.route('/delete-restaurant-react.json', methods=['POST'])
 def delete_restaurant_react():
     """Delete Restaurant to Database using React."""
-
-    print 'in my delete react route'
 
     item_id = request.form.get('item_id')
     del_list_item(item_id)
@@ -456,11 +461,11 @@ def check_active_user_id():
     return is_active
 
 
-@app.route('/instagram-location')
+@app.route('/instagram-test')
 def get_ig_location():
     """"""
 
-    location_id = get_instagram_location('Pink Onion')
+    location_id = 1179108628832028
 
     print location_id
 
