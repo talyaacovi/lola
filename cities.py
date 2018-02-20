@@ -9,8 +9,6 @@ def get_cities():
 
     all_locations = db.session.query(User.city, User.state).distinct().all()
 
-    # [{'city': 'san francisco', 'state': 'CA', 'lat': 'lat'}, {'city'}]
-
     location_list = []
 
     for city, state in all_locations:
@@ -36,19 +34,6 @@ def check_city_state(state, city):
     """Check if registered user exists in that city state combination."""
 
     return User.query.filter(User.state == state.upper(), User.city == city.upper()).all()
-
-
-# def get_restaurants_by_city(state, city):
-#     """Get restaurants added to lists by users of that city."""
-
-#     restaurants = []
-
-#     lsts = List.query.join(User).filter(User.state == state.upper(), User.city == city.upper(), List.category_id == 1).all()
-#     for lst in lsts:
-#         for item in lst.list_items:
-#             restaurants.append(item.restaurant)
-
-#     return set(restaurants)
 
 
 def count_restaurants_by_city(state, city):

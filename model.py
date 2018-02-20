@@ -288,16 +288,31 @@ class Zipcode(db.Model):
 #         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
 
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri='postgresql:///restaurants'):
     """Connect the database to Flask app."""
 
     # Configure to use PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///restaurants'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     db.app = app
     db.init_app(app)
+
+
+def example_data():
+    """Create some sample data for testing."""
+
+    tal = User(email='talyaacovi@gmail.com', password='password', username='talyaac', city='SAN FRANCISCO', state='CA', zipcode='94103')
+    logan = User(email='loganbestwick@gmail.com', password='password', username='logan', city='SAN FRANCISCO', state='CA', zipcode='94103')
+    fred = User(email='fred@gmail.com', password='password', username='fred', city='SEATTLE', state='WA', zipcode='98105')
+
+    sf = Zipcode(zipcode='94103', city='SAN FRANCISCO', state='CA', lat='37.77', lng='122.41')
+    seattle = Zipcode(zipcode='98105', city='SEATTLE', state='WA', lat='47.66', lng='122.29')
+
+    db.session.add_all([tal, logan, fred, sf, seattle])
+    db.session.commit()
+
 
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave

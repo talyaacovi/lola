@@ -175,18 +175,19 @@ $('#signup-form-bootstrap').submit(function (evt) {
 });
 
 function signupUser(result) {
-    let message = $('#msg-para');
+    // let message = $('#msg-para');
 
     if (result) {
-        message.append('Your account has been created.');
+        // message.append('Your account has been created.');
         $('.logged-out-toggle').hide();
         $('.logged-in-toggle').show();
+        $('#main-home-div').show();
         $('#signupModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result);
-        $('#main-home-div').show();
+        $('#search-div').hide();
+        $('#msg-para').html('Your account has been created! Please add at least 5 restaurants to your <a href="/users/' + result + '/react-lists/favorites">Favorites</a> list to access more content.');
+
     }
-
-
 
     else {
         $('#signupModal').modal('hide');
