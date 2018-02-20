@@ -9,12 +9,12 @@
 // let url_listname = url.split('/')[4];
 
 
-let username = document.getElementById('username').getAttribute('value');
-let lst_id = document.getElementById('list_id').value;
-let lst_name = document.getElementById('list_name').textContent;
+// let username = document.getElementById('username').getAttribute('value');
+// let lst_id = document.getElementById('list_id').value;
+// let lst_name = document.getElementById('list_name').textContent;
 
 ReactDOM.render(
-    <ListItemContainer listId={ lst_id } username={ username } lstName={ lst_name }/>,
+    <ListItemContainer listId={data['list_id']} username={data['username']} lstName={data['list_name']}/>,
     document.getElementById("root")
 );
 

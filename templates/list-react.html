@@ -3,14 +3,15 @@
 
 
 
-<h1 id='list_name'>{{ lst.name.title() }}</h1>
+<!-- <h1 id='list_name'>{{ lst.name.title() }}</h1>
 <input hidden id='list_id' name='list_id' value='{{ lst.list_id }}'>
-<input hidden id='username' name='username' value='{{ username }}'>
+<input hidden id='username' name='username' value='{{ username }}'> -->
 
-<!-- <script>
-  // let data = {'username': '{{ username }}',
-  //             'list_name': '{{ lst.name.title() }}'};
-</script> -->
+<script>
+  let data = {'username': '{{ username }}',
+              'list_name': '{{ lst.name.title() }}',
+              'list_id': '{{ lst.list_id }}'};
+</script>
 <!-- EMAIL MODAL -->
 
 <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

@@ -35,7 +35,7 @@ function initMap() {
                     position: new google.maps.LatLng(lat, lng),
                     map: map,
                     title: 'Hover text',
-                    icon: '/static/img/pizza-2.png'
+                    icon: '/static/img/pizza-2-dark.png'
                 });
 
         // define contents for info window

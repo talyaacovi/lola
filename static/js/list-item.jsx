@@ -143,8 +143,12 @@ class ListItemContainer extends React.Component {
 
 
         // RENDER HEADING OF PAGE
-        // let header =
-        //         <h1 id='list_name'>{data['list_name']}</h1>;
+        let header =
+                <div>
+                    <h1 id='list_name'>{data['list_name']}</h1>
+                    <input readOnly hidden id='list_id' name='list_id' value={data['list_id']}></input>
+                    <input readOnly hidden id='username' name='username' value={data['username']}></input>
+                </div>
 
         // CREATING LIST ITEM COMPONENTS
         let listItems = [];
@@ -240,6 +244,7 @@ class ListItemContainer extends React.Component {
                 </div>
 
         return (<div>
+                    {header}
                     {sendList}
                     {listControls}
                     <div id='list-items'>
