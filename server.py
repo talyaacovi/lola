@@ -11,6 +11,7 @@ from user import *
 from cities import *
 from compare import *
 from sendgrid import *
+from ig import *
 import json
 # for your own helper file, can do 'from user import *'
 
@@ -453,6 +454,19 @@ def check_active_user_id():
     is_active = check_user_id(user_id)
 
     return is_active
+
+
+@app.route('/instagram-location')
+def get_ig_location():
+    """"""
+
+    location_id = get_instagram_location('Pink Onion')
+
+    print location_id
+
+    # photo_json = get_instagram_photos(location_id)
+
+    return redirect('/')
 
 
 if __name__ == "__main__":
