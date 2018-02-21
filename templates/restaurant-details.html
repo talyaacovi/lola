@@ -6,8 +6,16 @@
 
 {% for photo in ig_photos %}
     <div class='ig-photo'>
-        <!-- how do you display a .mp4 file? -->
+
+        {% if photo.url[-3:] == 'mp4' %}
+            <video width='400' height='400' controls>
+                <source src='{{ photo.url }}' type='video/mp4'>
+                 Your browser does not support the video tag.
+            </video>
+        {% else %}
             <img src='{{ photo.url }}'/>
+        {% endif %}
+
     </div>
 {% endfor %}
 

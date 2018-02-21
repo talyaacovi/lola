@@ -96,11 +96,11 @@ def get_instagram_photos(rest_id, location):
         for result in results:
             url = result['urls'][0]
             # for now, only store if it is a .jpg (and not a video .mp4)
-            if url[-3:] == 'jpg':
-                photo = Photo(rest_id=rest_id, url=url)
+            # if url[-3:] == 'jpg':
+            photo = Photo(rest_id=rest_id, url=url)
 
-                db.session.add(photo)
-                db.session.commit()
+            db.session.add(photo)
+            db.session.commit()
 
     os.system('rm -R ig_photos/')
     return 'success'
