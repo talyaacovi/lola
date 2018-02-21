@@ -491,16 +491,16 @@ def get_ig_data():
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
 
     if not restaurant.ig_loc_id:
-        loc_id = get_instagram_location(restaurant.rest_id, restaurant.name, restaurant.lat, restaurant.lng)
-        # return loc_id
+        loc_id = get_instagram_location(restaurant.rest_id, restaurant.name, restaurant.lat, restaurant.lng, restaurant.address, restaurant.city)
 
-        restaurant.ig_loc_id = loc_id
+        print loc_id
+        if loc_id:
+            restaurant.ig_loc_id = loc_id
 
-        successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
+            successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
 
-        return successMsg
+            return successMsg
 
-    # return render_template('restaurant-details.html', photos=photos)
     return ''
 
 

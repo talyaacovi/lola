@@ -167,7 +167,7 @@ class ListItemContainer extends React.Component {
 
             listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
                 rest={item.rest_name} category={item.yelp_category}
-                url={item.yelp_url} image={item.image} key={item.item_id}/>);
+                url={item.yelp_url} image={item.image} key={item.yelp_id}/>);
 
             if (this.state.editMode) {
                 listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
