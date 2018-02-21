@@ -2,11 +2,11 @@
 {% block content %}
 
 
-<h1>Restaurant Details Page!</h1>
+<h1>{{ restaurant.name }}</h1>
 
-{% for photo in photos %}
+{% for photo in ig_photos %}
     <div class='ig-photo'>
-        <img src='{{ photo }}'/>
+        <img src='{{ photo.url }}'/>
     </div>
 {% endfor %}
 

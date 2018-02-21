@@ -1,18 +1,18 @@
 import os
 import re
-from model import Restaurant
+from model import db, Photo
 import json
 import subprocess
 
 
-def get_instagram_location(yelp_id):
-    """"""
+def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng):
+    """Get Instagram Location ID based on restaurant name and Yelp lat/lng."""
 
-    print 'in my get IG location stuff!'
-    restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
-    restaurant_name = restaurant.name
-    restaurant_lat = restaurant.lat
-    restaurant_lng = restaurant.lng
+    print 'in my get IG location stuff!!!!!!!!!'
+    # restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
+    # restaurant_name = restaurant.name
+    # restaurant_lat = restaurant.lat
+    # restaurant_lng = restaurant.lng
 
     ###########################################################################
     # OS.SYSTEM TO RUN COMMAND, PIPE OUTPUT TO TXT FILE, OPEN + READ TXT FILE #
@@ -41,8 +41,10 @@ def get_instagram_location(yelp_id):
     # SUBPROCESS TO RUN COMMAND AND READ OUTPUT #
     #############################################
 
-    string = 'instagram-scraper --search-location ' + restaurant_name
+    string = 'instagram-scraper --search-location ' + rest_name
     p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)
+
+    # NEED TO ADD EXCEPTION FOR IF LOCATION ID NOT FOUND
 
     # REGEX PATTERNS:
     latPattern = re.compile(r"\b(lat: )(.+?)(?=, lng)")
@@ -58,16 +60,50 @@ def get_instagram_location(yelp_id):
             lng = lngPattern.search(line)
             locId = locIdPattern.search(line)
 
-            if lat.group(2) == restaurant_lat and lng.group(2) == restaurant_lng:
+            print lat.group(2)
+            print rest_lat
+            print lng.group(2)
+            print rest_lng
+            print locId.group(2)
+
+            if lat.group(2) == rest_lat and lng.group(2) == rest_lng:
                 return locId.group(2)
         else:
             break
 
 
-def get_instagram_photos(location):
+# this function scrapes instagram for a specific location ID and creates records
+# in the photos table with the returned URLs.
+def get_instagram_photos(rest_id, location):
     """"""
 
     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
+
+    # if using subprocess, can try p.terminate()
+
+    json_file = 'ig_photos/' + location + '.json'
+
+    with open(json_file) as json_data:
+        results = json.load(json_data)
+        for result in results:
+            url = result['urls'][0]
+            photo = Photo(rest_id=rest_id, url=url)
+
+            db.session.add(photo)
+            db.session.commit()
+
+    os.system('rm -R ig_photos/')
+    return 'success'
+
+
+# this function scrapes instagram for a specific location ID and appends URL
+# results to a list which is returned to render on the page.
+def get_instagram_photos_test(rest_id, location):
+    """"""
+
+    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
+
+    # if using subprocess, can try p.terminate()
 
     json_file = 'ig_photos/' + location + '.json'
 
@@ -75,9 +111,8 @@ def get_instagram_photos(location):
 
     with open(json_file) as json_data:
         results = json.load(json_data)
-        for photo in results:
-            # print photo['urls'][0]
-            photo_list.append(photo['urls'][0])
+        for result in results:
+            photo_list.append(result['urls'][0])
 
     os.system('rm -R ig_photos/')
 
@@ -85,6 +120,18 @@ def get_instagram_photos(location):
 
 
 # pink onion location ID: 1179108628832028
+
+# LOCATION RESPONSE FROM YELP FOR SPECIFIC BUSINESS ID:
+# u'location':
+#     {u'cross_streets': u'York St & Hampshire St',
+#     u'city': u'San Francisco',
+#     u'display_address': [u'2501 Mariposa St', u'San Francisco, CA 94110'],
+#     u'country': u'US',
+#     u'address2': u'',
+#     u'address3': None,
+#     u'state': u'CA',
+#     u'address1': u'2501 Mariposa St',
+#     u'zip_code': u'94110'}
 
 # # JSON FILE FOR ONE RESULT:
 # a list of dictionaries

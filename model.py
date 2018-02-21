@@ -123,6 +123,7 @@ class Restaurant(db.Model):
     yelp_url = db.Column(db.String(256))
     yelp_category = db.Column(db.String(128))  # hot_and_new?
     yelp_photo = db.Column(db.String(256))  # or IG photo
+    ig_loc_id = db.Column(db.String(256))
 
     def to_dict(self):
         """Return dict of list item."""
@@ -139,68 +140,6 @@ class Restaurant(db.Model):
         return "<Rest id={} name={}>".format(self.rest_id, self.name)
 
 
-class UserRestaurant(db.Model):
-    """Restaurants that have been added by users."""
-
-    __tablename__ = 'user_restaurants'
-
-    user_rest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.user_id'),
-                        nullable=False)
-    rest_id = db.Column(db.Integer,
-                        db.ForeignKey('restaurants.rest_id'),
-                        nullable=False)
-    fav_dish = db.Column(db.String(128))
-
-    def __repr__(self):
-        """Provide helpful representation of user / restaurant relationship."""
-
-        return "<User_rest id={} favorite dish={}>".format(self.user_rest_id,
-                                                           self.fav_dish)
-
-
-class UserRestaurantFavDish(db.Model):
-    """Favorite dishes specified by user for certain restaurant."""
-
-    __tablename__ = 'user_restaurant_fav_dishes'
-
-    dish_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.user_id'),
-                        nullable=False)
-    rest_id = db.Column(db.Integer,
-                        db.ForeignKey('restaurants.rest_id'),
-                        nullable=False)
-    name = db.Column(db.String(128))
-
-    def __repr__(self):
-        """Provide helpful representation of favorite dishes."""
-
-        return "<dish id={} name={}>".format(self.dish_id,
-                                             self.name)
-
-
-class Friendship(db.Model):
-    """Defines friendships among users based on Facebook data."""
-
-    __tablename__ = 'friendships'
-
-    friendship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    f_1_id = db.Column(db.Integer,
-                       db.ForeignKey('users.user_id'),
-                       nullable=False)
-    f_2_id = db.Column(db.Integer,
-                       db.ForeignKey('users.user_id'),
-                       nullable=False)
-
-    def __repr__(self):
-        """Provide helpful representation of friendships."""
-
-        return "<Friend 1 id={} Friend 2 id={}>".format(self.f_1_id,
-                                                        self.f_2_id)
-
-
 class Zipcode(db.Model):
     """Table for converting zipcodes to other location info."""
 
@@ -211,6 +150,25 @@ class Zipcode(db.Model):
     state = db.Column(db.String(128))
     lat = db.Column(db.String(128))
     lng = db.Column(db.String(128))
+
+
+class Photo(db.Model):
+    """Store photos for each restaurant."""
+
+    __tablename__ = 'photos'
+
+    photo_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    rest_id = db.Column(db.Integer,
+                        db.ForeignKey('restaurants.rest_id'),
+                        nullable=False)
+    url = db.Column(db.String(512))
+
+    restaurant = db.relationship('Restaurant', backref='photos')
+
+    def __repr__(self):
+        """Provide helpful representation of photo."""
+
+        return "<id={} rest_id={}>".format(self.photo_id, self.rest_id)
 
 
 ##############################################################################
@@ -252,23 +210,6 @@ class Zipcode(db.Model):
 #         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
 
 
-# class RestaurantPhoto(db.Model):
-#     """Store photos for each restaurant."""
-
-#     __tablename__ = 'restaurant_photos'
-
-#     photo_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     rest_id = db.Column(db.Integer,
-#                         db.ForeignKey('restaurants.rest_id'),
-#                         nullable=False)
-#     url = db.Column(db.String(256))
-
-#     def __repr__(self):
-#         """Provide helpful representation of photo."""
-
-#         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
-
-
 # class RestaurantLike(db.Model):
 #     """What category users have indicated a specific restaurant is good for."""
 
@@ -286,6 +227,67 @@ class Zipcode(db.Model):
 #         """Provide helpful representation of user-selected category."""
 
 #         return "<id={} user_id={}>".format(self.u_g_f_id, self.user_id)
+
+# class UserRestaurant(db.Model):
+#     """Restaurants that have been added by users."""
+
+#     __tablename__ = 'user_restaurants'
+
+#     user_rest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     user_id = db.Column(db.Integer,
+#                         db.ForeignKey('users.user_id'),
+#                         nullable=False)
+#     rest_id = db.Column(db.Integer,
+#                         db.ForeignKey('restaurants.rest_id'),
+#                         nullable=False)
+#     fav_dish = db.Column(db.String(128))
+
+#     def __repr__(self):
+#         """Provide helpful representation of user / restaurant relationship."""
+
+#         return "<User_rest id={} favorite dish={}>".format(self.user_rest_id,
+#                                                            self.fav_dish)
+
+
+# class UserRestaurantFavDish(db.Model):
+#     """Favorite dishes specified by user for certain restaurant."""
+
+#     __tablename__ = 'user_restaurant_fav_dishes'
+
+#     dish_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     user_id = db.Column(db.Integer,
+#                         db.ForeignKey('users.user_id'),
+#                         nullable=False)
+#     rest_id = db.Column(db.Integer,
+#                         db.ForeignKey('restaurants.rest_id'),
+#                         nullable=False)
+#     name = db.Column(db.String(128))
+
+#     def __repr__(self):
+#         """Provide helpful representation of favorite dishes."""
+
+#         return "<dish id={} name={}>".format(self.dish_id,
+#                                              self.name)
+
+
+# class Friendship(db.Model):
+#     """Defines friendships among users based on Facebook data."""
+
+#     __tablename__ = 'friendships'
+
+#     friendship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+#     f_1_id = db.Column(db.Integer,
+#                        db.ForeignKey('users.user_id'),
+#                        nullable=False)
+#     f_2_id = db.Column(db.Integer,
+#                        db.ForeignKey('users.user_id'),
+#                        nullable=False)
+
+#     def __repr__(self):
+#         """Provide helpful representation of friendships."""
+
+#         return "<Friend 1 id={} Friend 2 id={}>".format(self.f_1_id,
+#                                                         self.f_2_id)
 
 
 def connect_to_db(app, db_uri='postgresql:///restaurants'):

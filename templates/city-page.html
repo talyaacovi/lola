@@ -22,7 +22,13 @@
     </div>
     <ol>
     {% for restaurant in all_restaurants %}
-        <li data-yelp-id='{{ restaurant.yelp_id }}' data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}' data-yelp='{{ restaurant.yelp_url }}'>{{ restaurant.name }}</li>
+        <li data-yelp-id='{{ restaurant.yelp_id }}' data-lat='{{ restaurant.lat }}' data-lng='{{ restaurant.lng }}' data-yelp='{{ restaurant.yelp_url }}'>
+          {% if restaurant.ig_loc_id %}
+            <a href='/restaurants/{{ restaurant.yelp_id }}'>{{ restaurant.name }}</a>
+          {% else %}
+            {{ restaurant.name }}
+          {% endif %}
+        </li>
     {% endfor %}
     </ol>
 </br>

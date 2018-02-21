@@ -359,19 +359,23 @@ def do_react_search():
 def add_restaurant_react():
     """Add Restaurant to Database using React."""
 
+    # get List ID and the Yelp ID of the restaurant the user wants to add.
+
     lst_id = request.form.get('lst_id')
     yelp_id = request.form.get('yelp_id')
 
+    # add_new_restaurant function queries the restaurants table for an entry
+    # with that Yelp ID and if it doesn't exist, creates it in table.
+    # it returns the Restaurant ID.
+
     rest_id = add_new_restaurant(yelp_id)
+
+    # add_list_item function takes the Restaurant ID, List ID, and User ID
+    # and creates a new List Item if the user has not already added that item
+    # to their list.
+    # returns new ListItem object, or None
+
     lst_item = add_list_item(rest_id, lst_id, session['user_id'])
-
-    location_id = get_instagram_location(yelp_id)
-    # get_instagram_photos(location_id)
-
-    # QUESTION FOR KATIE -- SHOULD I STORE THE IG LOCATION ID ON THE RESTAURANT?
-    # THAT WAY IF RESTAURANT IS ALREADY IN DB, I KNOW I ALREADY HAVE THE LOCATION
-    # AND DON'T HAVE TO QUERY YELP API OR RUN THE IG SCRAPER
-    # print location_id
 
     if lst_item:
 
@@ -461,14 +465,53 @@ def check_active_user_id():
     return is_active
 
 
+# this route is for rendering a static restaurant-details.html page with a
+# hard-coded IG location ID
 @app.route('/instagram-test')
 def get_ig_location():
     """"""
 
     location_id = '1179108628832028'
-    photos = get_instagram_photos(location_id)
+    rest_id = 4
+
+    if not Restaurant.query.filter_by(ig_loc_id=location_id).first():
+        photos = get_instagram_photos_test(rest_id, location_id)
+
+    else:
+        Restaurant.query.filter_by(ig_loc_id=location_id).first()
 
     return render_template('restaurant-details.html', photos=photos)
+
+
+@app.route('/instagram-react')
+def get_ig_data():
+    """"""
+
+    yelp_id = request.args.get('yelp_id')
+    restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
+
+    if not restaurant.ig_loc_id:
+        loc_id = get_instagram_location(restaurant.rest_id, restaurant.name, restaurant.lat, restaurant.lng)
+        # return loc_id
+
+        restaurant.ig_loc_id = loc_id
+
+        successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
+
+        return successMsg
+
+    # return render_template('restaurant-details.html', photos=photos)
+    return ''
+
+
+@app.route('/restaurants/<yelp_id>')
+def restaurant_detail(yelp_id):
+    """Details page for a restaurant, Instagram photos."""
+
+    restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
+    ig_photos = restaurant.photos
+
+    return render_template('restaurant-details.html', restaurant=restaurant, ig_photos=ig_photos)
 
 
 if __name__ == "__main__":

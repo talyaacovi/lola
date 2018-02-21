@@ -2,6 +2,7 @@
 
 from model import *
 from yelp_api import business
+from ig import *
 
 
 def add_new_restaurant(yelp_id):
@@ -12,8 +13,10 @@ def add_new_restaurant(yelp_id):
     if rest:
         return rest.rest_id
     else:
+        # query Yelp API for information related to business with that Yelp ID.
         results = business(yelp_id)
 
+        # parse results for details to store in restaurants table.
         name = results['name']
         lat = results['coordinates']['latitude']
         lng = results['coordinates']['longitude']

@@ -71,6 +71,15 @@ class ListItemContainer extends React.Component {
 
         this.setState({searchItems: []});
         this.setState({inputValue: ''});
+
+        this.addInstagram(newRestaurant);
+    }
+
+    addInstagram(yelpId) {
+        // AJAX REQUEST TO FLASK ROUTE THAT DOES IG LOCATION SEARCH + PHOTO SCRAPE
+
+        $.get('/instagram-react?yelp_id=' + yelpId, (data) => console.log(data));
+
     }
 
     // CHECK LENGTH OF LIST TO DETERMINE IF IT HAS REACHED LIMIT OF 20
