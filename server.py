@@ -83,7 +83,7 @@ def signup():
 
     set_session_info(user)
 
-    fav_list = add_fav_list(user.user_id, 'Favorites', 'draft', 1)
+    add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
     return username
 
@@ -121,13 +121,13 @@ def user_page(username):
     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 
-@app.route('/profile')
-def profile_page():
-    """Homepage."""
+# @app.route('/profile')
+# def profile_page():
+#     """Homepage."""
 
-    username = session['username']
-    user = get_user(username)
-    return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
+#     username = session['username']
+#     user = get_user(username)
+#     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 
 @app.route('/add-list', methods=['POST'])
@@ -252,13 +252,13 @@ def search_city():
         return redirect('/')
 
 
-@app.route('/cities')
-def cities():
-    """List all cities with lists created."""
+# @app.route('/cities')
+# def cities():
+#     """List all cities with lists created."""
 
-    all_locations = get_cities()
+#     all_locations = get_cities()
 
-    return render_template('cities.html', all_locations=all_locations)
+#     return render_template('cities.html', all_locations=all_locations)
 
 
 @app.route('/cities/<state>/<city>')
@@ -463,24 +463,6 @@ def check_active_user_id():
     is_active = check_user_id(user_id)
 
     return is_active
-
-
-# this route is for rendering a static restaurant-details.html page with a
-# hard-coded IG location ID
-@app.route('/instagram-test')
-def get_ig_location():
-    """"""
-
-    location_id = '1179108628832028'
-    rest_id = 4
-
-    if not Restaurant.query.filter_by(ig_loc_id=location_id).first():
-        photos = get_instagram_photos_test(rest_id, location_id)
-
-    else:
-        Restaurant.query.filter_by(ig_loc_id=location_id).first()
-
-    return render_template('restaurant-details.html', photos=photos)
 
 
 @app.route('/instagram-react')

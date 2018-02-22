@@ -135,7 +135,12 @@ class Restaurant(db.Model):
                 'yelp_id': self.yelp_id,
                 'yelp_category': self.yelp_category,
                 'yelp_url': self.yelp_url,
-                'image': self.yelp_photo}
+                'image': self.yelp_photo,
+                'lat': self.lat,
+                'lng': self.lng,
+                'address': self.address,
+                'city': self.city,
+                'state': self.state}
 
     def __repr__(self):
         """Provide helpful representation of restaurant."""
@@ -314,8 +319,11 @@ def example_data():
 
     sf = Zipcode(zipcode='94103', city='SAN FRANCISCO', state='CA', lat='37.77', lng='122.41')
     seattle = Zipcode(zipcode='98105', city='SEATTLE', state='WA', lat='47.66', lng='122.29')
+    sf_2 = Zipcode(zipcode='94117', city='SAN FRANCISCO', state='CA', lat='37.76', lng='122.44')
 
-    db.session.add_all([tal, logan, fred, sf, seattle])
+    favorites = ListCategory(category='favorites')
+
+    db.session.add_all([tal, logan, fred, sf, seattle, sf_2, favorites])
     db.session.commit()
 
 

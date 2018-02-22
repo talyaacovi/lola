@@ -21,6 +21,7 @@ class FlaskTests(TestCase):
         db.session.close()
         db.drop_all()
 
+    # LOGIN TESTS
     def test_correct_login(self):
         result = self.client.post('/login-user', data={'email': 'talyaacovi@gmail.com',
                                                        'password': 'password'})
@@ -35,6 +36,21 @@ class FlaskTests(TestCase):
         result = self.client.post('/login-user', data={'email': 'bob@gmail.com',
                                                        'password': 'password'})
         self.assertIn('No Account', result.data)
+
+    # SIGNUP TESTS
+    def test_signup(self):
+        result = self.client.post('/signup', data={'email': 'alice@gmail.com',
+                                                   'password': 'password',
+                                                   'username': 'alice',
+                                                   'zipcode': '94117'})
+        self.assertIn('alice', result.data)
+
+    def test_existing_user_signup(self):
+        result = self.client.post('/signup', data={'email': 'talyaacovi@gmail.com',
+                                                   'password': 'password',
+                                                   'username': 'alice',
+                                                   'zipcode': '94117'})
+        self.assertIn('', result.data)
 
     def test_homepage(self):
         result = self.client.get('/')

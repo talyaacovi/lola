@@ -42,7 +42,7 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
     #############################################
 
     string = 'instagram-scraper --search-location ' + rest_name
-    p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
 
     # NEED TO ADD EXCEPTION FOR IF LOCATION ID NOT FOUND
 
@@ -64,16 +64,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
             address = addressPattern.search(line)
             city = cityPattern.search(line)
 
-            print lat.group(2)
-            print rest_lat
-            print lng.group(2)
-            print rest_lng
-            print locId.group(2)
-            print address.group(2)
-            print rest_address
-            print city.group(2)
-            print rest_city
-
             if (lat.group(2) == rest_lat and lng.group(2) == rest_lng) or (address.group(2) == rest_address and city.group(2) == rest_city):
                 return locId.group(2)
         else:
@@ -87,7 +77,10 @@ def get_instagram_photos(rest_id, location):
 
     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
-    # if using subprocess, can try p.terminate()
+    # try with subprocess:
+    # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
+    # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
+    # p.terminate()
 
     json_file = 'ig_photos/' + location + '.json'
 
@@ -113,7 +106,10 @@ def get_instagram_photos_test(rest_id, location):
 
     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
-    # if using subprocess, can try p.terminate()
+    # try with subprocess:
+    # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
+    # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
+    # p.terminate()
 
     json_file = 'ig_photos/' + location + '.json'
 
