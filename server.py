@@ -13,6 +13,8 @@ from compare import *
 from sendgrid import *
 from ig import *
 import json
+from instagram_worker import *
+# import threading
 # for your own helper file, can do 'from user import *'
 
 app = Flask(__name__)
@@ -469,19 +471,29 @@ def check_active_user_id():
 def get_ig_data():
     """"""
 
+    # yelp_id = request.args.get('yelp_id')
+    # restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
+
+    # if not restaurant.ig_loc_id:
+    #     loc_id = get_instagram_location(restaurant.rest_id, restaurant.name, restaurant.lat, restaurant.lng, restaurant.address, restaurant.city)
+
+    #     print loc_id
+    #     if loc_id:
+    #         restaurant.ig_loc_id = loc_id
+
+    #         successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
+
+    #         return successMsg
+
+    # return ''
+
     yelp_id = request.args.get('yelp_id')
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
 
     if not restaurant.ig_loc_id:
-        loc_id = get_instagram_location(restaurant.rest_id, restaurant.name, restaurant.lat, restaurant.lng, restaurant.address, restaurant.city)
-
-        print loc_id
-        if loc_id:
-            restaurant.ig_loc_id = loc_id
-
-            successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
-
-            return successMsg
+        print 'in if statement!!!!!!!!!!!!!!!!!!!!!!!!!!'
+        t = threading.Thread(target=instagram_function, args=([restaurant]))
+        t.start()
 
     return ''
 

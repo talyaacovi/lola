@@ -3,6 +3,7 @@
 from model import *
 from yelp_api import business
 from ig import *
+from thread import *
 
 
 def add_new_restaurant(yelp_id):
@@ -27,8 +28,6 @@ def add_new_restaurant(yelp_id):
         city = results['location']['city']
         state = results['location']['state']
 
-        # condition.acquire()
-
         restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
                                 yelp_url=yelp_url, yelp_category=yelp_category,
                                 yelp_photo=yelp_photo, address=address, city=city,
@@ -37,8 +36,11 @@ def add_new_restaurant(yelp_id):
         db.session.add(restaurant)
         db.session.commit()
 
+        # condition.acquire()
+        # t = threading.Thread(target=Instagram, args=(condition, restaurant))
+        # t.start()
+        # # t.join() ??
         # condition.notify()
-        # t = threading.Thread(target=worker, args=(i,))
         # condition.release()
 
     return restaurant.rest_id

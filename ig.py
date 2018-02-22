@@ -1,6 +1,6 @@
 import os
 import re
-from model import db, Photo
+from model import db, Photo, Restaurant
 import json
 import subprocess
 
@@ -8,11 +8,7 @@ import subprocess
 def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address, rest_city):
     """Get Instagram Location ID based on restaurant name and Yelp lat/lng."""
 
-    print 'in my get IG location stuff!!!!!!!!!'
-    # restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
-    # restaurant_name = restaurant.name
-    # restaurant_lat = restaurant.lat
-    # restaurant_lng = restaurant.lng
+    print 'in my get IG location function!!!!!!!!!'
 
     ###########################################################################
     # OS.SYSTEM TO RUN COMMAND, PIPE OUTPUT TO TXT FILE, OPEN + READ TXT FILE #
@@ -65,6 +61,11 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
             city = cityPattern.search(line)
 
             if (lat.group(2) == rest_lat and lng.group(2) == rest_lng) or (address.group(2) == rest_address and city.group(2) == rest_city):
+
+                restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
+                restaurant.ig_loc_id = locId.group(2)
+                db.session.commit()
+
                 return locId.group(2)
         else:
             break
@@ -74,6 +75,8 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
 # in the photos table with the returned URLs.
 def get_instagram_photos(rest_id, location):
     """"""
+
+    print 'in my get IG PHOTOS function!!!!!!!!!'
 
     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
@@ -88,8 +91,6 @@ def get_instagram_photos(rest_id, location):
         results = json.load(json_data)
         for result in results:
             url = result['urls'][0]
-            # for now, only store if it is a .jpg (and not a video .mp4)
-            # if url[-3:] == 'jpg':
             photo = Photo(rest_id=rest_id, url=url)
 
             db.session.add(photo)
@@ -103,6 +104,8 @@ def get_instagram_photos(rest_id, location):
 # results to a list which is returned to render on the page.
 def get_instagram_photos_test(rest_id, location):
     """"""
+
+    print 'in my get IG PHOTOS function!!!!!!!!!'
 
     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
@@ -123,6 +126,8 @@ def get_instagram_photos_test(rest_id, location):
     os.system('rm -R ig_photos/')
 
     return photo_list
+
+
 
 
 # pink onion location ID: 1179108628832028
