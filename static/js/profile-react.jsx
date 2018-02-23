@@ -38,10 +38,13 @@ class UserPageContainer extends React.Component {
     );
     }
 
-    fetchListItemsAjax(listid) {
+    fetchListItemsAjax(listid, listname) {
         $.get('/list-items-react.json?lst_id=' + listid, (data) => {
             console.log(data);
-            this.setState({listItems: data.restaurants});
+            this.setState({listItems: data.restaurants, isListOpen: true, openListId: listid, openListName:listname});
+            // this.setState({isListOpen: true});
+            // this.setState({openListId: listid});
+            // this.setState({openListName: listname});
             console.log(this.state.listItems);
         });
 
@@ -84,10 +87,10 @@ class UserPageContainer extends React.Component {
     }
 
     displayList(listid, listname) {
-        this.setState({isListOpen: true});
-        this.setState({openListId: listid});
-        this.setState({openListName: listname});
-        this.fetchListItemsAjax(listid);
+        // this.setState({isListOpen: true});
+        // this.setState({openListId: listid});
+        // this.setState({openListName: listname});
+        this.fetchListItemsAjax(listid, listname);
     }
 
     // RENDER METHOD
@@ -141,7 +144,6 @@ class UserPageContainer extends React.Component {
 
         if (this.state.isListOpen) {
             console.log('recreating listitem container divs');
-            console.log(this.props.listname);
             openListItems =
                 <div>
                     <ListItemContainer listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId}/>
