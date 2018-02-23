@@ -23,6 +23,7 @@ class ListItemContainer extends React.Component {
 
     fetchListItemsAjax() {
         $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
+            console.log(data);
             this.setState({listItems: data.restaurants});
             this.checkLength(data.restaurants);
         });

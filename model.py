@@ -52,6 +52,14 @@ class List(db.Model):
     user = db.relationship('User', backref='lists')
     list_category = db.relationship('ListCategory', backref='lists')
 
+    def to_dict(self):
+        """Return dict of list."""
+
+        return {'list_id': self.list_id,
+                'user_id': self.user_id,
+                'name': self.name,
+                'category_id': self.category_id}
+
     def __repr__(self):
         """Provide helpful representation of list."""
 

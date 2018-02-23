@@ -36,15 +36,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
             address = addressPattern.search(line)
             city = cityPattern.search(line)
 
-            print lat.group(2)
-            print type(lat.group(2))
-            print lng.group(2)
-            print type(lng.group(2))
-            print rest_lng
-            print type(rest_lng)
-            print rest_lat
-            print type(rest_lat)
-
             if (lat.group(2) == rest_lat and lng.group(2) == rest_lng) or (address.group(2) == rest_address and city.group(2) == rest_city):
 
                 restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
@@ -60,8 +51,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
                 db.session.commit()
 
                 return locId.group(2)
-
-            # else:
 
         else:
             break
@@ -116,6 +105,27 @@ def get_instagram_photos(rest_id, location):
     os.system('rm ig_photos/' + location + '.json')
 
     return 'success'
+
+
+
+# FOR ADDING ANOTHER ELSE TO CATCH THE RIGHT LOCATION:
+# print lat.group(2)
+#         37.7897
+#         string
+# print type(lat.group(2))
+# print lng.group(2)
+#         -122.41135
+#         string
+# print type(lng.group(2))
+# print rest_lng
+#         -122.411374
+#         unicode
+# print type(rest_lng)
+# print rest_lat
+#         37.789627
+#         unicode
+# print type(rest_lat)
+# myFloat = round(myFloat(myString),3)
 
 
 # pink onion location ID: 1179108628832028

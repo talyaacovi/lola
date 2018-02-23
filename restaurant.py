@@ -36,15 +36,6 @@ def add_new_restaurant(yelp_id):
         db.session.add(restaurant)
         db.session.commit()
 
-        print 'finished adding restaurant to db'
-
-        # condition.acquire()
-        # t = threading.Thread(target=Instagram, args=(condition, restaurant))
-        # t.start()
-        # # t.join() ??
-        # condition.notify()
-        # condition.release()
-
     return restaurant.rest_id
 
 

@@ -123,13 +123,32 @@ def user_page(username):
     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 
-# @app.route('/profile')
-# def profile_page():
-#     """Homepage."""
+@app.route('/users/react/<username>')
+def user_page_react(username):
+    """User profile page."""
 
-#     username = session['username']
-#     user = get_user(username)
-#     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
+    # user = get_user(username)
+
+    return render_template('profile-react.html', username=username)
+
+
+@app.route('/get-lists.json')
+def get_user_lists():
+    """User profile page."""
+
+    username = request.args.get('username')
+
+    user = get_user(username)
+
+    userLists = []
+    for lst in user.lists:
+        userLists.append(lst.to_dict())
+
+    userDict = {}
+
+    userDict['userLists'] = userLists
+
+    return jsonify(userDict)
 
 
 @app.route('/add-list', methods=['POST'])
@@ -143,7 +162,7 @@ def add_new_list():
     lst = add_list(name, status, user_id)
 
     if lst:
-        return redirect('/users/{}/lists/{}'.format(lst.user.username, lst.name))
+        return redirect('/users/{}/react/lists/{}'.format(lst.user.username, lst.name))
 
     else:
         flash('You already have a list with this name!')

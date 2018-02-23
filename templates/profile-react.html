@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script>
+  let data = {'username': '{{ username }}'};
+</script>
+
+<!-- REPLACE -->
+
+<h1>NON REACT STUFF</h1>
+
+
+
+<!-- REPLACE -->
+
+<div id="root"></div>
+
+<script>
+    {% if username == session.get('username') %}
+        let viewingOwnPage = true;
+    {% else %}
+        let viewingOwnPage = false;
+    {% endif %}
+</script>
+
+<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+<script src="http://unpkg.com/babel-standalone"></script>
+
+<script src="/static/js/profile-react.jsx" type="text/jsx"></script>
+<!-- <script src="/static/js/list-item.jsx" type="text/jsx"></script> -->
+<!-- <script src="/static/js/list-react.jsx" type="text/jsx"></script> -->
+
+
+<script src='/static/js/send-email.js'></script>
+
+
+<script>
+    let idOfOptionToBold = '';
+</script>
+
+{% endblock %}
