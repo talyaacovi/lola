@@ -10,29 +10,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
 
     print 'in my get IG location function!!!!!!!!!'
 
-    ###########################################################################
-    # OS.SYSTEM TO RUN COMMAND, PIPE OUTPUT TO TXT FILE, OPEN + READ TXT FILE #
-    ###########################################################################
-
-    # os.system('instagram-scraper --search-location ' + restaurant_name + ' > ig_results.txt')
-
-    # with open('ig_results.txt') as f:
-    #     results = f.read()
-    #     os.system('rm ig_results.txt')
-    #     latPattern = re.compile(r"\b(lat: )(.+?)(?=, lng)")
-    #     lngPattern = re.compile(r"\b(lng: )(.*)")
-    #     locIdPattern = re.compile(r"\b(location-id: )(.+?)(?=,)")
-
-    #     results = results.rstrip().split('\n')
-
-    #     for item in results:
-    #         lat = latPattern.search(item)
-    #         lng = lngPattern.search(item)
-    #         locId = locIdPattern.search(item)
-
-    #         if lat.group(2) == restaurant_lat and lng.group(2) == restaurant_lng:
-    #             return locId.group(2)
-
     #############################################
     # SUBPROCESS TO RUN COMMAND AND READ OUTPUT #
     #############################################
@@ -40,8 +17,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
     string = 'instagram-scraper --search-location ' + rest_address + ' ' + rest_name
     print string
     p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
-
-    # NEED TO ADD EXCEPTION FOR IF LOCATION ID NOT FOUND
 
     # REGEX PATTERNS:
     latPattern = re.compile(r"\b(lat: )(.+?)(?=, lng)")
@@ -91,25 +66,43 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
         else:
             break
 
+    ###########################################################################
+    # OS.SYSTEM TO RUN COMMAND, PIPE OUTPUT TO TXT FILE, OPEN + READ TXT FILE #
+    ###########################################################################
+
+    # os.system('instagram-scraper --search-location ' + restaurant_name + ' > ig_results.txt')
+
+    # with open('ig_results.txt') as f:
+    #     results = f.read()
+    #     os.system('rm ig_results.txt')
+    #     latPattern = re.compile(r"\b(lat: )(.+?)(?=, lng)")
+    #     lngPattern = re.compile(r"\b(lng: )(.*)")
+    #     locIdPattern = re.compile(r"\b(location-id: )(.+?)(?=,)")
+
+    #     results = results.rstrip().split('\n')
+
+    #     for item in results:
+    #         lat = latPattern.search(item)
+    #         lng = lngPattern.search(item)
+    #         locId = locIdPattern.search(item)
+
+    #         if lat.group(2) == restaurant_lat and lng.group(2) == restaurant_lng:
+    #             return locId.group(2)
+
 
 # this function scrapes instagram for a specific location ID and creates records
 # in the photos table with the returned URLs.
 def get_instagram_photos(rest_id, location):
     """"""
 
-    print 'in my get IG PHOTOS function!!!!!!!!!'
-
-    # os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
-    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none')
+    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
     # try with subprocess:
     # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
     # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
     # p.terminate()
 
-    # json_file = 'ig_photos/' + location + '.json'
-    json_directory = location + '/'
-    json_file = json_directory + location + '.json'
+    json_file = 'ig_photos/' + location + '.json'
 
     with open(json_file) as json_data:
         results = json.load(json_data)
@@ -120,40 +113,9 @@ def get_instagram_photos(rest_id, location):
             db.session.add(photo)
             db.session.commit()
 
-    # os.system('rm -R ig_photos/')
+    os.system('rm ig_photos/' + location + '.json')
 
-    os.system('rm -R ' + json_directory)
     return 'success'
-
-
-# this function scrapes instagram for a specific location ID and appends URL
-# results to a list which is returned to render on the page.
-# def get_instagram_photos_test(rest_id, location):
-#     """"""
-
-#     print 'in my get IG PHOTOS function!!!!!!!!!'
-
-#     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
-
-#     # try with subprocess:
-#     # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
-#     # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
-#     # p.terminate()
-
-#     json_file = 'ig_photos/' + location + '.json'
-
-#     photo_list = []
-
-#     with open(json_file) as json_data:
-#         results = json.load(json_data)
-#         for result in results:
-#             photo_list.append(result['urls'][0])
-
-#     os.system('rm -R ig_photos/')
-
-#     return photo_list
-
-
 
 
 # pink onion location ID: 1179108628832028

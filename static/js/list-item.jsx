@@ -51,92 +51,31 @@ class ListItemContainer extends React.Component {
         payload.append('lst_id', this.props.listId);
         payload.append('yelp_id', newRestaurant);
 
+        // FETCH IS A PROMISE!!!!
+
         fetch('/add-restaurant-react.json', {
             method: 'POST',
             body: payload,
             credentials: 'same-origin'
         })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //         if (data) {
-    //             let currItems = this.state.listItems;
-    //             currItems.push(data);
-    //             this.setState({listItems: currItems});
-    //             // this.addInstagram(newRestaurant);
-    //         }
-    //         else {
-    //             alert('This restaurant already exists on this list!');
-    //             }
-    //     });
+        .then((response) => response.json()) // resolve is what promise says its going to return
+        .then((data) => {
+                                        if (data) {
+                                            let currItems = this.state.listItems;
+                                            currItems.push(data);
+                                            this.setState({listItems: currItems});
+                                        }
+                                        else {
+                                            alert('This restaurant already exists on this list!');
+                                        }
+                                        fetch('/instagram-react?yelp_id=' + newRestaurant)
+                                        .then((results) => console.log('done with IG'));
+        });
 
-    // }
+        this.setState({searchItems: []});
+        this.setState({inputValue: ''});
 
-     // FETCH IS A PROMISE!!!!
-                        .then((response) => response.json()) // resolve is what promise says its going to return
-                        .then((data) => {
-                                                        console.log('back from restaurant adding !!!!!!!!');
-                                                        if (data) {
-                                                            let currItems = this.state.listItems;
-                                                            currItems.push(data);
-                                                            this.setState({listItems: currItems});
-                                                            // this.addInstagram(newRestaurant);
-                                                        }
-                                                        else {
-                                                            alert('This restaurant already exists on this list!');
-                                                        }
-                                                        // return fetch('/instagram-react?yelp_id=' + newRestaurant);
-                                                        console.log('about to go to instagram react route!!!!!!!!!!!!!!!!!!!');
-                                                        fetch('/instagram-react?yelp_id=' + newRestaurant)
-                                                        .then((results) => console.log('done with IG'));
-                        });
-
-                        this.setState({searchItems: []});
-                        this.setState({inputValue: ''});
-
-                    }
-
-
-    //                         new Promise(function(resolve, reject) {
-    //                                                     if (data) {
-    //                                                         let currItems = this.state.listItems;
-    //                                                         currItems.push(data);
-    //                                                         this.setState({listItems: currItems});
-    //                                                         // this.addInstagram(newRestaurant);
-    //                                                     }
-    //                                                     else {
-    //                                                         alert('This restaurant already exists on this list!');
-    //                                                     }
-    //                         this.setState({searchItems: []});
-    //                         this.setState({inputValue: ''});
-    //                     });
-
-    //     Promise.all([promiseA]).then(this.addInstagram(newRestaurant));
-
-    // }
-
-  // .then(githubUser => new Promise(function(resolve, reject) {
-  //                                   let img = document.createElement('img');
-  //                                   img.src = githubUser.avatar_url;
-  //                                   img.className = "promise-avatar-example";
-  //                                   document.body.append(img);
-
-  //                                   setTimeout(() => {
-  //                                     img.remove();
-  //                                     resolve(githubUser);
-  //                                   }, 3000);
-  // })//end new promise
-  // )//end .then
-  // // triggers after 3 seconds
-  // .then(githubUser => alert(`Finished showing ${githubUser.name}`));
-
-
-
-    // addInstagram(yelpId) {
-    //     // AJAX REQUEST TO FLASK ROUTE THAT DOES IG LOCATION SEARCH + PHOTO SCRAPE
-    //     console.log('in addInstagram function');
-    //     $.get('/instagram-react?yelp_id=' + yelpId, (data) => console.log(data));
-
-    // }
+    }
 
     // CHECK LENGTH OF LIST TO DETERMINE IF IT HAS REACHED LIMIT OF 20
 

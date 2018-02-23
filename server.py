@@ -472,15 +472,10 @@ def check_active_user_id():
 def get_ig_data():
     """"""
 
-    print 'IN INSTAGRAM REACT FLASK ROUTE!!!!!!!!!!!!!!'
     # FLASK THREADING VERSION
     yelp_id = request.args.get('yelp_id')
 
-    print yelp_id
-
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
-
-    print restaurant
 
     if not restaurant.ig_loc_id:
         loc_id = get_instagram_location(restaurant.rest_id,
