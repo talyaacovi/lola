@@ -13,10 +13,10 @@
 // let lst_id = document.getElementById('list_id').value;
 // let lst_name = document.getElementById('list_name').textContent;
 
-ReactDOM.render(
-    <ListItemContainer listId={data['list_id']} username={data['username']} lstName={data['list_name']}/>,
-    document.getElementById("root")
-);
+// ReactDOM.render(
+//     <ListItemContainer listId={data['list_id']} username={data['username']} lstName={data['list_name']}/>,
+//     document.getElementById("root")
+// );
 
 
 

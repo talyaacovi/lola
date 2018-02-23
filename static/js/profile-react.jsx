@@ -18,8 +18,9 @@
 class UserPageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {userLists: [], isListOpen: false, openListId: null, newListName: '', newListStatus: 'draft'};
+        this.state = {userLists: [], isListOpen: false, openListName: '', openListId: null, newListName: '', newListStatus: 'draft', listItems: []};
         this.fetchUserListsAjax = this.fetchUserListsAjax.bind(this);
+        this.fetchListItemsAjax = this.fetchListItemsAjax.bind(this);
     }
 
     componentWillMount() {
@@ -33,9 +34,18 @@ class UserPageContainer extends React.Component {
         $.get('/get-lists.json?username=' + this.props.username, (data) => {
             console.log(data);
             this.setState({userLists: data.userLists});
-            // createUserLists(data.userLists);
         }
     );
+    }
+
+    fetchListItemsAjax(listid) {
+        $.get('/list-items-react.json?lst_id=' + listid, (data) => {
+            console.log(data);
+            this.setState({listItems: data.restaurants});
+            console.log(this.state.listItems);
+        });
+
+
     }
 
     updateInputValue(evt) {
@@ -73,9 +83,11 @@ class UserPageContainer extends React.Component {
         });
     }
 
-    displayList(listid) {
+    displayList(listid, listname) {
         this.setState({isListOpen: true});
         this.setState({openListId: listid});
+        this.setState({openListName: listname});
+        this.fetchListItemsAjax(listid);
     }
 
     // RENDER METHOD
@@ -84,17 +96,7 @@ class UserPageContainer extends React.Component {
 
         let mainDiv = [];
 
-        // for (let i = 0; i < this.state.userLists.length; i++) {
-        //         // let lst = this.state.userLists[i];
-        //         let myDiv =
-        //             (<div key={i}>
-        //                 <a onClick={this.displayList.bind(this)} dataListId={this.state.userLists[i].list_id}>{this.state.userLists[i].name}</a>
-        //             </div>);
-        //         mainDiv.push(myDiv);
-        //     }
-
         for (let i = 0; i < this.state.userLists.length; i++) {
-                // let lst = this.state.userLists[i];
                     mainDiv.push(<ListLink key={i} listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.displayList.bind(this)}/>);
             }
 
@@ -128,11 +130,22 @@ class UserPageContainer extends React.Component {
 
         let openListItems
 
+        // if (this.state.isListOpen) {
+        //     console.log('recreating listitem container divs');
+        //     openListItems =
+        //         <div>
+        //             <ListItemContainer listId={this.state.openListId} listItems={this.state.listItems}/>
+        //             <p>the list being requested {this.state.openListId}</p>
+        //         </div>
+        // }
+
         if (this.state.isListOpen) {
+            console.log('recreating listitem container divs');
+            console.log(this.props.listname);
             openListItems =
                 <div>
-                    <p>'I have opened a list!'</p>
-                    <p>'and the id is' {this.state.openListId}</p>
+                    <ListItemContainer listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId}/>
+                    <p>the list being requested {this.state.openListId}</p>
                 </div>
         }
 
@@ -152,7 +165,7 @@ class UserPageContainer extends React.Component {
 
 class ListLink extends React.Component {
     buttonClickHandler() {
-        this.props.displayListHandler(this.props.listid);
+        this.props.displayListHandler(this.props.listid, this.props.listname);
     }
     render() {
         return (<div>

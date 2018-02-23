@@ -364,6 +364,8 @@ def list_items_react():
     lst_id = request.args.get('lst_id')
     lst_items = get_list_items_react(lst_id)
 
+    print lst_items
+
     return jsonify(lst_items)
 
 

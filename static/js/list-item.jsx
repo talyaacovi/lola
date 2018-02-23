@@ -7,29 +7,37 @@
 class ListItemContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false};
+        this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false, listName: ''};
         // this.fetchListItems = this.fetchListItems.bind(this);
-        this.fetchListItemsAjax = this.fetchListItemsAjax.bind(this);
+        // this.fetchListItemsAjax = this.fetchListItemsAjax.bind(this);
         this.checkLength = this.checkLength.bind(this);
     }
 
-    componentWillMount() {
-        // this.fetchListItems();
-        this.fetchListItemsAjax();
+    // componentWillMount() {
+    //     // this.fetchListItems();
+    //     this.fetchListItemsAjax();
 
-    }
+    // }
 
-    // GET LIST ITEMS USING AJAX
+    // // GET LIST ITEMS USING AJAX
 
-    fetchListItemsAjax() {
-        $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
-            console.log(data);
-            this.setState({listItems: data.restaurants});
-            this.checkLength(data.restaurants);
-        });
+    // fetchListItemsAjax() {
+    //     $.get('/list-items-react.json?lst_id=' + this.props.listId, (data) => {
+    //         console.log(data);
+    //         this.setState({listItems: data.restaurants});
+    //         this.checkLength(data.restaurants);
+    //     });
 
 
-    }
+    // }
+
+        componentWillReceiveProps(nextProps) {
+            this.setState({listItems: nextProps.listItems});
+            this.setState({listName: nextProps.listName});
+            console.log(this.state.listName);
+        }
+
+
 
     // GET LIST ITEMS USING FETCH (doesn't work)
 
@@ -49,7 +57,7 @@ class ListItemContainer extends React.Component {
     addListItem(newRestaurant) {
 
         let payload = new FormData();
-        payload.append('lst_id', this.props.listId);
+        payload.append('lst_id', this.props.listid);
         payload.append('yelp_id', newRestaurant);
 
         // FETCH IS A PROMISE!!!!
@@ -145,7 +153,12 @@ class ListItemContainer extends React.Component {
     render() {
 
 
+        // GET CODE REVIEW
+        // this.fetchListItemsAjax();
+
         // RENDER HEADING OF PAGE
+        console.log('rendering list item container again');
+
         let header =
                 <div>
                     <h1 id='list_name'>{data['list_name']}</h1>
@@ -214,7 +227,7 @@ class ListItemContainer extends React.Component {
 
         let deleteControl;
 
-        if (this.state.editMode && this.props.lstName != 'Favorites') {
+        if (this.state.editMode && this.state.listName != 'favorites') {
             deleteControl =
                     <div>
                         <div id='del-list'>
