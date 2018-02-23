@@ -19,3 +19,17 @@ ReactDOM.render(
 );
 
 
+
+
+// TO MOVE LISTS TO USER PAGE
+// ListItemContainer component becomes List component
+// create UserPageContainer component that will mount to root div of user profile page
+        // states:
+        //     isListOpen -- false
+        //     openListId -- none, null
+        // componentWillMount -- fetchLists for userID (with list_id data attribute)
+        // render -- user name, create list if viewing own page, {lists}
+        //         -- if isListOpen: also mount on render the <List component with listId = this.state.openListId>
+
+        // onClick of list, change state to isListOpen = true and get listId, setState.openListId = listId
+

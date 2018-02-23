@@ -44,9 +44,7 @@ class List(db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.user_id'),
                         nullable=False)
-    name = db.Column(db.String(128), nullable=False, unique=True)
-    # lists can be in draft or published status
-    # this could be a Boolean flag
+    name = db.Column(db.String(128), nullable=False)
     status = db.Column(db.String(64), nullable=False)
     category_id = db.Column(db.Integer,
                             db.ForeignKey('list_categories.list_c_id'))
@@ -303,7 +301,7 @@ def connect_to_db(app, db_uri='postgresql:///restaurants'):
 
     # Configure to use PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_ECHO'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     db.app = app

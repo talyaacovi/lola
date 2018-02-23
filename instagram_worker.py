@@ -9,12 +9,9 @@ condition = threading.Condition()
 
 def instagram_function(restaurant):
 
-    print restaurant
-
     ig_loc_id = get_instagram_location(restaurant.rest_id, restaurant.name,
                                        restaurant.lat, restaurant.lng,
                                        restaurant.address, restaurant.city)
-    print ig_loc_id
 
     restaurant.ig_loc_id = ig_loc_id
 

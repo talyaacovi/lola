@@ -37,7 +37,8 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
     # SUBPROCESS TO RUN COMMAND AND READ OUTPUT #
     #############################################
 
-    string = 'instagram-scraper --search-location ' + rest_name
+    string = 'instagram-scraper --search-location ' + rest_address + ' ' + rest_name
+    print string
     p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
 
     # NEED TO ADD EXCEPTION FOR IF LOCATION ID NOT FOUND
@@ -60,6 +61,15 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
             address = addressPattern.search(line)
             city = cityPattern.search(line)
 
+            print lat.group(2)
+            print type(lat.group(2))
+            print lng.group(2)
+            print type(lng.group(2))
+            print rest_lng
+            print type(rest_lng)
+            print rest_lat
+            print type(rest_lat)
+
             if (lat.group(2) == rest_lat and lng.group(2) == rest_lng) or (address.group(2) == rest_address and city.group(2) == rest_city):
 
                 restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
@@ -67,6 +77,17 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
                 db.session.commit()
 
                 return locId.group(2)
+
+            elif (address.group(2) == rest_address or city.group(2) == rest_city):
+
+                restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
+                restaurant.ig_loc_id = locId.group(2)
+                db.session.commit()
+
+                return locId.group(2)
+
+            # else:
+
         else:
             break
 
@@ -78,14 +99,17 @@ def get_instagram_photos(rest_id, location):
 
     print 'in my get IG PHOTOS function!!!!!!!!!'
 
-    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
+    # os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
+    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none')
 
     # try with subprocess:
     # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
     # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
     # p.terminate()
 
-    json_file = 'ig_photos/' + location + '.json'
+    # json_file = 'ig_photos/' + location + '.json'
+    json_directory = location + '/'
+    json_file = json_directory + location + '.json'
 
     with open(json_file) as json_data:
         results = json.load(json_data)
@@ -96,36 +120,38 @@ def get_instagram_photos(rest_id, location):
             db.session.add(photo)
             db.session.commit()
 
-    os.system('rm -R ig_photos/')
+    # os.system('rm -R ig_photos/')
+
+    os.system('rm -R ' + json_directory)
     return 'success'
 
 
 # this function scrapes instagram for a specific location ID and appends URL
 # results to a list which is returned to render on the page.
-def get_instagram_photos_test(rest_id, location):
-    """"""
+# def get_instagram_photos_test(rest_id, location):
+#     """"""
 
-    print 'in my get IG PHOTOS function!!!!!!!!!'
+#     print 'in my get IG PHOTOS function!!!!!!!!!'
 
-    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
+#     os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
 
-    # try with subprocess:
-    # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
-    # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
-    # p.terminate()
+#     # try with subprocess:
+#     # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'
+#     # p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
+#     # p.terminate()
 
-    json_file = 'ig_photos/' + location + '.json'
+#     json_file = 'ig_photos/' + location + '.json'
 
-    photo_list = []
+#     photo_list = []
 
-    with open(json_file) as json_data:
-        results = json.load(json_data)
-        for result in results:
-            photo_list.append(result['urls'][0])
+#     with open(json_file) as json_data:
+#         results = json.load(json_data)
+#         for result in results:
+#             photo_list.append(result['urls'][0])
 
-    os.system('rm -R ig_photos/')
+#     os.system('rm -R ig_photos/')
 
-    return photo_list
+#     return photo_list
 
 
 

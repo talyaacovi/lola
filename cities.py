@@ -40,18 +40,7 @@ def count_restaurants_by_city(state, city):
     """Get top 10 restaurants for a specific city."""
 
     # query to get COUNT with Restaurant object.
-    # restaurants = (db.session.query(Restaurant, func.count(ListItem.rest_id))
-    #                          .join(ListItem)
-    #                          .join(List)
-    #                          .join(User)
-    #                          .filter(User.state == 'CA',
-    #                                  User.city == 'SAN FRANCISCO',
-    #                                  List.category_id == 1)
-    #                          .group_by(Restaurant.rest_id)
-    #                          .order_by(db.desc(func.count(ListItem.rest_id)))
-    #                          .limit(10).all())
-
-    restaurants = (db.session.query(Restaurant)
+    restaurants = (db.session.query(Restaurant, func.count(ListItem.rest_id))
                              .join(ListItem)
                              .join(List)
                              .join(User)
@@ -60,8 +49,19 @@ def count_restaurants_by_city(state, city):
                                      List.category_id == 1)
                              .group_by(Restaurant.rest_id)
                              .order_by(db.desc(func.count(ListItem.rest_id)))
-                             .limit(10)
-                             .all())
+                             .limit(10).all())
+
+    # restaurants = (db.session.query(Restaurant)
+    #                          .join(ListItem)
+    #                          .join(List)
+    #                          .join(User)
+    #                          .filter(User.state == state.upper(),
+    #                                  User.city == city.upper(),
+    #                                  List.category_id == 1)
+    #                          .group_by(Restaurant.rest_id)
+    #                          .order_by(db.desc(func.count(ListItem.rest_id)))
+    #                          .limit(10)
+    #                          .all())
 
     return restaurants
 

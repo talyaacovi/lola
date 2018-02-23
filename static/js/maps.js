@@ -41,7 +41,7 @@ function initMap() {
         // define contents for info window
         html = (
               '<div class="window-content">' +
-                    '<p>' + restArray[i].innerText + '</p>' +
+                    '<p>' + restArray[i].firstElementChild.innerText + '</p>' +
                     '<a href="' + url + '">Yelp</a>' +
               '</div>');
 

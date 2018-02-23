@@ -13,7 +13,7 @@ from compare import *
 from sendgrid import *
 from ig import *
 import json
-from instagram_worker import *
+# from instagram_worker import *
 # import threading
 # for your own helper file, can do 'from user import *'
 
@@ -178,7 +178,6 @@ def add_restaurant():
 
     lst_id = request.form.get('list')
     yelp_id = request.form.get('id')
-    print yelp_id
 
     rest_id = add_new_restaurant(yelp_id)
 
@@ -268,14 +267,14 @@ def display_city_page(state, city):
     """Display users and lists for a specific city."""
 
     all_users = get_users_by_city(state, city)
-    all_restaurants = count_restaurants_by_city(state, city)
+    restaurant_tuples = count_restaurants_by_city(state, city)
     location = get_city_lat_lng(state, city)
 
     return render_template('city-page.html',
                            all_users=all_users,
                            city=city,
                            state=state,
-                           all_restaurants=all_restaurants,
+                           restaurant_tuples=restaurant_tuples,
                            location=location)
 
 
@@ -335,10 +334,10 @@ def list_items_react():
 def do_react_search():
     """Get search results using Yelp API and React."""
 
+    print 'IN SEARCH REACT FLASK ROUTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+
     search_term = request.args.get('term')
     username = request.args.get('username')
-    # city = session['city'].title()
-    # state = session['state'].title()
     user_location = get_user_location(username)
     city = user_location[0]
     state = user_location[1]
@@ -360,6 +359,8 @@ def do_react_search():
 @app.route('/add-restaurant-react.json', methods=['POST'])
 def add_restaurant_react():
     """Add Restaurant to Database using React."""
+
+    print 'IN ADD RESTAURANT REACT FLASK ROUTE!!!!!!!!!!!!!!'
 
     # get List ID and the Yelp ID of the restaurant the user wants to add.
 
@@ -471,31 +472,43 @@ def check_active_user_id():
 def get_ig_data():
     """"""
 
+    print 'IN INSTAGRAM REACT FLASK ROUTE!!!!!!!!!!!!!!'
+    # FLASK THREADING VERSION
+    yelp_id = request.args.get('yelp_id')
+
+    print yelp_id
+
+    restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
+
+    print restaurant
+
+    if not restaurant.ig_loc_id:
+        loc_id = get_instagram_location(restaurant.rest_id,
+                                        restaurant.name,
+                                        restaurant.lat,
+                                        restaurant.lng,
+                                        restaurant.address,
+                                        restaurant.city)
+
+        if loc_id:
+            restaurant.ig_loc_id = loc_id
+
+            successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
+
+            return successMsg
+
+    return ''
+
+
+    # THREADING MODULE VERSION
     # yelp_id = request.args.get('yelp_id')
     # restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
 
     # if not restaurant.ig_loc_id:
-    #     loc_id = get_instagram_location(restaurant.rest_id, restaurant.name, restaurant.lat, restaurant.lng, restaurant.address, restaurant.city)
-
-    #     print loc_id
-    #     if loc_id:
-    #         restaurant.ig_loc_id = loc_id
-
-    #         successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
-
-    #         return successMsg
+    #     t = threading.Thread(target=instagram_function, args=([restaurant]))
+    #     t.start()
 
     # return ''
-
-    yelp_id = request.args.get('yelp_id')
-    restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
-
-    if not restaurant.ig_loc_id:
-        print 'in if statement!!!!!!!!!!!!!!!!!!!!!!!!!!'
-        t = threading.Thread(target=instagram_function, args=([restaurant]))
-        t.start()
-
-    return ''
 
 
 @app.route('/restaurants/<yelp_id>')
@@ -516,4 +529,4 @@ if __name__ == "__main__":
     # Use the DebugToolbar
     DebugToolbarExtension(app)
 
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", threaded=True)
