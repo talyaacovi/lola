@@ -34,10 +34,10 @@ class ListItemContainer extends React.Component {
 
         componentWillReceiveProps(nextProps) {
             if (nextProps.listid !== this.props.listid) {
-                this.setState({editMode: false});
+                this.setState({editMode: false, listItems: nextProps.listItems});
             }
 
-            // this.setState({listName: nextProps.listName});
+            this.setState({listItems: nextProps.listItems});
 
             // console.log(this.state.listName);
         }
@@ -140,7 +140,7 @@ class ListItemContainer extends React.Component {
         let payload = new FormData();
 
         payload.append('item_id', itemId);
-        payload.append('lst_id', this.props.listId);
+        payload.append('lst_id', this.props.listid);
 
         fetch('/delete-restaurant-react.json', {
             method: 'POST',
@@ -168,24 +168,10 @@ class ListItemContainer extends React.Component {
                 </div>
 
         // CREATING LIST ITEM COMPONENTS
-        // let listItems = [];
-        // for (let i = 0; i < this.state.listItems.length; i++) {
-
-        //     let item = this.state.listItems[i];
-
-        //     listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
-        //         rest={item.rest_name} category={item.yelp_category}
-        //         url={item.yelp_url} image={item.image} key={item.yelp_id}/>);
-
-        //     if (this.state.editMode) {
-        //         listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
-        //     }
-        // }
-
         let listItems = [];
-        for (let i = 0; i < this.props.listItems.length; i++) {
+        for (let i = 0; i < this.state.listItems.length; i++) {
 
-            let item = this.props.listItems[i];
+            let item = this.state.listItems[i];
 
             listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
                 rest={item.rest_name} category={item.yelp_category}
@@ -195,6 +181,20 @@ class ListItemContainer extends React.Component {
                 listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
             }
         }
+
+        // let listItems = [];
+        // for (let i = 0; i < this.props.listItems.length; i++) {
+
+        //     let item = this.props.listItems[i];
+
+        //     listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
+        //         rest={item.rest_name} category={item.yelp_category}
+        //         url={item.yelp_url} image={item.image} key={item.yelp_id}/>);
+
+        //     if (this.state.editMode) {
+        //         listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
+        //     }
+        // }
 
 
         let searchControls;
