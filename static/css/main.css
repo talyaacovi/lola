@@ -36,3 +36,11 @@ ul > li {
     height: 400px;
     width: 400px;
 }
+
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+  pointer-events: none;
+}

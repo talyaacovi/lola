@@ -46,6 +46,7 @@ function initMap() {
               '</div>');
 
         // call function to bind info window to map
+
         bindInfoWindow(marker, map, infoWindow, activeHtml, inactiveHtml);
 
     }

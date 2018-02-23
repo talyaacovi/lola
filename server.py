@@ -127,9 +127,9 @@ def user_page(username):
 def user_page_react(username):
     """User profile page."""
 
-    # user = get_user(username)
+    user = get_user(username)
 
-    return render_template('profile-react.html', username=username)
+    return render_template('profile-react.html', city=user.city.title(), state=user.state, username=username)
 
 
 @app.route('/get-lists.json')
@@ -167,6 +167,24 @@ def add_new_list():
     else:
         flash('You already have a list with this name!')
         return redirect('/users/{}'.format(session['username']))
+
+
+@app.route('/add-list-react.json', methods=['POST'])
+def add_new_list_react():
+    """Add list to database in draft status."""
+
+    print 'IN REACT ADD NEW LIST ROUTE !!!!!!!!!!!!!!!!!!!!!!!!!!'
+    name = request.form.get('list_name')
+    status = request.form.get('status')
+    user_id = session['user_id']
+
+    lst = add_list(name, status, user_id)
+
+    if lst:
+        return jsonify(lst.to_dict())
+
+    else:
+        return 'null'
 
 
 @app.route('/search-results.json')
@@ -353,8 +371,6 @@ def list_items_react():
 def do_react_search():
     """Get search results using Yelp API and React."""
 
-    print 'IN SEARCH REACT FLASK ROUTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-
     search_term = request.args.get('term')
     username = request.args.get('username')
     user_location = get_user_location(username)
@@ -378,8 +394,6 @@ def do_react_search():
 @app.route('/add-restaurant-react.json', methods=['POST'])
 def add_restaurant_react():
     """Add Restaurant to Database using React."""
-
-    print 'IN ADD RESTAURANT REACT FLASK ROUTE!!!!!!!!!!!!!!'
 
     # get List ID and the Yelp ID of the restaurant the user wants to add.
 

@@ -47,9 +47,12 @@ function initMap() {
 
         restaurant = restArray[i];
 
+        if (isActive) {
+                bindInfoWindow(marker, map, infoWindow, html);
+                changeMapCenter(restaurant, marker, map, infoWindow, html);
+            }
         // call function to bind info window to map
-        bindInfoWindow(marker, map, infoWindow, html);
-        changeMapCenter(restaurant, marker, map, infoWindow, html);
+
 
     }
 

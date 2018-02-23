@@ -18,7 +18,7 @@
 class UserPageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {userLists: [], isListOpen: false, openListId: null};
+        this.state = {userLists: [], isListOpen: false, openListId: null, newListName: '', newListStatus: 'draft'};
         this.fetchUserListsAjax = this.fetchUserListsAjax.bind(this);
     }
 
@@ -38,6 +38,41 @@ class UserPageContainer extends React.Component {
     );
     }
 
+    updateInputValue(evt) {
+        this.setState({newListName: evt.target.value});
+    }
+
+    createNewList(evt) {
+        evt.preventDefault();
+
+        let listName = this.state.newListName;
+        let listStatus = this.state.newListStatus;
+
+        let payload = new FormData();
+
+        payload.append('list_name', listName);
+        payload.append('status', listStatus);
+
+        fetch('/add-list-react.json', {
+            method: 'POST',
+            body: payload,
+            credentials: 'same-origin'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+                                        console.log('in create new list promise');
+                                        if (data) {
+                                            let currLists = this.state.userLists;
+                                            currLists.push(data);
+                                            this.setState({useLists: currLists});
+                                            this.setState({newListName: ''});
+                                        }
+                                        else {
+                                            alert('You already have a list with that name!');
+                                        }
+        });
+    }
+
 
     // RENDER METHOD
 
@@ -49,15 +84,17 @@ class UserPageContainer extends React.Component {
                 // let lst = this.state.userLists[i];
                 let myDiv =
                     (<div key={i}>
-                        <h2 data-list-id={this.state.userLists[i].list_id}>{this.state.userLists[i].name}</h2>
+                        <a data-list-id={this.state.userLists[i].list_id}>{this.state.userLists[i].name}</a>
                     </div>);
                 mainDiv.push(myDiv);
             }
 
         // RENDER HEADING OF PAGE
+        let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
                 <div>
-                    <h1>This is my page! Lists!</h1>
+                    <p id='msg-para'></p>
+                    <h1>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
                 </div>
 
 
@@ -69,7 +106,12 @@ class UserPageContainer extends React.Component {
             createListControls =
                     <div>
                         <div id='create-list'>
-                            <button>Create a list</button>
+                            <h3>Create a list</h3>
+                            <form onSubmit={this.createNewList.bind(this)}>
+                                <label>Name</label>
+                                <input name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
+                                <button>Create List</button>
+                            </form>
                         </div>
                     </div>
         }
@@ -77,7 +119,9 @@ class UserPageContainer extends React.Component {
 
         return (<div>
                     {header}
-                    <div id='lists'>
+                    <div>
+                        {createListControls}
+                        <h3>Lists</h3>
                         {mainDiv}
                     </div>
                 </div>);
@@ -86,7 +130,7 @@ class UserPageContainer extends React.Component {
 
 
 ReactDOM.render(
-    <UserPageContainer listId={data['list_id']} username={data['username']} lstName={data['list_name']}/>,
+    <UserPageContainer listId={data['list_id']} username={data['username']} lstName={data['list_name']} city={data['city']} state={data['state']}/>,
     document.getElementById("root")
 );
 
