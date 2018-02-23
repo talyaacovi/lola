@@ -73,6 +73,10 @@ class UserPageContainer extends React.Component {
         });
     }
 
+    displayList(listid) {
+        this.setState({isListOpen: true});
+        this.setState({openListId: listid});
+    }
 
     // RENDER METHOD
 
@@ -80,14 +84,20 @@ class UserPageContainer extends React.Component {
 
         let mainDiv = [];
 
+        // for (let i = 0; i < this.state.userLists.length; i++) {
+        //         // let lst = this.state.userLists[i];
+        //         let myDiv =
+        //             (<div key={i}>
+        //                 <a onClick={this.displayList.bind(this)} dataListId={this.state.userLists[i].list_id}>{this.state.userLists[i].name}</a>
+        //             </div>);
+        //         mainDiv.push(myDiv);
+        //     }
+
         for (let i = 0; i < this.state.userLists.length; i++) {
                 // let lst = this.state.userLists[i];
-                let myDiv =
-                    (<div key={i}>
-                        <a data-list-id={this.state.userLists[i].list_id}>{this.state.userLists[i].name}</a>
-                    </div>);
-                mainDiv.push(myDiv);
+                    mainDiv.push(<ListLink key={i} listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.displayList.bind(this)}/>);
             }
+
 
         // RENDER HEADING OF PAGE
         let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
@@ -116,6 +126,15 @@ class UserPageContainer extends React.Component {
                     </div>
         }
 
+        let openListItems
+
+        if (this.state.isListOpen) {
+            openListItems =
+                <div>
+                    <p>'I have opened a list!'</p>
+                    <p>'and the id is' {this.state.openListId}</p>
+                </div>
+        }
 
         return (<div>
                     {header}
@@ -124,7 +143,22 @@ class UserPageContainer extends React.Component {
                         <h3>Lists</h3>
                         {mainDiv}
                     </div>
+                    <div>
+                        {openListItems}
+                    </div>
                 </div>);
+    }
+}
+
+class ListLink extends React.Component {
+    buttonClickHandler() {
+        this.props.displayListHandler(this.props.listid);
+    }
+    render() {
+        return (<div>
+                    <a onClick={this.buttonClickHandler.bind(this)} data-list-id={this.props.listid}>{this.props.listname}</a>
+                </div>
+            );
     }
 }
 
