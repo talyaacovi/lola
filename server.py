@@ -2,8 +2,9 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, session, jsonify
+from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for
 from flask_debugtoolbar import DebugToolbarExtension
+from werkzeug import secure_filename
 from model import *
 from yelp_api import search
 from restaurant import *
@@ -13,11 +14,13 @@ from compare import *
 from sendgrid import *
 from ig import *
 import json
-# from instagram_worker import *
-# import threading
-# for your own helper file, can do 'from user import *'
+
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
@@ -290,15 +293,6 @@ def search_city():
         return redirect('/')
 
 
-# @app.route('/cities')
-# def cities():
-#     """List all cities with lists created."""
-
-#     all_locations = get_cities()
-
-#     return render_template('cities.html', all_locations=all_locations)
-
-
 @app.route('/cities/<state>/<city>')
 def display_city_page(state, city):
     """Display users and lists for a specific city."""
@@ -530,17 +524,6 @@ def get_ig_data():
     return ''
 
 
-    # THREADING MODULE VERSION
-    # yelp_id = request.args.get('yelp_id')
-    # restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
-
-    # if not restaurant.ig_loc_id:
-    #     t = threading.Thread(target=instagram_function, args=([restaurant]))
-    #     t.start()
-
-    # return ''
-
-
 @app.route('/restaurants/<yelp_id>')
 def restaurant_detail(yelp_id):
     """Details page for a restaurant, Instagram photos."""
@@ -549,6 +532,35 @@ def restaurant_detail(yelp_id):
     ig_photos = restaurant.photos
 
     return render_template('restaurant-details.html', restaurant=restaurant, ig_photos=ig_photos)
+
+
+@app.route('/user-info-react.json')
+def get_user_info():
+    """Get user profile info."""
+
+    username = request.args.get('username')
+    user = User.query.filter_by(username=username).first()
+    profile_info = user.profiles[0].to_dict()
+
+    return jsonify(profile_info)
+
+
+@app.route('/upload-profile-image', methods=['POST'])
+def upload_profile_image():
+    """User profile page."""
+
+    username = request.form.get('username')
+    image = request.files['image']
+    user = User.query.filter_by(username=username).first()
+    print user
+
+    if image:
+        filename = secure_filename(image.filename)
+        user.profiles[0].image_url = filename
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        db.session.commit()
+
+    return 'did it'
 
 
 if __name__ == "__main__":

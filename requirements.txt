@@ -6,6 +6,8 @@ coverage==4.5.1
 Flask==0.12.2
 Flask-DebugToolbar==0.10.1
 Flask-SQLAlchemy==2.3.2
+Flask-Uploads==0.2.1
+Flask-WTF==0.14.2
 futures==2.2.0
 idna==2.6
 instagram-scraper==1.5.18
@@ -21,3 +23,4 @@ SQLAlchemy==1.2.2
 tqdm==4.19.5
 urllib3==1.22
 Werkzeug==0.14.1
+WTForms==2.1

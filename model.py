@@ -25,6 +25,8 @@ class User(db.Model):
     city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(64), nullable=False)
     zipcode = db.Column(db.String(64), nullable=False)
+    # profile_filename = db.Column(db.String(128))
+    # profile_url = db.Column(db.String(128))
 
     def __repr__(self):
         """Provide helpful representation of user."""
@@ -33,6 +35,43 @@ class User(db.Model):
                                                               self.username,
                                                               self.city,
                                                               self.state)
+
+
+class Profile(db.Model):
+    """Users that have created an account for the local favorites site."""
+
+    __tablename__ = 'profiles'
+
+    profile_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=False)
+    image_fn = db.Column(db.String(256))
+    image_url = db.Column(db.String(256))
+    fav_rest = db.Column(db.String(128))
+    fav_dish = db.Column(db.String(128))
+    fav_city = db.Column(db.String(128))
+
+    user = db.relationship('User', backref='profiles')
+
+    def to_dict(self):
+        """Return dict of profile info."""
+
+        return {'profile_id': self.profile_id,
+                'user_id': self.user_id,
+                'image_fn': self.image_fn,
+                'image_url': self.image_url,
+                'fav_rest': self.fav_rest,
+                'fav_dish': self.fav_dish,
+                'fav_city': self.fav_city}
+
+    def __repr__(self):
+        """Provide helpful representation of user profile."""
+
+        return "<User id={} fav_rest={} fav_dish={} fav_city={}>".format(self.user_id,
+                                                                         self.fav_rest,
+                                                                         self.fav_dish,
+                                                                         self.fav_city)
 
 
 class List(db.Model):

@@ -4,7 +4,7 @@
 // ListItemContainer is the parent component which attaches to the 'root' div
 // and renders the ListItem and Search components.
 
-class ListItemContainer extends React.Component {
+class List extends React.Component {
     constructor(props) {
         super(props);
         this.state = {listItems: [], searchItems: [], inputValue: '', editMode: false, listName: ''};
@@ -13,12 +13,12 @@ class ListItemContainer extends React.Component {
         this.checkLength = this.checkLength.bind(this);
     }
 
-    // componentWillMount() {
-    //     // this.fetchListItems();
-    //     // this.fetchListItemsAjax();
-    //     this.setState({listItems: this.props.listItems, listName: this.props.listName});
+    componentWillMount() {
+        // this.fetchListItems();
+        // this.fetchListItemsAjax();
+        this.setState({listItems: this.props.listItems, listName: this.props.listName});
 
-    // }
+    }
 
     // // GET LIST ITEMS USING AJAX
 
@@ -290,11 +290,13 @@ class ListItemContainer extends React.Component {
 class ListItem extends React.Component {
     render() {
         return (<div data-yelp-id={ this.props.yelpid } data-item-id={ this.props.itemid }>
-                    <h3>{ this.props.rest }</h3>
-                    <p>{ this.props.category }</p>
-                    <a href={ this.props.url }>Yelp</a>
                     <div className='yelp-img'>
                         <img src={ this.props.image }/>
+                    </div>
+                    <div className='yelp-info'>
+                        <h3>{ this.props.rest }</h3>
+                        <p>{ this.props.category }</p>
+                        <a href={ this.props.url }>Yelp</a>
                     </div>
                 </div>
             );

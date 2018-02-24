@@ -1,20 +1,6 @@
 "use strict";
 
 
-// TO MOVE LISTS TO USER PAGE
-// ListItemContainer component becomes List component
-// create UserPageContainer component that will mount to root div of user profile page
-        // states:
-        //     isListOpen -- false
-        //     openListId -- none, null
-        // componentWillMount -- fetchLists for userID (with list_id data attribute)
-        // render -- user name, create list if viewing own page, {lists}
-        //         -- if isListOpen: also mount on render the <List component with listId = this.state.openListId>
-
-        // onClick of list, change state to isListOpen = true and get listId, setState.openListId = listId
-
-
-
 class UserPageContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -41,11 +27,12 @@ class UserPageContainer extends React.Component {
     fetchListItemsAjax(listid, listname) {
         $.get('/list-items-react.json?lst_id=' + listid, (data) => {
             console.log(data);
-            this.setState({listItems: data.restaurants, isListOpen: true, openListId: listid, openListName:listname});
+            this.setState({listItems: data.restaurants, isListOpen: true, openListId: listid, openListName: listname});
             // this.setState({isListOpen: true});
             // this.setState({openListId: listid});
             // this.setState({openListName: listname});
             console.log(this.state.listItems);
+        // window.history.pushState(null, this.state.openListName);
         });
 
 
@@ -86,12 +73,12 @@ class UserPageContainer extends React.Component {
         });
     }
 
-    displayList(listid, listname) {
-        // this.setState({isListOpen: true});
-        // this.setState({openListId: listid});
-        // this.setState({openListName: listname});
-        this.fetchListItemsAjax(listid, listname);
-    }
+    // displayList(listid, listname) {
+    //     // this.setState({isListOpen: true});
+    //     // this.setState({openListId: listid});
+    //     // this.setState({openListName: listname});
+    //     this.fetchListItemsAjax(listid, listname);
+    // }
 
     // RENDER METHOD
 
@@ -100,18 +87,23 @@ class UserPageContainer extends React.Component {
         let mainDiv = [];
 
         for (let i = 0; i < this.state.userLists.length; i++) {
-                    mainDiv.push(<ListLink key={i} listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.displayList.bind(this)}/>);
+                    mainDiv.push(<ListLink key={i} listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.fetchListItemsAjax.bind(this)}/>);
             }
 
 
         // RENDER HEADING OF PAGE
-        let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
+        // let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
+        // let header =
+        //         <div>
+        //             <p id='msg-para'></p>
+        //             <h1>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
+        //         </div>
+
+        // let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
                 <div>
-                    <p id='msg-para'></p>
-                    <h1>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
+                    <User username={this.props.username} city={this.props.city} state={this.props.state}/>
                 </div>
-
 
         let createListControls;
 
@@ -131,6 +123,7 @@ class UserPageContainer extends React.Component {
                     </div>
         }
 
+
         let openListItems
 
         // if (this.state.isListOpen) {
@@ -146,8 +139,7 @@ class UserPageContainer extends React.Component {
             console.log('recreating listitem container divs');
             openListItems =
                 <div>
-                    <ListItemContainer listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId}/>
-                    <p>the list being requested {this.state.openListId}</p>
+                    <List listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId}/>
                 </div>
         }
 

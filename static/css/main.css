@@ -1,5 +1,13 @@
 .yelp-img img {
-    height: 100px;
+    height: 146px;
+}
+
+.profile-image {
+  height: 146px;
+}
+
+.yelp-img, .yelp-info {
+  display: inline-block;
 }
 
 #logout-form, #logout-div, #logout {
