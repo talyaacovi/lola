@@ -86,6 +86,15 @@ def register_user(email, password, username, zipcode):
     return user
 
 
+def default_profile_info(user_id):
+    """Add user."""
+
+    profile = Profile(user_id=user_id, image_fn=default.png)
+
+    db.session.add(profile)
+    db.session.commit()
+
+
 def check_active(username):
     """Check if user is active."""
 

@@ -47,7 +47,6 @@ class Profile(db.Model):
                         db.ForeignKey('users.user_id'),
                         nullable=False)
     image_fn = db.Column(db.String(256))
-    image_url = db.Column(db.String(256))
     fav_rest = db.Column(db.String(128))
     fav_dish = db.Column(db.String(128))
     fav_city = db.Column(db.String(128))
@@ -60,7 +59,6 @@ class Profile(db.Model):
         return {'profile_id': self.profile_id,
                 'user_id': self.user_id,
                 'image_fn': self.image_fn,
-                'image_url': self.image_url,
                 'fav_rest': self.fav_rest,
                 'fav_dish': self.fav_dish,
                 'fav_city': self.fav_city}

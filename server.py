@@ -89,6 +89,7 @@ def signup():
     set_session_info(user)
 
     add_fav_list(user.user_id, 'Favorites', 'draft', 1)
+    add_profile_info(user.user_id)
 
     return username
 
@@ -545,22 +546,28 @@ def get_user_info():
     return jsonify(profile_info)
 
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route('/upload-profile-image', methods=['POST'])
 def upload_profile_image():
     """User profile page."""
 
     username = request.form.get('username')
-    image = request.files['image']
+    file = request.files['image']
     user = User.query.filter_by(username=username).first()
     print user
 
-    if image:
-        filename = secure_filename(image.filename)
-        user.profiles[0].image_url = filename
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        user.profiles[0].image_fn = filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         db.session.commit()
 
-    return 'did it'
+    print filename
+    return jsonify(filename)
 
 
 if __name__ == "__main__":

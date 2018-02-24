@@ -18,7 +18,7 @@ class User extends React.Component {
     fetchUserInfoAjax() {
         $.get('/user-info-react.json?username=' + this.props.username, (data) => {
             console.log(data);
-            this.setState({favDish: data.fav_dish, profileImage: data.image_url,
+            this.setState({favDish: data.fav_dish, profileImage: '/static/uploads/' + data.image_fn,
                           favCity: data.fav_city, favRest: data.fav_rest});
         }
     );
@@ -43,7 +43,7 @@ class User extends React.Component {
             contentType: false,
             credentials: 'same-origin'
         }).done((data) => {
-            console.log(data);
+            this.setState({profileImage: '/static/uploads/' + data});
         });
     }
 
@@ -58,6 +58,7 @@ class User extends React.Component {
 
         // RENDER HEADING OF PAGE
         let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
+
         let header =
                 <div>
                     <p id='msg-para'></p>
