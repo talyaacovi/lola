@@ -57,7 +57,6 @@ class UserPageContainer extends React.Component {
         })
         .then((response) => response.json())
         .then((data) => {
-                                        console.log('in create new list promise');
                                         if (data) {
                                             let currLists = this.state.userLists;
                                             currLists.push(data);

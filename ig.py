@@ -84,7 +84,7 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
 def get_instagram_photos(rest_id, location):
     """"""
 
-    os.system('instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos')
+    os.system('instagram-scraper --location ' + location + ' --maximum 6 --media-metadata --media-types none --destination ig_photos')
 
     # try with subprocess:
     # string = 'instagram-scraper --location ' + location + ' --maximum 4 --media-metadata --media-types none --destination ig_photos'

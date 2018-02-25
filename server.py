@@ -275,8 +275,6 @@ def display_list(username, listname):
 def delete():
     """Delete list."""
 
-    print 'in delete list route'
-
     list_id = request.form.get('list_id')
     message = delete_list(list_id)
     flash(message)
@@ -383,8 +381,6 @@ def list_items_react():
     lst_id = request.args.get('lst_id')
     lst_items = get_list_items_react(lst_id)
 
-    print lst_items
-
     return jsonify(lst_items)
 
 
@@ -479,7 +475,7 @@ def send_user_list():
     for index, item in enumerate(restaurants):
         email_body = email_body + str(index + 1) + '. ' + '<a href="' + item['yelp_url'] + '">' + item['rest_name'] + '</a>' + "<br/>"
 
-    if lst_name == 'Favorites':
+    if lst_name == 'favorites':
         list_type = 'favorite restaurants'
     else:
         list_type = 'favorite ' + lst_name.lower()
@@ -566,7 +562,6 @@ def get_user_info():
     username = request.args.get('username')
     user = User.query.filter_by(username=username).first()
     profile_info = user.profiles[0].to_dict()
-    print profile_info
 
     return jsonify(profile_info)
 
@@ -613,6 +608,6 @@ if __name__ == "__main__":
     app.debug = True
     connect_to_db(app)
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0", threaded=True)

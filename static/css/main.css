@@ -39,6 +39,11 @@ ul > li {
     list-style: none;
 }
 
+.form-group > li {
+  list-style: none;
+  width: 25%;
+}
+
 .not-active {
   pointer-events: none;
   cursor: default;
@@ -47,6 +52,12 @@ ul > li {
 .ig-photo img {
     height: 400px;
     width: 400px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+.ig-photo {
+  display: inline;
 }
 
 .isDisabled {

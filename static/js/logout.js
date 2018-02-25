@@ -41,7 +41,7 @@ function loginMessage(result) {
         }
         else {
             $('#search-div').hide();
-            $('#msg-para').html('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/react-lists/favorites">Favorites</a> list to access more content.');
+            $('#msg-para').html('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/react/' + result.user + '/favorites">Favorites</a> list to access more content.');
         }
     }
     else if (result == 'Incorrect') {
@@ -185,7 +185,7 @@ function signupUser(result) {
         $('#signupModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result);
         $('#search-div').hide();
-        $('#msg-para').html('Your account has been created! Please add at least 5 restaurants to your <a href="/users/' + result + '/react-lists/favorites">Favorites</a> list to access more content.');
+        $('#msg-para').html('Your account has been created! Please add at least 5 restaurants to your <a href="/users/react/' + result + '/favorites">Favorites</a> list to access more content.');
 
     }
 

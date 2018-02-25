@@ -36,26 +36,29 @@ class User extends React.Component {
         let payload = new FormData();
         let image = document.querySelector('input[type="file"]').files[0];
 
-        payload.append('image', image);
-        payload.append('username', this.props.username);
+        if (!image) {
+            alert('Please select a file to upload.');
+        }
 
-        $.ajax({
-            method: 'POST',
-            url: '/upload-profile-image',
-            data: payload,
-            dataType: 'json',
-            cache: false,
-            processData: false,
-            contentType: false,
-            credentials: 'same-origin'
-        }).done((data) => {
-            if (data) {
-                this.setState({profileImage: '/static/uploads/' + data});
+        else {
+                payload.append('image', image);
+                payload.append('username', this.props.username);
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/upload-profile-image',
+                    data: payload,
+                    dataType: 'json',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    credentials: 'same-origin'
+                }).done((data) => {
+                    if (data) {
+                        this.setState({profileImage: '/static/uploads/' + data});
+                    }
+                });
             }
-            else {
-                alert('Please select a file to upload.');
-            }
-        });
     }
 
 
@@ -82,12 +85,13 @@ class User extends React.Component {
             editControls =
                     <div>
                         <div id='edit-profile'>
-                            <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
+                            <button className='btn btn-default' onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
                         </div>
                     </div>
         }
 
         let updatePhotoForm;
+        let profileInfo;
 
         // DISPLAY LIST CONTROLS IF USER IS VIEWING THEIR OWN PAGE
 
@@ -99,7 +103,51 @@ class User extends React.Component {
                             <button>Upload</button>
                         </form>
                     </div>
+            profileInfo =
+                    <div className='form-group'>
+                        <li>
+                            <label>Favorite local restaurant</label>
+                            <input
+                              // onKeyDown={ this.handleEditField }
+                              type="text"
+                              className="form-control"
+                              // ref={ `title_${ item._id }` }
+                              name="title"
+                              defaultValue={this.state.favRest}/>
+                        </li>
+                        <li>
+                            <label>Favorite dish:</label>
+                            <input
+                              // onKeyDown={ this.handleEditField }
+                              type="text"
+                              className="form-control"
+                              // ref={ `title_${ item._id }` }
+                              name="title"
+                              defaultValue={this.state.favDish}/>
+                        </li>
+                        <li>
+                            <label>Favorite food city:</label>
+                            <input
+                              // onKeyDown={ this.handleEditField }
+                              type="text"
+                              className="form-control"
+                              // ref={ `title_${ item._id }` }
+                              name="title"
+                              defaultValue={this.state.favCity}/>
+                        </li>
+                    </div>
         }
+
+        else {
+            profileInfo =
+                    <div className='form-group'>
+                        <li data-info='favRest'>Favorite local restaurant: {this.state.favRest}</li>
+                        <li data-info='favDish'>Favorite dish: {this.state.favDish}</li>
+                        <li data-info='favCity'>Favorite food city: {this.state.favCity}</li>
+                    </div>
+        }
+
+
 
         // RENDER HEADING OF PAGE
         let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
@@ -115,9 +163,7 @@ class User extends React.Component {
         let profileDetails =
                 <div>
                     <ul>
-                        <li data-info='favRest' onClick={this.toggleEditMode.bind(this)}>Favorite local restaurant: {this.state.favRest}</li>
-                        <li data-info='favDish' onClick={this.toggleEditMode.bind(this)}>Favorite dish: {this.state.favDish}</li>
-                        <li data-info='favCity' onClick={this.toggleEditMode.bind(this)}>Favorite food city: {this.state.favCity}</li>
+                        {profileInfo}
                     </ul>
                 </div>
 
