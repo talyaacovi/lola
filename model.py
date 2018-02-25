@@ -56,10 +56,7 @@ class Profile(db.Model):
     def to_dict(self):
         """Return dict of profile info."""
 
-        return {'profile_id': self.profile_id,
-                'user_id': self.user_id,
-                'image_fn': self.image_fn,
-                'fav_rest': self.fav_rest,
+        return {'fav_rest': self.fav_rest,
                 'fav_dish': self.fav_dish,
                 'fav_city': self.fav_city}
 

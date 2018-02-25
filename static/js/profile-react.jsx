@@ -11,28 +11,25 @@ class UserPageContainer extends React.Component {
 
     componentWillMount() {
         this.fetchUserListsAjax();
-
     }
 
     // GET USER LISTS USING AJAX
 
     fetchUserListsAjax() {
         $.get('/get-lists.json?username=' + this.props.username, (data) => {
-            console.log(data);
             this.setState({userLists: data.userLists});
+            if (this.props.list_id) {
+                this.setState({isListOpen: true, openListId: this.props.list_id});
+                this.fetchListItemsAjax(this.props.list_id, this.props.listname);
+            }
         }
     );
     }
 
     fetchListItemsAjax(listid, listname) {
         $.get('/list-items-react.json?lst_id=' + listid, (data) => {
-            console.log(data);
             this.setState({listItems: data.restaurants, isListOpen: true, openListId: listid, openListName: listname});
-            // this.setState({isListOpen: true});
-            // this.setState({openListId: listid});
-            // this.setState({openListName: listname});
-            console.log(this.state.listItems);
-        // window.history.pushState(null, this.state.openListName);
+            history.pushState(null, null, `/users/react/${this.props.username}/${this.state.openListName}`);
         });
 
 
@@ -87,7 +84,7 @@ class UserPageContainer extends React.Component {
         let mainDiv = [];
 
         for (let i = 0; i < this.state.userLists.length; i++) {
-                    mainDiv.push(<ListLink key={i} listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.fetchListItemsAjax.bind(this)}/>);
+                    mainDiv.push(<li key={i}><ListLink listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.fetchListItemsAjax.bind(this)}/></li>);
             }
 
 
@@ -126,17 +123,8 @@ class UserPageContainer extends React.Component {
 
         let openListItems
 
-        // if (this.state.isListOpen) {
-        //     console.log('recreating listitem container divs');
-        //     openListItems =
-        //         <div>
-        //             <ListItemContainer listId={this.state.openListId} listItems={this.state.listItems}/>
-        //             <p>the list being requested {this.state.openListId}</p>
-        //         </div>
-        // }
 
         if (this.state.isListOpen) {
-            console.log('recreating listitem container divs');
             openListItems =
                 <div>
                     <List listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId}/>
@@ -148,7 +136,9 @@ class UserPageContainer extends React.Component {
                     <div>
                         {createListControls}
                         <h3>Lists</h3>
-                        {mainDiv}
+                        <ul>
+                            {mainDiv}
+                        </ul>
                     </div>
                     <div>
                         {openListItems}
@@ -171,7 +161,7 @@ class ListLink extends React.Component {
 
 
 ReactDOM.render(
-    <UserPageContainer listId={data['list_id']} username={data['username']} lstName={data['list_name']} city={data['city']} state={data['state']}/>,
+    <UserPageContainer list_id={data['list_id']} username={data['username']} listname={data['listname']} city={data['city']} state={data['state']}/>,
     document.getElementById("root")
 );
 

@@ -4,11 +4,13 @@
 class User extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {editProfileMode: false, favDish: '', profileImage: '', favCity: '', favRest: ''};
+        this.state = {editingProfile: false, favDish: '', profileImage: '', favCity: '', favRest: ''};
         this.fetchUserInfoAjax = this.fetchUserInfoAjax.bind(this);
+        this.fetchUserProfileImage = this.fetchUserProfileImage.bind(this);
     }
 
     componentWillMount() {
+        this.fetchUserProfileImage();
         this.fetchUserInfoAjax();
 
     }
@@ -17,11 +19,15 @@ class User extends React.Component {
 
     fetchUserInfoAjax() {
         $.get('/user-info-react.json?username=' + this.props.username, (data) => {
-            console.log(data);
-            this.setState({favDish: data.fav_dish, profileImage: '/static/uploads/' + data.image_fn,
-                          favCity: data.fav_city, favRest: data.fav_rest});
-        }
-    );
+            this.setState({favDish: data.fav_dish, favCity: data.fav_city, favRest: data.fav_rest});
+        });
+    }
+
+
+    fetchUserProfileImage() {
+        $.get('/user-profile-image.json?username=' + this.props.username, (data) => {
+            this.setState({profileImage: '/static/uploads/' + data});
+        });
     }
 
     uploadPhoto(evt) {
@@ -43,18 +49,57 @@ class User extends React.Component {
             contentType: false,
             credentials: 'same-origin'
         }).done((data) => {
-            this.setState({profileImage: '/static/uploads/' + data});
+            if (data) {
+                this.setState({profileImage: '/static/uploads/' + data});
+            }
+            else {
+                alert('Please select a file to upload.');
+            }
         });
     }
 
+
+    toggleEditMode(evt) {
+        this.setState(prevState => ({editingProfile: !prevState.editingProfile}));
+    }
+
+
     render() {
 
-        // let mainDiv = [];
 
-        // for (let i = 0; i < this.state.userLists.length; i++) {
-        //             mainDiv.push(<ListLink key={i} listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.fetchListItemsAjax.bind(this)}/>);
-        //     }
+        let buttonText;
+        let editControls;
 
+        if (this.state.editingProfile) {
+            buttonText = 'Save Profile';
+        }
+
+        else {
+            buttonText = 'Edit Profile';
+        }
+
+        if (viewingOwnPage) {
+            editControls =
+                    <div>
+                        <div id='edit-profile'>
+                            <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
+                        </div>
+                    </div>
+        }
+
+        let updatePhotoForm;
+
+        // DISPLAY LIST CONTROLS IF USER IS VIEWING THEIR OWN PAGE
+
+        if (this.state.editingProfile) {
+            updatePhotoForm =
+                    <div>
+                        <form onSubmit={this.uploadPhoto.bind(this)} encType='multipart/form-data'>
+                            <input type='file' name='file'></input>
+                            <button>Upload</button>
+                        </form>
+                    </div>
+        }
 
         // RENDER HEADING OF PAGE
         let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
@@ -64,35 +109,23 @@ class User extends React.Component {
                     <p id='msg-para'></p>
                     <h1>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
                     <img className='profile-image' src={this.state.profileImage}/>
-                    <form onSubmit={this.uploadPhoto.bind(this)} encType='multipart/form-data'>
-                        <input type='file' name='file'></input>
-                        <button>Upload</button>
-                    </form>
-                    <p>Favorite local restaurant: {this.state.favRest}</p>
-                    <p>Favorite dish: {this.state.favDish}</p>
-                    <p>Favorite food city: {this.state.favCity}</p>
+                    {updatePhotoForm}
                 </div>
 
-        // let editUserControls;
+        let profileDetails =
+                <div>
+                    <ul>
+                        <li data-info='favRest' onClick={this.toggleEditMode.bind(this)}>Favorite local restaurant: {this.state.favRest}</li>
+                        <li data-info='favDish' onClick={this.toggleEditMode.bind(this)}>Favorite dish: {this.state.favDish}</li>
+                        <li data-info='favCity' onClick={this.toggleEditMode.bind(this)}>Favorite food city: {this.state.favCity}</li>
+                    </ul>
+                </div>
 
-        // // DISPLAY LIST CONTROLS IF USER IS VIEWING THEIR OWN PAGE
-
-        // if (viewingOwnPage) {
-        //     editUserControls =
-        //             <div>
-        //                 <div id='edit-profile'>
-        //                     <h3>Edit Your Profile</h3>
-        //                     <form>
-        //                         <label>Name</label>
-        //                         <input name='favorite-place' onChange={this.updateInputValue.bind(this)} required></input>
-        //                         <button>Submit</button>
-        //                     </form>
-        //                 </div>
-        //             </div>
-        // }
 
         return (<div>
                     {header}
+                    {profileDetails}
+                    {editControls}
                 </div>);
     }
 }

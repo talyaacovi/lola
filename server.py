@@ -177,7 +177,6 @@ def add_new_list():
 def add_new_list_react():
     """Add list to database in draft status."""
 
-    print 'IN REACT ADD NEW LIST ROUTE !!!!!!!!!!!!!!!!!!!!!!!!!!'
     name = request.form.get('list_name')
     status = request.form.get('status')
     user_id = session['user_id']
@@ -343,13 +342,23 @@ def do_comparison():
         return redirect('/users/{}/react-lists/favorites'.format(session['username']))
 
 
-@app.route('/users/<username>/react-lists/<listname>')
+# @app.route('/users/<username>/react-lists/<listname>')
+# def list_react(username, listname):
+#     """React!"""
+
+#     lst = get_list(username, listname)
+
+#     return render_template('list-react.html', lst_id=lst.list_id, username=username, lst=lst)
+
+
+@app.route('/users/react/<username>/<listname>')
 def list_react(username, listname):
     """React!"""
 
-    lst = get_list(username, listname)
+    user = get_user(username)
+    lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
 
-    return render_template('list-react.html', lst_id=lst.list_id, username=username, lst=lst)
+    return render_template('profile-react.html', listname=listname, list_id=lst.list_id, city=user.city.title(), state=user.state, username=username)
 
 
 @app.route('/list-items-react.json')
@@ -542,8 +551,20 @@ def get_user_info():
     username = request.args.get('username')
     user = User.query.filter_by(username=username).first()
     profile_info = user.profiles[0].to_dict()
+    print profile_info
 
     return jsonify(profile_info)
+
+
+@app.route('/user-profile-image.json')
+def get_user_profile_image():
+    """Get user profile info."""
+
+    username = request.args.get('username')
+    user = User.query.filter_by(username=username).first()
+    profile_image = user.profiles[0].image_fn
+
+    return jsonify(profile_image)
 
 
 def allowed_file(filename):
@@ -558,7 +579,6 @@ def upload_profile_image():
     username = request.form.get('username')
     file = request.files['image']
     user = User.query.filter_by(username=username).first()
-    print user
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -566,8 +586,10 @@ def upload_profile_image():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         db.session.commit()
 
-    print filename
-    return jsonify(filename)
+        return jsonify(filename)
+
+    else:
+        return ''
 
 
 if __name__ == "__main__":
