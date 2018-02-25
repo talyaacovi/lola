@@ -169,13 +169,13 @@
 
       else if (result == 'False' && window.location.pathname == '/') {
         $('#search-div').hide();
-        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/react-lists/favorites">Favorites</a> list to see where locals of these cities are eating!');
+        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/react/' + usernameForLink + '/favorites">Favorites</a> list to see where locals of these cities are eating!');
       }
       // document.location.pathname.indexOf("/about/") === 0)
       else if (result == 'False' && window.location.pathname.indexOf('/cities/') === 0) {
         $('#top-restaurants').hide();
         $('#city-locals a').addClass('isDisabled')
-        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/react-lists/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
+        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/react/' + usernameForLink + '/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
       }
     }
 

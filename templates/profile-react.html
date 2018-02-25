@@ -2,11 +2,13 @@
 {% block content %}
 
 <script>
-  let data = {'username': '{{ username }}',
-              'city': '{{ city }}',
-              'state': '{{ state }}',
-              'listname': '{{ listname }}',
-              'list_id': '{{ list_id }}'};
+
+  let data = {'username': '{{ user_dict.get("username") }}',
+              'city': '{{ user_dict.get("city") }}',
+              'state': '{{ user_dict.get("state") }}',
+              'listname': '{{ user_dict.get("listname") }}',
+              'list_id': '{{ user_dict.get("list_id") }}'};
+
 </script>
 
 <!-- REPLACE -->
@@ -14,7 +16,7 @@
 <div id="root"></div>
 
 <script>
-    {% if username == session.get('username') %}
+    {% if user_dict.get('username') == session.get('username') %}
         let viewingOwnPage = true;
     {% else %}
         let viewingOwnPage = false;

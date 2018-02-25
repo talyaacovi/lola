@@ -76,3 +76,12 @@ function initMap() {
 google.maps.event.addDomListener(window, 'load', initMap);
 
 
+document.getElementById('map-view-btn').addEventListener('click', function(evt) {
+    $('#main-map').show();
+    $('#city-div').hide();
+});
+
+document.getElementById('list-view-btn').addEventListener('click', function(evt) {
+    $('#city-div').show();
+    $('#main-map').hide();
+});

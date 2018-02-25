@@ -133,7 +133,14 @@ def user_page_react(username):
 
     user = get_user(username)
 
-    return render_template('profile-react.html', city=user.city.title(), state=user.state, username=username)
+    user_dict = {
+        'city': user.city.title(),
+        'state': user.state,
+        'username': username
+    }
+
+    # return render_template('profile-react.html', city=user.city.title(), state=user.state, username=username)
+    return render_template('profile-react.html', user_dict=user_dict)
 
 
 @app.route('/get-lists.json')
@@ -357,8 +364,16 @@ def list_react(username, listname):
 
     user = get_user(username)
     lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
+    user_dict = {
+        'listname': listname,
+        'list_id': lst.list_id,
+        'city': user.city.title(),
+        'state': user.state,
+        'username': username
+    }
 
-    return render_template('profile-react.html', listname=listname, list_id=lst.list_id, city=user.city.title(), state=user.state, username=username)
+    # return render_template('profile-react.html', listname=listname, list_id=lst.list_id, city=user.city.title(), state=user.state, username=username)
+    return render_template('profile-react.html', user_dict=user_dict)
 
 
 @app.route('/list-items-react.json')

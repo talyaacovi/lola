@@ -18,7 +18,7 @@ class UserPageContainer extends React.Component {
     fetchUserListsAjax() {
         $.get('/get-lists.json?username=' + this.props.username, (data) => {
             this.setState({userLists: data.userLists});
-            if (this.props.list_id) {
+            if (this.props.list_id > 0) {
                 this.setState({isListOpen: true, openListId: this.props.list_id});
                 this.fetchListItemsAjax(this.props.list_id, this.props.listname);
             }
