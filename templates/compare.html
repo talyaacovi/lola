@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Comparison page!</h1>
-
-
 
 <h2>You are most similar to {{ most_similar_user }}.</h2>
 
-<img src='/static/uploads/{{ most_similar_user.profiles[0].image_fn }}'/>
+<img class='profile-image' src='/static/uploads/{{ similar_image }}'/>
+<img class='profile-image' src='/static/uploads/{{ user_image }}'/>
 
 <p>These are the restaurants you have in common:</p>
     <ol>
@@ -17,12 +15,14 @@
     </ol>
 
 
-<p>These are the restaurants that {{ most_similar_user }} likes that you should check out!</p>
-    <ol>
-        {% for rests in not_common %}
-            <li>{{ rests.name }}</li>
-        {% endfor %}
-    </ol>
+{% if not_common %}
+    <p>These are the restaurants that {{ most_similar_user }} likes that you should check out!</p>
+        <ol>
+            {% for rests in not_common %}
+                <li>{{ rests.name }}</li>
+            {% endfor %}
+        </ol>
+{% endif %}
 
 <script>
     let idOfOptionToBold = '#compare-page-link';

@@ -54,10 +54,10 @@ def get_most_similar_user(my_restaurants):
         if points > max_points:
             max_points = points
             most_similar_user['name'] = user.username
+            most_similar_user['photo'] = user.profiles[0].image_fn
             most_similar_user['rest_ids'] = similar_restaurants
             most_similar_user['uncommon'] = dissimilar_restaurants
 
-    print most_similar_user
     return most_similar_user
 
 

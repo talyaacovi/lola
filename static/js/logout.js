@@ -34,7 +34,7 @@ function loginMessage(result) {
         $('.logged-in-toggle').show();
         $('#main-home-div').show();
         $('#loginModal').modal('hide');
-        $('#profile-page').attr('href', '/users/' + result.user);
+        $('#profile-page').attr('href', '/users/react/' + result.user);
         if (result.isActive === 'True') {
             isActive = true; // global variable defined in base.html
             $('#msg-para').html('You have successfully logged in!');

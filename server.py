@@ -336,11 +336,14 @@ def do_comparison():
         most_similar_user = most_similar_user_dict.get('name')
         rests_in_common_ids = most_similar_user_dict.get('rest_ids')
         not_common_ids = most_similar_user_dict.get('uncommon')
+        similar_image = most_similar_user_dict.get('photo')
 
         rests_in_common = get_common_rests(rests_in_common_ids)
         not_common = get_common_rests(not_common_ids)
 
-        return render_template('compare.html', rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
+        user = User.query.filter_by(user_id=session.get('user_id')).first()
+
+        return render_template('compare.html', user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
