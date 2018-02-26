@@ -537,6 +537,7 @@ def get_ig_data():
 
         if loc_id:
             restaurant.ig_loc_id = loc_id
+            db.session.commit()
 
             successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
 
@@ -564,6 +565,26 @@ def get_user_info():
     profile_info = user.profiles[0].to_dict()
 
     return jsonify(profile_info)
+
+
+@app.route('/update-profile-info', methods=['POST'])
+def update_profile_info():
+    """Update user profile info."""
+
+    favRest = request.form.get('favRest')
+    favDish = request.form.get('favDish')
+    favCity = request.form.get('favCity')
+    username = request.form.get('username')
+
+    user = User.query.filter_by(username=username).first()
+    user_profile = user.profiles[0]
+    user_profile.fav_rest = favRest
+    user_profile.fav_dish = favDish
+    user_profile.fav_city = favCity
+
+    db.session.commit()
+
+    return jsonify(user.profiles[0].to_dict())
 
 
 @app.route('/user-profile-image.json')

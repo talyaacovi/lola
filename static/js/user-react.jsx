@@ -4,7 +4,7 @@
 class User extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {editingProfile: false, favDish: '', profileImage: '', favCity: '', favRest: ''};
+        this.state = {editingProfile: false, editing: null, favDish: '', profileImage: '', favCity: '', favRest: ''};
         this.fetchUserInfoAjax = this.fetchUserInfoAjax.bind(this);
         this.fetchUserProfileImage = this.fetchUserProfileImage.bind(this);
     }
@@ -61,10 +61,57 @@ class User extends React.Component {
             }
     }
 
+    updateProfileInfo(evt) {
+        evt.preventDefault();
+        let payload = new FormData();
+        let favRest = document.querySelector('input[name="favRest"]').value;
+        let favDish = document.querySelector('input[name="favDish"]').value;
+        let favCity = document.querySelector('input[name="favCity"]').value;
+        payload.append('favRest', favRest);
+        payload.append('favDish', favDish);
+        payload.append('favCity', favCity);
+        payload.append('username', this.props.username);
+
+
+            $.ajax({
+                method: 'POST',
+                url: '/update-profile-info',
+                data: payload,
+                dataType: 'json',
+                cache: false,
+                processData: false,
+                contentType: false,
+                credentials: 'same-origin'
+            }).done((data) => {
+                if (data) {
+                    this.setState({favDish: data.fav_dish, favCity: data.fav_city, favRest: data.fav_rest});
+                    this.setState({editingProfile: false});
+                }
+            });
+    }
 
     toggleEditMode(evt) {
         this.setState(prevState => ({editingProfile: !prevState.editingProfile}));
+
     }
+
+
+    // handleEditField(evt) {
+    //     // if (evt.keyCode === 13) {
+    //         let target = evt.target,
+    //         update = {};
+    //         // this.setState({inputValue: evt.target.value});
+    //         update[target.name] = target.value;
+    //         console.log(update);
+    //         // if (evt.keyCode === )
+    //         this.handleEditItem(update);
+    //     // }
+    // }
+
+    // handleEditItem(update) {
+    //     let key = Object.keys(update)[0];
+    //     console.log(update[key]);
+    // }
 
 
     render() {
@@ -105,36 +152,36 @@ class User extends React.Component {
                     </div>
             profileInfo =
                     <div className='form-group'>
-                        <li>
+                        <form onSubmit={this.updateProfileInfo.bind(this)}>
                             <label>Favorite local restaurant</label>
                             <input
+                              // onBlur={this.handleEditField.bind(this)}
                               // onKeyDown={ this.handleEditField }
                               type="text"
                               className="form-control"
-                              // ref={ `title_${ item._id }` }
-                              name="title"
+                              ref={this.state.favRest}
+                              name="favRest"
                               defaultValue={this.state.favRest}/>
-                        </li>
-                        <li>
                             <label>Favorite dish:</label>
                             <input
+                              // onBlur={this.handleEditField.bind(this)}
                               // onKeyDown={ this.handleEditField }
                               type="text"
                               className="form-control"
-                              // ref={ `title_${ item._id }` }
-                              name="title"
+                              ref={this.state.favDish}
+                              name="favDish"
                               defaultValue={this.state.favDish}/>
-                        </li>
-                        <li>
                             <label>Favorite food city:</label>
                             <input
+                              // onBlur={this.handleEditField.bind(this)}
                               // onKeyDown={ this.handleEditField }
                               type="text"
                               className="form-control"
-                              // ref={ `title_${ item._id }` }
-                              name="title"
+                              ref={this.state.favCity}
+                              name="favCity"
                               defaultValue={this.state.favCity}/>
-                        </li>
+                            <button className='btn btn-default'>{ buttonText }</button>
+                        </form>
                     </div>
         }
 
@@ -144,6 +191,7 @@ class User extends React.Component {
                         <li data-info='favRest'>Favorite local restaurant: {this.state.favRest}</li>
                         <li data-info='favDish'>Favorite dish: {this.state.favDish}</li>
                         <li data-info='favCity'>Favorite food city: {this.state.favCity}</li>
+                        {editControls}
                     </div>
         }
 
@@ -171,7 +219,6 @@ class User extends React.Component {
         return (<div>
                     {header}
                     {profileDetails}
-                    {editControls}
                 </div>);
     }
 }
