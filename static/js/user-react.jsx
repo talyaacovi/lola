@@ -96,24 +96,6 @@ class User extends React.Component {
     }
 
 
-    // handleEditField(evt) {
-    //     // if (evt.keyCode === 13) {
-    //         let target = evt.target,
-    //         update = {};
-    //         // this.setState({inputValue: evt.target.value});
-    //         update[target.name] = target.value;
-    //         console.log(update);
-    //         // if (evt.keyCode === )
-    //         this.handleEditItem(update);
-    //     // }
-    // }
-
-    // handleEditItem(update) {
-    //     let key = Object.keys(update)[0];
-    //     console.log(update[key]);
-    // }
-
-
     render() {
 
 

@@ -172,10 +172,11 @@ class List extends React.Component {
         for (let i = 0; i < this.state.listItems.length; i++) {
 
             let item = this.state.listItems[i];
+            let restUrl = '/restaurants/' + item.yelp_id
 
             listItems.push(<ListItem yelpid={item.yelp_id} itemid={item.item_id}
                 rest={item.rest_name} category={item.yelp_category}
-                url={item.yelp_url} image={item.image} key={item.yelp_id}/>);
+                url={item.yelp_url} rest_url={restUrl} image={item.image} key={item.yelp_id}/>);
 
             if (this.state.editMode) {
                 listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
@@ -279,7 +280,7 @@ class ListItem extends React.Component {
                         <img src={ this.props.image }/>
                     </div>
                     <div className='yelp-info'>
-                        <h3>{ this.props.rest }</h3>
+                        <h3><a href={ this.props.rest_url }>{ this.props.rest }</a></h3>
                         <p>{ this.props.category }</p>
                         <a href={ this.props.url }>Yelp</a>
                     </div>

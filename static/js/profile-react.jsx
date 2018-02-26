@@ -69,12 +69,6 @@ class UserPageContainer extends React.Component {
         });
     }
 
-    // displayList(listid, listname) {
-    //     // this.setState({isListOpen: true});
-    //     // this.setState({openListId: listid});
-    //     // this.setState({openListName: listname});
-    //     this.fetchListItemsAjax(listid, listname);
-    // }
 
     // RENDER METHOD
 
@@ -88,14 +82,7 @@ class UserPageContainer extends React.Component {
 
 
         // RENDER HEADING OF PAGE
-        // let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
-        // let header =
-        //         <div>
-        //             <p id='msg-para'></p>
-        //             <h1>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
-        //         </div>
 
-        // let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
                 <div>
                     <User username={this.props.username} city={this.props.city} state={this.props.state}/>

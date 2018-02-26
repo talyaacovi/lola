@@ -7,6 +7,8 @@
 
 <h2>You are most similar to {{ most_similar_user }}.</h2>
 
+<img src='/static/uploads/{{ most_similar_user.profiles[0].image_fn }}'/>
+
 <p>These are the restaurants you have in common:</p>
     <ol>
         {% for rests in rests_in_common %}

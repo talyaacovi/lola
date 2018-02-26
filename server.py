@@ -344,7 +344,7 @@ def do_comparison():
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
-        return redirect('/users/{}/react-lists/favorites'.format(session['username']))
+        return redirect('/users/react/{}/favorites'.format(session['username']))
 
 
 # @app.route('/users/<username>/react-lists/<listname>')

@@ -139,7 +139,8 @@ class ListItem(db.Model):
                 'item_id': self.item_id,
                 'yelp_category': self.restaurant.yelp_category,
                 'yelp_url': self.restaurant.yelp_url,
-                'image': self.restaurant.yelp_photo}
+                'image': self.restaurant.yelp_photo,
+                'ig_loc_id': self.restaurant.ig_loc_id}
 
     def __repr__(self):
         """Provide helpful representation of list items."""

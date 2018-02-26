@@ -28,18 +28,20 @@
       <a class="navbar-brand" href="/">Eat Local</a>
     </div>
 
-    <div class='logged-out-toggle'
-        {% if session.get('user_id') %} hidden {% endif %}>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class='logged-out-toggle'
+          {% if session.get('user_id') %} hidden {% endif %}>
+
           <ul class="nav navbar-nav navbar-right">
             <li><a href='#' data-toggle='modal' data-target='#loginModal'>Login</a></li>
             <li><a href='#' data-toggle='modal' data-target='#signupModal'>Signup</a></li>
           </ul>
         </div>
-    </div>
-    <div class='logged-in-toggle'
-        {% if not session.get('user_id') %} hidden {% endif %}>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<!--     </div> -->
+    <!-- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> -->
+        <div class='logged-in-toggle'
+          {% if not session.get('user_id') %} hidden {% endif %}>
+
           <ul class="nav navbar-nav navbar-right">
             <li id='profile-page-link'><a id='profile-page' href='/users/react/{{ session.get("username") }}'>Profile</a></li>
             <!-- <li id='city-page-link'><a href='/cities'>Cities</a></li> -->
