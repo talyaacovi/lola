@@ -14,13 +14,11 @@
     display: inline;
 }
 
-#map {
+#city-map {
     height: 400px;
 }
 
-#main-map {
-    height: 600px;
-}
+
 
 #city-div {
   margin-top: 20px;
@@ -35,12 +33,7 @@
     display: none;
 }
 
-ul > li {
-    list-style: none;
-}
-
-.form-group > li {
-  list-style: none;
+.form-group > form {
   width: 25%;
 }
 
@@ -71,4 +64,31 @@ ul > li {
   opacity: 0.5;
   text-decoration: none;
   pointer-events: none;
+}
+
+
+/*STYLES FOR HOMEPAGE*/
+
+#main-header {
+  text-align: center;
+}
+
+body, html, .container-fluid {
+  height: 100%;
+}
+
+.container-fluid {
+  margin: 0 15px;
+}
+
+.row-first {
+  height: 25%;
+}
+
+#main-map {
+    height: 400px;
+}
+
+#view-controls {
+  padding-left: 0;
 }

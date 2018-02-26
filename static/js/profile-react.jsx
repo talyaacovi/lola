@@ -122,7 +122,7 @@ class UserPageContainer extends React.Component {
                     <div>
                         {createListControls}
                         <h3>Lists</h3>
-                        <ul>
+                        <ul className='list-unstyled'>
                             {mainDiv}
                         </ul>
                     </div>

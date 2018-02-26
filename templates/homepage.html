@@ -3,43 +3,50 @@
 {% block content %}
 
 
+<div class='container-fluid'>
+    <div class='row row-first'>
+        <div class="col-xs-offset-3 col-xs-6">
+            <h1 id='main-header'>Where do the locals eat?</h1>
+        </div>
+    </div>
 
-<h1>Where do the locals eat?</h1>
+
+    <div class='row row-second' id='main-home-div'
+        {% if not session.get('user_id') %} hidden {% endif %}>
+    <!-- search for a city which uses Google Places autocomplete -->
 
 
-<div id='main-home-div'
-    {% if not session.get('user_id') %} hidden {% endif %}>
-<!-- search for a city which uses Google Places autocomplete -->
-    <div id='search-div'>
-        <h3>Search for a city</h3>
+
+        <div id='view-controls' class="col-xs-12 col-lg-12">
+            <button class='btn btn-default btn-sm active' id='map-view-btn'>Map View</button>
+            <button class='btn btn-default btn-sm' id='list-view-btn'>List View</button>
+            <button class='btn btn-default btn-sm' id='search-btn'>Search</button>
+        </div>
+
+        <div id='city-div' hidden>
+            <ul class='list-unstyled'>
+                {% for location in all_locations %}
+                    <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
+                        <a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a>
+                    <!-- <br> -->
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id='main-map' class="col-xs-12"></div>
+        <div id='search-div' class='form-group' hidden>
+            <h3>Search for a city</h3>
 
             <form action='/search-city'>
-                <label>City
-                    <input id='autocomplete' type='text' name='city-name' required>
-                    <input type='submit' id='search-city' value='Search'>
-                </label>
+                    <input class='form-control' id='autocomplete' type='text' name='city-name' required>
+                    <button class='btn btn-default' id='search-city' value='Search'>Search</button>
             </form>
+        </div>
+
     </div>
-
-    <div id='view-controls'>
-        <button id='list-view-btn'>List View</button>
-        <button id='map-view-btn'>Map View</button>
-    </div>
-
-    <div id='city-div' hidden>
-        <ul>
-            {% for location in all_locations %}
-                <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
-                    <a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a>
-                <!-- <br> -->
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div id='main-map'></div>
-
 </div>
+
 
 <script>
     var input = document.getElementById('autocomplete');

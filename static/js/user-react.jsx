@@ -192,7 +192,7 @@ class User extends React.Component {
 
         let profileDetails =
                 <div>
-                    <ul>
+                    <ul className='list-unstyled'>
                         {profileInfo}
                     </ul>
                 </div>

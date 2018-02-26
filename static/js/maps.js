@@ -7,7 +7,7 @@ function initMap() {
     let city = {lat: $('#city').data('lat'), lng: $('#city').data('lng')};
 
     // google map with city as center
-    window.map = new google.maps.Map(document.querySelector('#map'), {
+    window.map = new google.maps.Map(document.querySelector('#city-map'), {
         center: city,
         zoom: 12,
         mapTypeControl: false,
