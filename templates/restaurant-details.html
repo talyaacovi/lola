@@ -4,20 +4,28 @@
 
 <h1>{{ restaurant.name }}</h1>
 
-{% for photo in ig_photos %}
-    <div class='ig-photo'>
+{% if ig_photos %}
+    {% for photo in ig_photos %}
+        <div class='ig-photo'>
 
-        {% if photo.url[-3:] == 'mp4' %}
-            <video width='400' height='400' controls>
-                <source src='{{ photo.url }}' type='video/mp4'>
-                 Your browser does not support the video tag.
-            </video>
-        {% else %}
-            <img src='{{ photo.url }}'/>
-        {% endif %}
+            {% if photo.url[-3:] == 'mp4' %}
+                <video width='400' height='400' controls>
+                    <source src='{{ photo.url }}' type='video/mp4'>
+                     Your browser does not support the video tag.
+                </video>
+            {% else %}
+                <img src='{{ photo.url }}'/>
+            {% endif %}
 
-    </div>
-{% endfor %}
+        </div>
+    {% endfor %}
+{% else %}
+    {% for photo in yelp_photos %}
+        <div class='yelp-photo'>
+                <img src='{{ photo }}'/>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <script>
     let idOfOptionToBold = '';

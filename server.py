@@ -556,7 +556,11 @@ def restaurant_detail(yelp_id):
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
     ig_photos = restaurant.photos
 
-    return render_template('restaurant-details.html', restaurant=restaurant, ig_photos=ig_photos)
+    if not ig_photos:
+        results = business(yelp_id)
+        yelp_photos = results['photos']
+
+    return render_template('restaurant-details.html', ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
 
 
 @app.route('/user-info-react.json')

@@ -56,8 +56,13 @@ ul > li {
     padding-bottom: 10px;
 }
 
-.ig-photo {
+.ig-photo, .yelp-photo{
   display: inline;
+}
+
+.yelp-photo > img {
+  height: 500px;
+  width: 500px;
 }
 
 .isDisabled {
