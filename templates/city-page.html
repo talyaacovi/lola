@@ -1,34 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}, {{ state.upper() }}</h1>
-
-<div id='city-locals'>
-    <h2>Meet The Locals</h2>
-    <ul class='list-unstyled'>
-      {% for user in all_users %}
-      <li>
-          <a href='/users/react/{{ user.username }}'>{{ user.username }}</a>
-          <br>
-      </li>
-      {% endfor %}
-    </ul>
-</div>
-
-<h2>Top 10 Favorite Local Restaurants</h2>
-<div id='top-restaurants'>
-    <div id='email-list'>
-      <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+<div class='container-fluid'>
+    <div class='row'>
+          <div class='main-city-header col-xs-offset-3 col-xs-6'>
+            <h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}, {{ state.upper() }}</h1>
+          </div>
     </div>
-    <ol>
-    {% for item in restaurant_tuples %}
-        <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>
-          <p style="display: inline;">{{ item[0].name }}</p>
-          <img src='/static/img/star.png'/><p style="display: inline;">{{item[1]}}</p>
-        </li>
-    {% endfor %}
-    </ol>
-</br>
+
+    <div class='row'>
+          <div id='city-locals'>
+              <h2>Meet The Locals</h2>
+              <ul class='list-unstyled'>
+                {% for user in all_users %}
+                <li>
+                    <a href='/users/react/{{ user.username }}'>{{ user.username }}</a>
+                    <br>
+                </li>
+                {% endfor %}
+              </ul>
+          </div>
+    </div>
+
+    <div class='row'>
+          <h2>Top 10 Favorite Local Restaurants</h2>
+          <p>(Click to view on map)</p>
+          <div id='top-restaurants' class='col-xs-4'>
+              <ol id='top-restaurants-list'>
+              {% for item in restaurant_tuples %}
+                  <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>
+                    <p style="display: inline;">{{ item[0].name }}</p>
+                    <img src='/static/img/star.png'/><p style="display: inline;">{{item[1]}}</p>
+                  </li>
+              {% endfor %}
+              </ol>
+          </div>
+    </div>
+
+    <div class='row'>
+          <div id='email-list'>
+              <button class='btn btn-default' id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+          </div>
+    </div>
+
+    <div class='row'>
+          <div id='city-map'></div>
+    </div>
+
 </div>
 
 
@@ -61,11 +79,8 @@
 </div>
 
 
-<br>
-
-<div id='city-map'></div>
 <script src="/static/js/city-mapstyles.js"></script>
-<script src='/static/js/maps.js'></script>
+<script src='/static/js/city-map.js'></script>
 <script src='/static/js/send-email.js'></script>
 
 <script>

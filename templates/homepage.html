@@ -5,9 +5,13 @@
 
 <div class='container-fluid'>
     <div class='row row-first'>
+    </div>
+    <div class='row row-first'>
         <div class="col-xs-offset-3 col-xs-6">
             <h1 id='main-header'>Where do the locals eat?</h1>
         </div>
+    </div>
+    <div class='row row-first'>
     </div>
 
 
@@ -27,7 +31,7 @@
             <ul class='list-unstyled'>
                 {% for location in all_locations %}
                     <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
-                        <a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a>
+                        <h3 class='city-link'><a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a></h3>
                     <!-- <br> -->
                     </li>
                 {% endfor %}
@@ -39,8 +43,12 @@
             <h3>Search for a city</h3>
 
             <form action='/search-city'>
+                <div class='form-group'>
                     <input class='form-control' id='autocomplete' type='text' name='city-name' required>
+                </div>
+                <div class='form-group'>
                     <button class='btn btn-default' id='search-city' value='Search'>Search</button>
+                </div>
             </form>
         </div>
     </div>

@@ -9,7 +9,7 @@ function initMap() {
     // google map with city as center
     window.map = new google.maps.Map(document.querySelector('#city-map'), {
         center: city,
-        zoom: 12,
+        zoom: 12.2,
         mapTypeControl: false,
         styles: MAPSTYLES
     });
