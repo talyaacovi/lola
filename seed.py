@@ -40,4 +40,4 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     load_zips()
-    load_list_categories()
+    # load_list_categories()

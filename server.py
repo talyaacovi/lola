@@ -478,7 +478,7 @@ def send_user_list():
     for index, item in enumerate(restaurants):
         email_body = email_body + str(index + 1) + '. ' + '<a href="' + item['yelp_url'] + '">' + item['rest_name'] + '</a>' + "<br/>"
 
-    if lst_name == 'favorites':
+    if lst_name == 'favorites' or lst_name == 'Favorites':
         list_type = 'favorite restaurants'
     else:
         list_type = 'favorite ' + lst_name.lower()
