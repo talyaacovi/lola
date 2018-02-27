@@ -160,11 +160,11 @@ class List extends React.Component {
         // RENDER HEADING OF PAGE
         console.log('rendering list item container again');
 
-        let header =
+        let listHeader =
                 <div>
-                    <h1 id='list_name'>{data['list_name']}</h1>
-                    <input readOnly hidden id='list_id' name='list_id' value={data['list_id']}></input>
-                    <input readOnly hidden id='username' name='username' value={data['username']}></input>
+                    <h2 id='list_name'>{this.props.listName}</h2>
+                    <input readOnly hidden id='list_id' name='list_id' value={this.props.listid}></input>
+                    <input readOnly hidden id='username' name='username' value={this.props.username}></input>
                 </div>
 
         // CREATING LIST ITEM COMPONENTS
@@ -263,7 +263,7 @@ class List extends React.Component {
                 </div>
 
         return (<div>
-                    {header}
+                    {listHeader}
                     {sendList}
                     {listControls}
                     <div id='list-items'>

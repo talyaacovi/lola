@@ -24,7 +24,7 @@
     {% for item in restaurant_tuples %}
         <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>
           <p style="display: inline;">{{ item[0].name }}</p>
-          <p style="display: inline;">({{item[1]}})</p>
+          <img src='/static/img/star.png'/><p style="display: inline;">{{item[1]}}</p>
         </li>
     {% endfor %}
     </ol>

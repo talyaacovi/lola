@@ -29,7 +29,7 @@ class UserPageContainer extends React.Component {
     fetchListItemsAjax(listid, listname) {
         $.get('/list-items-react.json?lst_id=' + listid, (data) => {
             this.setState({listItems: data.restaurants, isListOpen: true, openListId: listid, openListName: listname});
-            history.pushState(null, null, `/users/react/${this.props.username}/${this.state.openListName}`);
+            history.pushState(null, null, `/users/react/${this.props.username}/${this.state.openListName.toLowerCase()}`);
         });
 
 

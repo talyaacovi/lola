@@ -91,7 +91,7 @@ class List(db.Model):
 
         return {'list_id': self.list_id,
                 'user_id': self.user_id,
-                'name': self.name,
+                'name': self.name.title(),
                 'category_id': self.category_id}
 
     def __repr__(self):

@@ -13,6 +13,7 @@ from cities import *
 from compare import *
 from sendgrid import *
 from ig import *
+import fbg.py as fb
 import json
 
 
@@ -545,6 +546,16 @@ def get_ig_data():
             successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
 
             return successMsg
+
+        else:
+            loc_id = fb.request(restaurant.name, restaurant.lat, restaurant.lng)
+            print 'in else of instagram react that fetches from FB'
+            if loc_id:
+                restaurant.ig_loc_id = loc_id
+                db.session.commit()
+
+                successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
+                return successMsg
 
     return ''
 
