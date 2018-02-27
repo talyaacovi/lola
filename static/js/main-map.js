@@ -4,10 +4,11 @@ function initMap() {
 
     // google map with united states as center
     window.map = new google.maps.Map(document.querySelector('#main-map'), {
-        center: {lat: 40, lng: -95},
-        zoom: 4.4,
+        center: {lat: 42, lng: -95},
+        zoom: 4.3,
         mapTypeControl: false,
         zoomControl: false,
+        styles: MAPSTYLES
     });
 
     let infoWindow = new google.maps.InfoWindow({
@@ -31,7 +32,7 @@ function initMap() {
                     position: new google.maps.LatLng(lat, lng),
                     map: map,
                     title: 'Hover text',
-                    // icon: myImageURL
+                    icon: '/static/img/popsicle-marker.png'
                 });
 
         // define contents for info window

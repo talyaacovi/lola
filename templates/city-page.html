@@ -5,13 +5,13 @@
 
 <div id='city-locals'>
     <h2>Meet The Locals</h2>
-    <ul>
-    {% for user in all_users %}
-    <li>
-        <a href='/users/react/{{ user.username }}'>{{ user.username }}</a>
-        <br>
-    </li>
-    {% endfor %}
+    <ul class='list-unstyled'>
+      {% for user in all_users %}
+      <li>
+          <a href='/users/react/{{ user.username }}'>{{ user.username }}</a>
+          <br>
+      </li>
+      {% endfor %}
     </ul>
 </div>
 
@@ -25,9 +25,6 @@
         <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>
           <p style="display: inline;">{{ item[0].name }}</p>
           <p style="display: inline;">({{item[1]}})</p>
-          {% if item[0].photos %}
-          , <a href='/restaurants/{{ item[0].yelp_id }}'>Photos</a>
-          {% endif %}
         </li>
     {% endfor %}
     </ol>
@@ -67,6 +64,7 @@
 <br>
 
 <div id='city-map'></div>
+<script src="/static/js/city-mapstyles.js"></script>
 <script src='/static/js/maps.js'></script>
 <script src='/static/js/send-email.js'></script>
 

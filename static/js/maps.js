@@ -11,6 +11,7 @@ function initMap() {
         center: city,
         zoom: 12,
         mapTypeControl: false,
+        styles: MAPSTYLES
     });
 
     let infoWindow = new google.maps.InfoWindow({
@@ -27,7 +28,7 @@ function initMap() {
         let lat = restArray[i].dataset.lat;
         let lng = restArray[i].dataset.lng;
         let url = restArray[i].dataset.yelp;
-        // restArray[i].addEventListener('click', changeMapCenter);
+        let yelp_id = restArray[i].dataset.yelpId;
 
 
         // create map marker for the specific restaurant
@@ -35,14 +36,15 @@ function initMap() {
                     position: new google.maps.LatLng(lat, lng),
                     map: map,
                     title: 'Hover text',
-                    // icon: '/static/img/pizza-2-dark.png'
+                    icon: '/static/img/popsicle-marker.png'
                 });
 
         // define contents for info window
         html = (
               '<div class="window-content">' +
                     '<p>' + restArray[i].firstElementChild.innerText + '</p>' +
-                    '<a href="' + url + '">Yelp</a>' +
+                    '<p><a href="' + url + '">Yelp Page</a></p>' +
+                    '<p><a href="/restaurants/' + yelp_id + '">Photos</a></p>' +
               '</div>');
 
         restaurant = restArray[i];

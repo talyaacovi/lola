@@ -235,7 +235,7 @@ class List extends React.Component {
                     <div>
                         <div id='del-list'>
                             <form action='/delete-list' method='POST' onSubmit={this.deleteList.bind(this)}>
-                                <input type='hidden' name='list_id' value={this.props.listId}></input>
+                                <input type='hidden' name='list_id' value={this.props.listid}></input>
                                 <button>Delete List</button>
                             </form>
                         </div>

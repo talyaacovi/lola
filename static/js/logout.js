@@ -34,6 +34,7 @@ function loginMessage(result) {
         $('.logged-in-toggle').show();
         $('#main-home-div').show();
         $('#loginModal').modal('hide');
+        $('#icons').hide();
         $('#profile-page').attr('href', '/users/react/' + result.user);
         if (result.isActive === 'True') {
             isActive = true; // global variable defined in base.html
@@ -185,6 +186,7 @@ function signupUser(result) {
         $('#signupModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result);
         $('#search-div').hide();
+        $('#icons').hide();
         $('#msg-para').html('Your account has been created! Please add at least 5 restaurants to your <a href="/users/react/' + result + '/favorites">Favorites</a> list to access more content.');
 
     }

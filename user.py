@@ -89,7 +89,7 @@ def register_user(email, password, username, zipcode):
 def default_profile_info(user_id):
     """Add user."""
 
-    profile = Profile(user_id=user_id, image_fn=default.png)
+    profile = Profile(user_id=user_id, image_fn='default.png')
 
     db.session.add(profile)
     db.session.commit()

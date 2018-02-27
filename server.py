@@ -89,7 +89,7 @@ def signup():
     set_session_info(user)
 
     add_fav_list(user.user_id, 'Favorites', 'draft', 1)
-    add_profile_info(user.user_id)
+    default_profile_info(user.user_id)
 
     return username
 
@@ -279,7 +279,7 @@ def delete():
     message = delete_list(list_id)
     flash(message)
 
-    return redirect('/users/{}'.format(session['username']))
+    return redirect('/users/react/{}'.format(session['username']))
 
 
 @app.route('/search-city')
