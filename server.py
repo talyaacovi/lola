@@ -13,7 +13,7 @@ from cities import *
 from compare import *
 from sendgrid import *
 from ig import *
-import fbg.py as fb
+import fbg as fb
 import json
 
 
@@ -140,7 +140,6 @@ def user_page_react(username):
         'username': username
     }
 
-    # return render_template('profile-react.html', city=user.city.title(), state=user.state, username=username)
     return render_template('profile-react.html', user_dict=user_dict)
 
 
@@ -572,7 +571,7 @@ def restaurant_detail(yelp_id):
         yelp_photos = results['photos']
         return render_template('restaurant-details.html', ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
 
-    return render_template('restaurant-details.html', ig_photos=ig_photos, restaurant=restaurant)
+    return render_template('restaurant-details.html', ig_photos=ig_photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
 
 
 @app.route('/user-info-react.json')

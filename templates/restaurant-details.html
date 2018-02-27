@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
+<div>
 <h1>{{ restaurant.name }}</h1>
+{% if ig_photos %}
+    <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/">Instagram Location</a>
+{% endif %}
+</div>
 
 {% if ig_photos %}
     {% for photo in ig_photos %}
