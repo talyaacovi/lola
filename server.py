@@ -219,31 +219,31 @@ def do_search():
     return jsonify(results_dict)
 
 
-@app.route('/add-restaurant.json', methods=['POST'])
-def add_restaurant():
-    """Add Restaurant to Database."""
+# @app.route('/add-restaurant.json', methods=['POST'])
+# def add_restaurant():
+#     """Add Restaurant to Database."""
 
-    lst_id = request.form.get('list')
-    yelp_id = request.form.get('id')
+#     lst_id = request.form.get('list')
+#     yelp_id = request.form.get('id')
 
-    rest_id = add_new_restaurant(yelp_id)
+#     rest_id = add_new_restaurant(yelp_id)
 
-    lst_item = add_list_item(rest_id, lst_id, session['user_id'])
+#     lst_item = add_list_item(rest_id, lst_id, session['user_id'])
 
-    if lst_item:
+#     if lst_item:
 
-        results_dict = {}
-        results_dict['name'] = lst_item.restaurant.name
-        results_dict['yelp_id'] = lst_item.restaurant.yelp_id
-        results_dict['item_id'] = lst_item.item_id
-        results_dict['yelp_category'] = lst_item.restaurant.yelp_category
-        results_dict['yelp_url'] = lst_item.restaurant.yelp_url
-        results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
+#         results_dict = {}
+#         results_dict['name'] = lst_item.restaurant.name
+#         results_dict['yelp_id'] = lst_item.restaurant.yelp_id
+#         results_dict['item_id'] = lst_item.item_id
+#         results_dict['yelp_category'] = lst_item.restaurant.yelp_category
+#         results_dict['yelp_url'] = lst_item.restaurant.yelp_url
+#         results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
 
-        return jsonify(results_dict)
+#         return jsonify(results_dict)
 
-    else:
-        return ''
+#     else:
+#         return ''
 
 
 @app.route('/del-restaurant.json', methods=['POST'])
@@ -546,15 +546,15 @@ def get_ig_data():
 
             return successMsg
 
-        else:
-            loc_id = fb.request(restaurant.name, restaurant.lat, restaurant.lng)
-            print 'in else of instagram react that fetches from FB'
-            if loc_id:
-                restaurant.ig_loc_id = loc_id
-                db.session.commit()
+        # else:
+        #     loc_id = fb.request(restaurant.name, restaurant.lat, restaurant.lng)
+        #     print 'in else of instagram react that fetches from FB'
+        #     if loc_id:
+        #         restaurant.ig_loc_id = loc_id
+        #         db.session.commit()
 
-                successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
-                return successMsg
+        #         successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
+        #         return successMsg
 
     return ''
 

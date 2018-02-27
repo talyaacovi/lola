@@ -15,4 +15,5 @@ def request(query, lat, lng, distance='15000'):
 
     data = graph.request('/search?q=' + query + '&type=place&center=' + lat + ',' + lng + '&' + distance)
     if data['data']:
+        print data['data'][0]['id']
         return data['data'][0]['id']

@@ -2,10 +2,7 @@
 {% block content %}
 
 <div>
-<h1>{{ restaurant.name }}</h1>
-{% if ig_photos %}
-    <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/">Instagram Location</a>
-{% endif %}
+    <h1>{{ restaurant.name }}</h1>
 </div>
 
 {% if ig_photos %}
@@ -29,6 +26,10 @@
                 <img src='{{ photo }}'/>
         </div>
     {% endfor %}
+{% endif %}
+
+{% if ig_photos %}
+    <h2><a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">See More</a></h2>
 {% endif %}
 
 <script>

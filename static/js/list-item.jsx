@@ -200,7 +200,7 @@ class List extends React.Component {
             searchControls =
                     <div>
                         <div id='search-restaurants'>
-                            <h2>Search for a restaurant you love in San Francisco!</h2>
+                            <h2>Search for a restaurant you love in {this.props.city}!</h2>
                             <form onSubmit={this.fetchSearchItems.bind(this)}>
                                 <input name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
                                 <button>Search</button>

@@ -113,7 +113,7 @@ class UserPageContainer extends React.Component {
         if (this.state.isListOpen) {
             openListItems =
                 <div>
-                    <List listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId}/>
+                    <List listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId} city={this.props.city}/>
                 </div>
         }
 
