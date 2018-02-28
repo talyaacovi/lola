@@ -6,7 +6,7 @@
   let data = {'username': '{{ user_dict.get("username") }}',
               'city': '{{ user_dict.get("city") }}',
               'state': '{{ user_dict.get("state") }}',
-              'listname': '{{ user_dict.get("listname") }}',
+              'listname': '{{ user_dict.get("listname").title() }}',
               'list_id': '{{ user_dict.get("list_id") }}'};
 
 </script>
