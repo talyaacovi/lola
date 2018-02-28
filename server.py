@@ -641,6 +641,40 @@ def upload_profile_image():
         return ''
 
 
+@app.route('/new-update-profile-info', methods=['POST'])
+def new_update_profile_info():
+    """User profile page."""
+
+    username = request.form.get('username')
+    favRest = request.form.get('favRest')
+    favDish = request.form.get('favDish')
+    favCity = request.form.get('favCity')
+
+    user = User.query.filter_by(username=username).first()
+    user_profile = user.profiles[0]
+    user_profile.fav_rest = favRest
+    user_profile.fav_dish = favDish
+    user_profile.fav_city = favCity
+
+    db.session.commit()
+
+    user_dict = user.profiles[0].to_dict()
+
+    file = request.files.get('image')
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        user.profiles[0].image_fn = filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        db.session.commit()
+        user_dict['filename'] = filename
+
+    else:
+        user_dict['filename'] = user_profile.image_fn
+
+    return jsonify(user_dict)
+
+
 @app.route('/users/react-new/<username>')
 def new_user_page_react(username):
     """User profile page."""

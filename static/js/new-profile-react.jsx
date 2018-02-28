@@ -371,7 +371,7 @@ class ListItem extends React.Component {
 class User extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editMode: false, profileImage: ''};
+        this.state = { editingProfile: false, profileImage: '', favDish: '', favCity: '', favRest: ''};
         this.fetchUserInfo = this.fetchUserInfo.bind(this);
         this.fetchUserProfileImage = this.fetchUserProfileImage.bind(this);
     }
@@ -385,9 +385,7 @@ class User extends React.Component {
         fetch('/user-info-react.json?username=' + this.props.username)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
-            let userData = {favDish: data.fav_dish, favCity: data.fav_city, favRest: data.fav_rest};
-            return userData;
+            this.setState({favDish: data.fav_dish, favCity: data.fav_city, favRest: data.fav_rest});
         })
     }
 
@@ -405,8 +403,44 @@ class User extends React.Component {
         });
     }
 
+    toggleEditMode(evt) {
+        this.setState(prevState => ({editingProfile: !prevState.editingProfile}));
+
+    }
+
+    updatePhoto(data) {
+        this.setState({editingProfile: false, profileImage: '/static/uploads/' + data.filename, favDish: data.fav_dish, favCity: data.fav_city, favRest: data.fav_rest});
+    }
 
     render() {
+
+        let buttonText;
+        let editControls;
+        let profileInfo;
+        let editProfileForm;
+
+        if (this.state.editingProfile) {
+            // buttonText = 'Save Profile';
+            editProfileForm = <ProfileForm profileImage={this.state.profileImage} favDish={this.state.favDish} favRest={this.state.favRest} favCity={this.state.favCity} onSubmit={this.updatePhoto.bind(this)} username={this.props.username}/>
+        }
+
+        else {
+            buttonText = 'Edit Profile';
+            profileInfo = <ProfileInfo favRest={this.state.favRest} favDish={this.state.favDish} favCity={this.state.favCity}/>
+        }
+
+
+
+        if (viewingOwnPage && !this.state.editingProfile) {
+            editControls =
+                    <div>
+                        <div id='edit-profile'>
+                            <button className='btn btn-default' onClick={this.toggleEditMode.bind(this)}>Edit Profile</button>
+                        </div>
+                    </div>
+        }
+
+
         let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
                 <div>
@@ -418,6 +452,9 @@ class User extends React.Component {
         return (
             <div>
                 { header }
+                { editProfileForm }
+                { profileInfo }
+                { editControls }
             </div>
         )
     }
@@ -434,6 +471,86 @@ class ListLink extends React.Component {
                     <a onClick={this.buttonClickHandler.bind(this)} data-list-id={this.props.listid}>{this.props.listname}</a>
                 </div>
             );
+    }
+}
+
+class ProfileInfo extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+                <div className='form-group'>
+                    <ul className='list-unstyled'>
+                        <li data-info='favRest'>Favorite local restaurant: {this.props.favRest}</li>
+                        <li data-info='favDish'>Favorite dish: {this.props.favDish}</li>
+                        <li data-info='favCity'>Favorite food city: {this.props.favCity}</li>
+                    </ul>
+                </div>
+            )
+    }
+}
+
+
+class ProfileForm extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    uploadPhoto(evt) {
+        evt.preventDefault();
+
+        let payload = new FormData();
+        // let image = document.querySelector('input[type="file"]').files[0];
+        let image = evt.target.querySelector('input[type="file"]').files[0];
+        let favDish = evt.target.querySelector('input[name="favDish"]').value;
+        let favCity = evt.target.querySelector('input[name="favCity"]').value;
+        let favRest = evt.target.querySelector('input[name="favRest"]').value;
+
+        if (image) {
+            payload.append('image', image);
+        }
+
+        payload.append('favRest', favRest);
+        payload.append('favDish', favDish);
+        payload.append('favCity', favCity);
+        payload.append('username', this.props.username);
+
+        $.ajax({
+            method: 'POST',
+            url: '/new-update-profile-info',
+            data: payload,
+            dataType: 'json',
+            cache: false,
+            processData: false,
+            contentType: false,
+            credentials: 'same-origin'
+        }).done((data) => {
+            if (data) {
+                this.props.onSubmit(data);
+                console.log(data);
+            }
+            // {fav_city: "Tokyo", fav_dish: "BBQ pork buns", fav_rest: "The Morris", filename: "IMG_5292.jpg"}
+        });
+    }
+
+
+    render() {
+        return (
+                <div>
+                    <form onSubmit={this.uploadPhoto.bind(this)} encType='multipart/form-data'>
+                        <input type='file' name='file'></input>
+                        <label>Favorite local restaurant:</label>
+                        <input type="text" className="form-control" name="favRest" defaultValue={this.props.favRest}/>
+                        <label>Favorite dish:</label>
+                        <input type="text" className="form-control" name="favDish" defaultValue={this.props.favDish}/>
+                        <label>Favorite food city:</label>
+                        <input type="text" className="form-control" name="favCity" defaultValue={this.props.favCity}/>
+                        <button className='btn btn-default'>Save Profile</button>
+                    </form>
+                </div>
+            )
     }
 }
 
