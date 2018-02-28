@@ -33,9 +33,9 @@
     display: none;
 }
 
-.form-group > form {
+/*.form-group > form {
   width: 25%;
-}
+}*/
 
 .not-active {
   pointer-events: none;
@@ -102,11 +102,11 @@ body, html, .container-fluid {
 }
 
 
-/*STYLES FOR CITYPAGE*/
+/*STYLES FOR CITY PAGE*/
 
 #email-list {
-  padding-bottom: 10px;
-  padding-top: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 #top-restaurants {
@@ -117,4 +117,9 @@ body, html, .container-fluid {
 #top-restaurants-list > li {
  float: left;
  clear: both;
+}
+
+/*STYLES FOR PROFILE PAGE*/
+input.form-control {
+  width: 25%;
 }

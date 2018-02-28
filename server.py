@@ -373,7 +373,6 @@ def list_react(username, listname):
         'username': username
     }
 
-    # return render_template('profile-react.html', listname=listname, list_id=lst.list_id, city=user.city.title(), state=user.state, username=username)
     return render_template('profile-react.html', user_dict=user_dict)
 
 
@@ -639,6 +638,38 @@ def upload_profile_image():
 
     else:
         return ''
+
+
+@app.route('/users/react-new/<username>')
+def new_user_page_react(username):
+    """User profile page."""
+
+    user = get_user(username)
+
+    user_dict = {
+        'city': user.city.title(),
+        'state': user.state,
+        'username': username
+    }
+
+    return render_template('new-profile-react.html', user_dict=user_dict)
+
+
+@app.route('/users/react-new/<username>/<listname>')
+def new_list_react(username, listname):
+    """React!"""
+
+    user = get_user(username)
+    lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
+    user_dict = {
+        'listname': listname,
+        'list_id': lst.list_id,
+        'city': user.city.title(),
+        'state': user.state,
+        'username': username
+    }
+
+    return render_template('new-profile-react.html', user_dict=user_dict)
 
 
 if __name__ == "__main__":

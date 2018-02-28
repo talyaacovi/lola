@@ -2,6 +2,7 @@
 {% block content %}
 
 <div class='container-fluid'>
+    <p id='msg-para'></p>
     <div class='row'>
           <div class='main-city-header col-xs-offset-3 col-xs-6'>
             <h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}, {{ state.upper() }}</h1>

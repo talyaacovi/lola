@@ -129,7 +129,7 @@ class User extends React.Component {
                     <div>
                         <form onSubmit={this.uploadPhoto.bind(this)} encType='multipart/form-data'>
                             <input type='file' name='file'></input>
-                            <button>Upload</button>
+                            <button className='btn btn-default'>Upload</button>
                         </form>
                     </div>
             profileInfo =

@@ -1,7 +1,7 @@
 "use strict";
 
 
-class UserPageContainer extends React.Component {
+class ProfilePageContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {userLists: [], isListOpen: false, openListName: '', openListId: null, newListName: '', newListStatus: 'draft', listItems: []};
@@ -97,10 +97,10 @@ class UserPageContainer extends React.Component {
                     <div>
                         <div id='create-list'>
                             <h3>Create a list</h3>
-                            <form onSubmit={this.createNewList.bind(this)}>
+                            <form className='form-group' onSubmit={this.createNewList.bind(this)}>
                                 <label>Name</label>
-                                <input name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
-                                <button>Create List</button>
+                                <input className='form-control' name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
+                                <button className='btn btn-default'>Create List</button>
                             </form>
                         </div>
                     </div>
@@ -147,7 +147,7 @@ class ListLink extends React.Component {
 
 
 ReactDOM.render(
-    <UserPageContainer list_id={data['list_id']} username={data['username']} listname={data['listname']} city={data['city']} state={data['state']}/>,
+    <ProfilePageContainer list_id={data['list_id']} username={data['username']} listname={data['listname']} city={data['city']} state={data['state']}/>,
     document.getElementById("root")
 );
 

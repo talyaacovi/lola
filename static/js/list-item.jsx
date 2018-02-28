@@ -179,7 +179,7 @@ class List extends React.Component {
                 url={item.yelp_url} rest_url={restUrl} image={item.image} key={item.yelp_id}/>);
 
             if (this.state.editMode) {
-                listItems.push(<button className='del-btn' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
+                listItems.push(<button className='del-btn btn btn-default' onClick={this.removeItem.bind(this)} item-id={item.item_id} key={i}>Remove Restaurant</button>);
             }
         }
 
@@ -201,9 +201,9 @@ class List extends React.Component {
                     <div>
                         <div id='search-restaurants'>
                             <h2>Search for a restaurant you love in {this.props.city}!</h2>
-                            <form onSubmit={this.fetchSearchItems.bind(this)}>
-                                <input name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
-                                <button>Search</button>
+                            <form className='form-group' onSubmit={this.fetchSearchItems.bind(this)}>
+                                <input className='form-control' name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+                                <button className='btn btn-default'>Search</button>
                             </form>
                         </div>
                         <div id='results-div'>
@@ -236,7 +236,7 @@ class List extends React.Component {
                         <div id='del-list'>
                             <form action='/delete-list' method='POST' onSubmit={this.deleteList.bind(this)}>
                                 <input type='hidden' name='list_id' value={this.props.listid}></input>
-                                <button>Delete List</button>
+                                <button className='btn btn-default'>Delete List</button>
                             </form>
                         </div>
                     </div>
@@ -248,7 +248,7 @@ class List extends React.Component {
             listControls =
                     <div>
                         <div id='edit-list'>
-                            <button onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
+                            <button className='btn btn-default' onClick={this.toggleEditMode.bind(this)}>{ buttonText }</button>
                         </div>
                         {deleteControl}
                         {searchControls}
@@ -259,7 +259,7 @@ class List extends React.Component {
 
         let sendList =
                 <div id='email-list'>
-                    <button id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+                    <button className='btn btn-default' id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
                 </div>
 
         return (<div>
@@ -297,7 +297,7 @@ class SearchItem extends React.Component {
         return (<div data-yelp-id={ this.props.yelpid }>
                     <p>{ this.props.rest }</p>
                     <p>{ this.props.address }</p>
-                    <button onClick={this.buttonClickHandler.bind(this)} data-yelp-id={ this.props.yelpid } className='add-btn'>Add Restaurant</button>
+                    <button className='btn btn-default' onClick={this.buttonClickHandler.bind(this)} data-yelp-id={ this.props.yelpid } className='add-btn'>Add Restaurant</button>
                 </div>
             );
     }
