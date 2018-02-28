@@ -4,11 +4,13 @@
 class ProfilePageContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {userLists: [], isListOpen: this.props.isListOpen, openListName: '', openListId: null, listItems: []};
+        this.state = {userLists: [], isListOpen: this.props.isListOpen, openListName: openListName, openListId: openListId, listItems: [], createList: false, newListName: '', newListStatus: 'draft'};
         this.handleClick = this.handleClick.bind(this);
         this.fetchUserLists = this.fetchUserLists.bind(this);
         this.fetchListItems = this.fetchListItems.bind(this);
         this.updateListItems = this.updateListItems.bind(this);
+        this.displayCreate = this.displayCreate.bind(this);
+        this.deleteList = this.deleteList.bind(this);
     }
 
     componentWillMount() {
@@ -18,11 +20,11 @@ class ProfilePageContainer extends React.Component {
         this.fetchUserLists(this.props.username);
     }
 
-    fetchUserLists(username) {
+    fetchUserLists() {
         fetch('/get-lists.json?username=' + this.props.username)
         .then((response) => response.json())
         .then((data) => {
-            this.setState({ userLists: data.userLists, isListOpen: true, openListName: this.props.listname, openListId: this.props.listid});
+            this.setState({ userLists: data.userLists});
         });
     }
 
@@ -49,17 +51,103 @@ class ProfilePageContainer extends React.Component {
         this.setState({listItems: restaurants});
     }
 
+    updateUserLists() {
+        this.setState({ userLists: data.userLists} );
+    }
+
+    displayCreate() {
+        this.setState({ createList: true });
+    }
+
+    updateInputValue(evt) {
+        this.setState({newListName: evt.target.value});
+    }
+
+    deleteList(list) {
+            let payload = new FormData();
+            payload.append('list_id', list);
+
+            fetch('/delete-list', {
+                method: 'POST',
+                body: payload,
+                credentials: 'same-origin'
+            }).then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                document.getElementById('msg-para').innerHTML = data;
+                history.pushState(null, null, `/users/react-new/${this.props.username}`);
+                this.fetchUserLists();
+                this.setState({isListOpen: false, openListId: null, openListName: ''});
+            });
+
+    }
+
+
+    createNewList(evt) {
+        evt.preventDefault();
+
+        let listName = this.state.newListName;
+        let listStatus = this.state.newListStatus;
+
+        let payload = new FormData();
+
+        payload.append('list_name', listName);
+        payload.append('status', listStatus);
+
+        fetch('/add-list-react.json', {
+            method: 'POST',
+            body: payload,
+            credentials: 'same-origin'
+        })
+        .then((response) => response.json())
+        .then((data) => {
+                                        if (data) {
+                                            let currLists = this.state.userLists;
+                                            currLists.push(data);
+                                            this.setState({userLists: currLists});
+                                            this.setState({newListName: ''});
+                                        }
+                                        else {
+                                            alert('You already have a list with that name!');
+                                        }
+        });
+    }
+
 
     // before rendering, check if listname exists and if so, set state for isListOpen to true, fetch list ID using username and list name
     render() {
         let openList;
         if (this.state.isListOpen === true) {
-            openList = <List username={this.props.username} city={this.props.city} onUpdate={this.updateListItems} listid={this.state.openListId} listname={this.state.openListName} listitems={this.state.listItems}/>
+            openList = <List onDelete={this.deleteList} username={this.props.username} city={this.props.city} onUpdate={this.updateListItems} listid={this.state.openListId} listname={this.state.openListName} listitems={this.state.listItems}/>
+        }
+
+        let createListControls;
+
+        if (this.state.createList === true) {
+            createListControls =
+                        <div id='create-list'>
+                            <form className='form-group' onSubmit={this.createNewList.bind(this)}>
+                                <label>Name</label>
+                                <input className='form-control' name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
+                                <button onClick={this.displayCreate} className='btn btn-default'>Submit</button>
+                            </form>
+                        </div>
+        }
+        let createButton;
+
+        if (viewingOwnPage && this.state.createList === false) {
+            createButton =
+                        <div>
+                                <button onClick={this.displayCreate} className='btn btn-default'>Create New List</button>
+                        </div>
         }
 
         return (
             <div>
-                <User username={this.props.username} state={this.props.state} city={this.props.city}/>
+                <User onNewList={this.updateUserLists} username={this.props.username} state={this.props.state} city={this.props.city}/>
+                <h2>Lists</h2>
+                {createButton}
+                {createListControls}
                 {this.state.userLists.map( (list) => {
                     return <ListLink key={list.list_id} onClick={this.handleClick} listid={list.list_id} listname={list.name} />
                 })}
@@ -78,8 +166,13 @@ class List extends React.Component {
     constructor(props) {
         super(props);
         this.state = {searchItems: [], inputValue: '', editMode: false};
-        // this.checkLength = this.checkLength.bind(this);
         this.removeItem = this.removeItem.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.listid !== this.props.listid) {
+            this.setState({editMode: false});
+        }
     }
 
 
@@ -120,6 +213,8 @@ class List extends React.Component {
         });
     }
 
+
+
     addRestaurant(newRestaurant) {
 
         let payload = new FormData();
@@ -148,6 +243,19 @@ class List extends React.Component {
         });
 
         this.setState({searchItems: [], inputValue: ''});
+    }
+
+    deleteListHandler(evt) {
+        var action = confirm('Are you sure you want to delete your list?');
+
+        if (!action) {
+            evt.preventDefault();
+        }
+        else {
+            console.log(evt.target);
+            let listid = evt.target.getAttribute('listid');
+            this.props.onDelete(listid);
+        }
     }
 
     render() {
@@ -190,16 +298,29 @@ class List extends React.Component {
                         </div>
         }
 
+
+        let deleteControl;
+
+        // if (this.state.editMode && this.state.listName != 'favorites') {
+        if (this.state.editMode === true && this.props.listname != 'Favorites') {
+            deleteControl =
+                        <div id='del-list'>
+                                <button onClick={this.deleteListHandler.bind(this)} listid={this.props.listid} className='btn btn-default'>Delete List</button>
+                        </div>
+        }
+
+
         let sendList =
                 <div id='email-list'>
-                    <button className='btn btn-default' id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+                    <button className='btn btn-default' data-toggle='modal' data-target='#emailModal'>Send List</button>
                 </div>
 
         return (
                 <div>
-                    <h1>{this.props.listname}</h1>
-                    {listControls}
+                    <h2>{this.props.listname}</h2>
                     {sendList}
+                    {listControls}
+                    {deleteControl}
                     {searchControls}
                     {this.props.listitems.map( (rest, i) => {
                         return <ListItem onClick={this.removeItem} editing={this.state.editMode} key={'rest_' + i} yelpid={rest.yelp_id} itemid={rest.item_id}
@@ -250,7 +371,7 @@ class ListItem extends React.Component {
 class User extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { editMode: false, profileImage: '' };
+        this.state = { editMode: false, profileImage: ''};
         this.fetchUserInfo = this.fetchUserInfo.bind(this);
         this.fetchUserProfileImage = this.fetchUserProfileImage.bind(this);
     }
@@ -269,6 +390,11 @@ class User extends React.Component {
             return userData;
         })
     }
+
+    updateInputValue(evt) {
+        this.setState({newListName: evt.target.value});
+    }
+
 
 
     fetchUserProfileImage() {
@@ -330,8 +456,12 @@ class SearchItem extends React.Component {
 
 
 let isListOpen;
+let openListName;
+let openListId;
 if (data['listname'] !== 'None') {
     isListOpen = true;
+    openListName = data['listname'];
+    openListId = data['list_id'];
 }
 
 else {

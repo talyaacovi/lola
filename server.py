@@ -277,9 +277,10 @@ def delete():
 
     list_id = request.form.get('list_id')
     message = delete_list(list_id)
-    flash(message)
 
-    return redirect('/users/react/{}'.format(session['username']))
+    return jsonify(message)
+
+    # return redirect('/users/react/{}'.format(session['username']))
 
 
 @app.route('/search-city')
@@ -662,7 +663,7 @@ def new_list_react(username, listname):
     user = get_user(username)
     lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
     user_dict = {
-        'listname': listname,
+        'listname': listname.title(),
         'list_id': lst.list_id,
         'city': user.city.title(),
         'state': user.state,

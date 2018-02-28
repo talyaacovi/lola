@@ -64,9 +64,11 @@ class User extends React.Component {
     updateProfileInfo(evt) {
         evt.preventDefault();
         let payload = new FormData();
-        let favRest = document.querySelector('input[name="favRest"]').value;
-        let favDish = document.querySelector('input[name="favDish"]').value;
-        let favCity = document.querySelector('input[name="favCity"]').value;
+        let favRest = evt.target.querySelector('input[name="favRest"]').value;
+        let favDish = evt.target.querySelector('input[name="favDish"]').value;
+        // let favCity = evt.target.querySelector('input[name="favCity"]').value;
+        let favCity = this.refs['blah'].querySelector('input[name="favCity"]').value;
+
         payload.append('favRest', favRest);
         payload.append('favDish', favDish);
         payload.append('favCity', favCity);
@@ -134,7 +136,7 @@ class User extends React.Component {
                     </div>
             profileInfo =
                     <div className='form-group'>
-                        <form onSubmit={this.updateProfileInfo.bind(this)}>
+                        <form ref='blah' onSubmit={this.updateProfileInfo.bind(this)}>
                             <label>Favorite local restaurant</label>
                             <input
                               // onBlur={this.handleEditField.bind(this)}

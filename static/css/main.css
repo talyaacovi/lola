@@ -123,3 +123,7 @@ body, html, .container-fluid {
 input.form-control {
   width: 25%;
 }
+
+#edit-list {
+  margin-bottom: 10px;
+}

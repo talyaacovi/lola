@@ -43,20 +43,6 @@ class List extends React.Component {
         }
 
 
-
-    // GET LIST ITEMS USING FETCH (doesn't work)
-
-    // fetchListItems() {
-    //     console.log('in fetch list items');
-
-    //     fetch('/list-items-react.json?lst_id=' + this.props.listId, {cache: 'no-cache'})
-    //     .then(() => console.log('in second promise'))
-    //     .then((response) => response.json())
-    //     .then((data) => this.setState({listItems: data.restaurants}))
-    //     .catch(console.log.bind(console));
-    // }
-
-
     // METHOD TO ADD A NEW RESTAURANT TO THE DB AND TO THE LIST
 
     addListItem(newRestaurant) {
