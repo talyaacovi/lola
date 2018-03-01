@@ -31,6 +31,7 @@
             <label for="From">From:</label>
             <input type="text" name='from' class="form-control" id="FromEmail" placeholder="From" required>
           </div>
+          <input type="hidden" name='username' value='{{ user_dict.get("username") }}' class="form-control">
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
 
@@ -40,12 +41,9 @@
 </div>
 
 
-<br>
-
-
 <div id='msg-div'></div>
 
-<div id="root"></div>
+<div class='container-fluid' id="root"></div>
 
 <script>
     {% if user_dict.get('username') == session.get('username') %}
@@ -57,15 +55,9 @@
 
 <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-
 <script src="http://unpkg.com/babel-standalone"></script>
 
-<script src="/static/js/user-react.jsx" type="text/jsx"></script>
-<script src="/static/js/profile-react.jsx" type="text/jsx"></script>
-<script src="/static/js/list-item.jsx" type="text/jsx"></script>
-<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
-
-
+<script src="/static/js/new-profile-react.jsx" type="text/jsx"></script>
 <script src='/static/js/send-email.js'></script>
 
 

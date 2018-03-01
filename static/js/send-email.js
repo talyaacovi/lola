@@ -9,15 +9,16 @@
 
 $('#email-form-bootstrap').submit(function (evt) {
     evt.preventDefault();
+    debugger;
     let email = evt.target.email.value;
     let from = evt.target.from.value;
-    let username = $('#username').val();
+    let username = evt.target.username.value;
     let lstName = document.getElementById('list_name').innerText;
 
-    let lstItems = getYelpIds($('#list-items > div'));
+    let emailLstItems = getYelpIds($('#list-items > div'));
 
     let payload = {'email': email,
-                   'lst_items': lstItems,
+                   'lst_items': emailLstItems,
                    'username': username,
                    'from': from,
                    'lst_name': lstName};
@@ -29,7 +30,7 @@ $('#email-form-bootstrap').submit(function (evt) {
 function getYelpIds(lst) {
     let newLst = [];
     for (let i = 0; i < lst.length; i++) {
-        newLst.push(lst[i].dataset.yelpId);
+        newLst.push(lst[i].dataset['yelpId']);
     }
     return newLst;
 }

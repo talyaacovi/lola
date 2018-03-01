@@ -120,9 +120,9 @@ body, html, .container-fluid {
 }
 
 /*STYLES FOR PROFILE PAGE*/
-input.form-control {
+/*input.form-control {
   width: 25%;
-}
+}*/
 
 #edit-list {
   margin-bottom: 10px;

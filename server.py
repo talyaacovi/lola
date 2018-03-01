@@ -32,8 +32,10 @@ app.jinja_env.auto_reload = True
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """Display homepage with all locations for which locals have made lists."""
 
+    # get_cities() returns list of location dictionaries with city, state,
+    # lat, lng
     all_locations = get_cities()
 
     return render_template('homepage.html', all_locations=all_locations)
@@ -60,21 +62,19 @@ def login_user():
 
 
 @app.route('/logout', methods=['POST'])
-def logout():
-    """Log out user."""
+def logout_user():
+    """Log user out of their account."""
 
     del session['user_id']
     del session['city']
     del session['state']
     del session['username']
 
-    # flash('You have successfully logged out.')
-    # return 'You have successfully logged out.'
     return redirect('/')
 
 
 @app.route('/signup', methods=['POST'])
-def signup():
+def signup_user():
     """Add new user to database."""
 
     email = request.form.get('email')
@@ -89,7 +89,10 @@ def signup():
 
     set_session_info(user)
 
+    # create default Favorites list
     add_fav_list(user.user_id, 'Favorites', 'draft', 1)
+
+    # create default profile image
     default_profile_info(user.user_id)
 
     return username
@@ -119,75 +122,78 @@ def do_check_email():
         return 'False'
 
 
-@app.route('/users/<username>')
-def user_page(username):
-    """User profile page."""
+# @app.route('/users/<username>')
+# def user_page(username):
+#     """User profile page."""
 
-    user = get_user(username)
+#     user = get_user(username)
 
-    return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
+#     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
 
 
-@app.route('/users/react/<username>')
-def user_page_react(username):
-    """User profile page."""
+# @app.route('/users/react/<username>')
+# def user_page_react(username):
+#     """User profile page."""
 
-    user = get_user(username)
+#     user = get_user(username)
 
-    user_dict = {
-        'city': user.city.title(),
-        'state': user.state,
-        'username': username
-    }
+#     user_dict = {
+#         'city': user.city.title(),
+#         'state': user.state,
+#         'username': username
+#     }
 
-    return render_template('profile-react.html', user_dict=user_dict)
+#     return render_template('profile-react.html', user_dict=user_dict)
 
 
 @app.route('/get-lists.json')
 def get_user_lists():
-    """User profile page."""
+    """Get lists for a user to display on their profile page."""
 
     username = request.args.get('username')
 
     user = get_user(username)
 
     userLists = []
+    userDict = {}
+
     for lst in user.lists:
         userLists.append(lst.to_dict())
 
-    userDict = {}
-
     userDict['userLists'] = userLists
 
+    # return dictionary of list objects.
     return jsonify(userDict)
 
 
-@app.route('/add-list', methods=['POST'])
+# @app.route('/add-list', methods=['POST'])
+# def add_new_list():
+#     """Add list to database in draft status."""
+
+#     name = request.form.get('list-name')
+#     status = request.form.get('status')
+#     user_id = session['user_id']
+
+#     lst = add_list(name, status, user_id)
+
+#     if lst:
+#         return redirect('/users/{}/react/lists/{}'.format(lst.user.username, lst.name))
+
+#     else:
+#         flash('You already have a list with this name!')
+#         return redirect('/users/{}'.format(session['username']))
+
+
+@app.route('/add-list.json', methods=['POST'])
 def add_new_list():
-    """Add list to database in draft status."""
-
-    name = request.form.get('list-name')
-    status = request.form.get('status')
-    user_id = session['user_id']
-
-    lst = add_list(name, status, user_id)
-
-    if lst:
-        return redirect('/users/{}/react/lists/{}'.format(lst.user.username, lst.name))
-
-    else:
-        flash('You already have a list with this name!')
-        return redirect('/users/{}'.format(session['username']))
-
-
-@app.route('/add-list-react.json', methods=['POST'])
-def add_new_list_react():
     """Add list to database in draft status."""
 
     name = request.form.get('list_name')
     status = request.form.get('status')
     user_id = session['user_id']
 
+    # returns None if user already has list with that name, otherwise returns
+    # new list object
     lst = add_list(name, status, user_id)
 
     if lst:
@@ -197,26 +203,26 @@ def add_new_list_react():
         return 'null'
 
 
-@app.route('/search-results.json')
-def do_search():
-    """Get search results using Yelp API."""
+# @app.route('/search-results.json')
+# def do_search():
+#     """Get search results using Yelp API."""
 
-    search_term = request.args.get('term')
-    city = session['city'].title()
-    state = session['state'].title()
-    search_location = city + ', ' + state
+#     search_term = request.args.get('term')
+#     city = session['city'].title()
+#     state = session['state'].title()
+#     search_location = city + ', ' + state
 
-    results = search(search_term, search_location)
-    business_results = results['businesses']
+#     results = search(search_term, search_location)
+#     business_results = results['businesses']
 
-    results_dict = {'rests': []}
+#     results_dict = {'rests': []}
 
-    for item in business_results:
-        results_dict['rests'].append({'name': item['name'],
-                                      'id': item['id'],
-                                      'location': item['location']['display_address'][0]})
+#     for item in business_results:
+#         results_dict['rests'].append({'name': item['name'],
+#                                       'id': item['id'],
+#                                       'location': item['location']['display_address'][0]})
 
-    return jsonify(results_dict)
+#     return jsonify(results_dict)
 
 
 # @app.route('/add-restaurant.json', methods=['POST'])
@@ -260,27 +266,25 @@ def delete_restaurant():
     return jsonify(restaurant_dict)
 
 
-@app.route('/users/<username>/lists/<listname>')
-def display_list(username, listname):
-    """Display list."""
+# @app.route('/users/<username>/lists/<listname>')
+# def display_list(username, listname):
+#     """Display list."""
 
-    lst = get_list(username, listname)
+#     lst = get_list(username, listname)
 
-    lst_items = get_list_items(lst.list_id)
+#     lst_items = get_list_items(lst.list_id)
 
-    return render_template('list.html', lst=lst, lst_items=lst_items, username=username)
+#     return render_template('list.html', lst=lst, lst_items=lst_items, username=username)
 
 
-@app.route('/delete-list', methods=['POST'])
-def delete():
+@app.route('/delete-list.json', methods=['POST'])
+def delete_list():
     """Delete list."""
 
     list_id = request.form.get('list_id')
     message = delete_list(list_id)
 
     return jsonify(message)
-
-    # return redirect('/users/react/{}'.format(session['username']))
 
 
 @app.route('/search-city')
@@ -295,7 +299,7 @@ def search_city():
         return redirect('/cities/{}/{}'.format(state.lower(), city.lower()))
 
     else:
-        flash('Lists for ' + city + ' have not yet been created. Invite your friends!')
+        flash('Sorry, no lists yet! Invite your friends that live in ' + city + ' to create some!')
         return redirect('/')
 
 
@@ -307,7 +311,7 @@ def display_city_page(state, city):
     restaurant_tuples = count_restaurants_by_city(state, city)
     location = get_city_lat_lng(state, city)
 
-    return render_template('city-page.html',
+    return render_template('city.html',
                            all_users=all_users,
                            city=city,
                            state=state,
@@ -316,7 +320,7 @@ def display_city_page(state, city):
 
 
 @app.route('/check-zipcode')
-def zipcode():
+def do_zipcode_check():
     """Check that zipcode is valid."""
 
     zipcode = request.args.get('zipcode')
@@ -348,7 +352,7 @@ def do_comparison():
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
-        return redirect('/users/react/{}/favorites'.format(session['username']))
+        return redirect('/users/{}/favorites'.format(session['username']))
 
 
 # @app.route('/users/<username>/react-lists/<listname>')
@@ -360,26 +364,26 @@ def do_comparison():
 #     return render_template('list-react.html', lst_id=lst.list_id, username=username, lst=lst)
 
 
-@app.route('/users/react/<username>/<listname>')
-def list_react(username, listname):
-    """React!"""
+# @app.route('/users/react/<username>/<listname>')
+# def list_react(username, listname):
+#     """React!"""
 
-    user = get_user(username)
-    lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
-    user_dict = {
-        'listname': listname,
-        'list_id': lst.list_id,
-        'city': user.city.title(),
-        'state': user.state,
-        'username': username
-    }
+#     user = get_user(username)
+#     lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
+#     user_dict = {
+#         'listname': listname,
+#         'list_id': lst.list_id,
+#         'city': user.city.title(),
+#         'state': user.state,
+#         'username': username
+#     }
 
-    return render_template('profile-react.html', user_dict=user_dict)
+#     return render_template('profile-react.html', user_dict=user_dict)
 
 
-@app.route('/list-items-react.json')
-def list_items_react():
-    """Get user list items using React."""
+@app.route('/list-items.json')
+def get_list_items():
+    """Get list items for a specific list to display on user profile page."""
 
     lst_id = request.args.get('lst_id')
     lst_items = get_list_items_react(lst_id)
@@ -387,9 +391,9 @@ def list_items_react():
     return jsonify(lst_items)
 
 
-@app.route('/search-results-react.json')
-def do_react_search():
-    """Get search results using Yelp API and React."""
+@app.route('/search-results.json')
+def do_restaurant_search():
+    """Get search results using Yelp API."""
 
     search_term = request.args.get('term')
     username = request.args.get('username')
@@ -411,9 +415,9 @@ def do_react_search():
     return jsonify(results_dict)
 
 
-@app.route('/add-restaurant-react.json', methods=['POST'])
-def add_restaurant_react():
-    """Add Restaurant to Database using React."""
+@app.route('/add-restaurant.json', methods=['POST'])
+def add_restaurant():
+    """Add restaurant to database and specific list of logged-in user."""
 
     # get List ID and the Yelp ID of the restaurant the user wants to add.
 
@@ -441,9 +445,9 @@ def add_restaurant_react():
         return 'null'
 
 
-@app.route('/delete-restaurant-react.json', methods=['POST'])
+@app.route('/delete-restaurant.json', methods=['POST'])
 def delete_restaurant_react():
-    """Delete Restaurant to Database using React."""
+    """Delete restaurant from specific list of logged-in user."""
 
     item_id = request.form.get('item_id')
     del_list_item(item_id)
@@ -463,6 +467,7 @@ def send_user_list():
     username = request.form.get('username')
     lst_items = request.form.getlist('lst_items[]')
     lst_name = request.form.get('lst_name')
+    print to_email, from_name, username, lst_items, lst_name
 
     location = get_user_location(username)
 
@@ -512,8 +517,8 @@ def send_city_list():
 
 
 @app.route('/check-active', methods=['POST'])
-def check_active_user_id():
-    """"""
+def do_check_active_user_id():
+    """Check if logged-in user has added at least 5 restaurants to favorites."""
 
     user_id = session.get('user_id')
     is_active = check_user_id(user_id)
@@ -521,9 +526,9 @@ def check_active_user_id():
     return is_active
 
 
-@app.route('/instagram-react')
-def get_ig_data():
-    """"""
+@app.route('/instagram-photos')
+def get_instagram_data():
+    """Get location ID + photos with Facebook Graph API and IG scraper."""
 
     # FLASK THREADING VERSION
     yelp_id = request.args.get('yelp_id')
@@ -546,22 +551,12 @@ def get_ig_data():
 
             return successMsg
 
-        # else:
-        #     loc_id = fb.request(restaurant.name, restaurant.lat, restaurant.lng)
-        #     print 'in else of instagram react that fetches from FB'
-        #     if loc_id:
-        #         restaurant.ig_loc_id = loc_id
-        #         db.session.commit()
-
-        #         successMsg = get_instagram_photos(restaurant.rest_id, loc_id)
-        #         return successMsg
-
     return ''
 
 
 @app.route('/restaurants/<yelp_id>')
-def restaurant_detail(yelp_id):
-    """Details page for a restaurant, Instagram photos."""
+def show_restaurant_details(yelp_id):
+    """Details page for a restaurant with Instagram photos."""
 
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
     ig_photos = restaurant.photos
@@ -569,12 +564,12 @@ def restaurant_detail(yelp_id):
     if not ig_photos:
         results = business(yelp_id)
         yelp_photos = results['photos']
-        return render_template('restaurant-details.html', ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
+        return render_template('restaurant.html', ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
 
-    return render_template('restaurant-details.html', ig_photos=ig_photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
+    return render_template('restaurant.html', ig_photos=ig_photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
 
 
-@app.route('/user-info-react.json')
+@app.route('/user-info.json')
 def get_user_info():
     """Get user profile info."""
 
@@ -585,24 +580,24 @@ def get_user_info():
     return jsonify(profile_info)
 
 
-@app.route('/update-profile-info', methods=['POST'])
-def update_profile_info():
-    """Update user profile info."""
+# @app.route('/update-profile-info', methods=['POST'])
+# def update_profile_info():
+#     """Update user profile info."""
 
-    favRest = request.form.get('favRest')
-    favDish = request.form.get('favDish')
-    favCity = request.form.get('favCity')
-    username = request.form.get('username')
+#     favRest = request.form.get('favRest')
+#     favDish = request.form.get('favDish')
+#     favCity = request.form.get('favCity')
+#     username = request.form.get('username')
 
-    user = User.query.filter_by(username=username).first()
-    user_profile = user.profiles[0]
-    user_profile.fav_rest = favRest
-    user_profile.fav_dish = favDish
-    user_profile.fav_city = favCity
+#     user = User.query.filter_by(username=username).first()
+#     user_profile = user.profiles[0]
+#     user_profile.fav_rest = favRest
+#     user_profile.fav_dish = favDish
+#     user_profile.fav_city = favCity
 
-    db.session.commit()
+#     db.session.commit()
 
-    return jsonify(user.profiles[0].to_dict())
+#     return jsonify(user.profiles[0].to_dict())
 
 
 @app.route('/user-profile-image.json')
@@ -621,29 +616,29 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/upload-profile-image', methods=['POST'])
-def upload_profile_image():
-    """User profile page."""
+# @app.route('/upload-profile-image', methods=['POST'])
+# def upload_profile_image():
+#     """User profile page."""
 
-    username = request.form.get('username')
-    file = request.files['image']
-    user = User.query.filter_by(username=username).first()
+#     username = request.form.get('username')
+#     file = request.files['image']
+#     user = User.query.filter_by(username=username).first()
 
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        user.profiles[0].image_fn = filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        db.session.commit()
+#     if file and allowed_file(file.filename):
+#         filename = secure_filename(file.filename)
+#         user.profiles[0].image_fn = filename
+#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#         db.session.commit()
 
-        return jsonify(filename)
+#         return jsonify(filename)
 
-    else:
-        return ''
+#     else:
+#         return ''
 
 
-@app.route('/new-update-profile-info', methods=['POST'])
-def new_update_profile_info():
-    """User profile page."""
+@app.route('/update-profile-info.json', methods=['POST'])
+def update_profile_info():
+    """Update user profile info and image."""
 
     username = request.form.get('username')
     favRest = request.form.get('favRest')
@@ -675,9 +670,9 @@ def new_update_profile_info():
     return jsonify(user_dict)
 
 
-@app.route('/users/react-new/<username>')
+@app.route('/users/<username>')
 def new_user_page_react(username):
-    """User profile page."""
+    """User profile page with no lists expanded."""
 
     user = get_user(username)
 
@@ -687,12 +682,12 @@ def new_user_page_react(username):
         'username': username
     }
 
-    return render_template('new-profile-react.html', user_dict=user_dict)
+    return render_template('profile.html', user_dict=user_dict)
 
 
-@app.route('/users/react-new/<username>/<listname>')
+@app.route('/users/<username>/<listname>')
 def new_list_react(username, listname):
-    """React!"""
+    """User profile page with specific list expanded."""
 
     user = get_user(username)
     lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
@@ -704,7 +699,7 @@ def new_list_react(username, listname):
         'username': username
     }
 
-    return render_template('new-profile-react.html', user_dict=user_dict)
+    return render_template('profile.html', user_dict=user_dict)
 
 
 if __name__ == "__main__":

@@ -33,14 +33,14 @@ class ProfilePageContainer extends React.Component {
             this.setState({ isListOpen: false, openListName: '' })
         }
         else {
-            history.pushState(null, null, `/users/react-new/${this.props.username}/${listname.toLowerCase()}`);
+            history.pushState(null, null, `/users/${this.props.username}/${listname.toLowerCase()}`);
             this.fetchListItems(listname, listid);
             this.setState({isListOpen: true, openListId: listid, openListName: listname});
         }
     }
 
     fetchListItems(listname, listid) {
-        fetch('/list-items-react.json?lst_id=' + listid)
+        fetch('/list-items.json?lst_id=' + listid)
         .then((response) => response.json())
         .then((data) => {
             this.setState({listItems: data.restaurants});
@@ -67,15 +67,14 @@ class ProfilePageContainer extends React.Component {
             let payload = new FormData();
             payload.append('list_id', list);
 
-            fetch('/delete-list', {
+            fetch('/delete-list.json', {
                 method: 'POST',
                 body: payload,
                 credentials: 'same-origin'
             }).then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 document.getElementById('msg-para').innerHTML = data;
-                history.pushState(null, null, `/users/react-new/${this.props.username}`);
+                history.pushState(null, null, `/users/${this.props.username}`);
                 this.fetchUserLists();
                 this.setState({isListOpen: false, openListId: null, openListName: ''});
             });
@@ -94,7 +93,7 @@ class ProfilePageContainer extends React.Component {
         payload.append('list_name', listName);
         payload.append('status', listStatus);
 
-        fetch('/add-list-react.json', {
+        fetch('/add-list.json', {
             method: 'POST',
             body: payload,
             credentials: 'same-origin'
@@ -188,7 +187,7 @@ class List extends React.Component {
         payload.append('item_id', item);
         payload.append('lst_id', this.props.listid);
 
-        fetch('/delete-restaurant-react.json', {
+        fetch('/delete-restaurant.json', {
             method: 'POST',
             body: payload,
             credentials: 'same-origin'
@@ -201,12 +200,11 @@ class List extends React.Component {
 
     updateInputValue(evt) {
         this.setState({inputValue: evt.target.value});
-        console.log(this.state.inputValue);
     }
 
     fetchSearchItems(evt) {
         evt.preventDefault();
-        fetch('/search-results-react.json?term=' + this.state.inputValue + '&username=' + this.props.username)
+        fetch('/search-results.json?term=' + this.state.inputValue + '&username=' + this.props.username)
         .then((response) => response.json())
         .then((data) => {
             this.setState({searchItems: data.rests})
@@ -222,7 +220,7 @@ class List extends React.Component {
         payload.append('yelp_id', newRestaurant);
 
 
-        fetch('/add-restaurant-react.json', {
+        fetch('/add-restaurant.json', {
             method: 'POST',
             body: payload,
             credentials: 'same-origin'
@@ -230,7 +228,6 @@ class List extends React.Component {
         .then((response) => response.json()) // resolve is what promise says its going to return
         .then((data) => {
                                         if (data) {
-                                            console.log(data);
                                             let currItems = this.props.listitems;
                                             currItems.push(data);
                                             this.props.onUpdate(currItems);
@@ -239,7 +236,7 @@ class List extends React.Component {
                                         else {
                                             alert('This restaurant already exists on this list!');
                                         }
-                                        fetch('/instagram-react?yelp_id=' + newRestaurant)
+                                        fetch('/instagram-photos?yelp_id=' + newRestaurant)
         });
 
         this.setState({searchItems: [], inputValue: ''});
@@ -252,7 +249,6 @@ class List extends React.Component {
             evt.preventDefault();
         }
         else {
-            console.log(evt.target);
             let listid = evt.target.getAttribute('listid');
             this.props.onDelete(listid);
         }
@@ -317,15 +313,17 @@ class List extends React.Component {
 
         return (
                 <div>
-                    <h2>{this.props.listname}</h2>
+                    <h2 id='list_name'>{this.props.listname}</h2>
                     {sendList}
                     {listControls}
                     {deleteControl}
                     {searchControls}
-                    {this.props.listitems.map( (rest, i) => {
-                        return <ListItem onClick={this.removeItem} editing={this.state.editMode} key={'rest_' + i} yelpid={rest.yelp_id} itemid={rest.item_id}
-                        rest={rest.rest_name} category={rest.yelp_category} url={rest.yelp_url} rest_url={'/restaurants/' + rest.yelp_id} image={rest.image} />
-                    })}
+                    <div id='list-items'>
+                        {this.props.listitems.map( (rest, i) => {
+                            return <ListItem onClick={this.removeItem} editing={this.state.editMode} key={'rest_' + i} yelpid={rest.yelp_id} itemid={rest.item_id}
+                            rest={rest.rest_name} category={rest.yelp_category} url={rest.yelp_url} rest_url={'/restaurants/' + rest.yelp_id} image={rest.image} />
+                        })}
+                    </div>
                 </div>
             )
     }
@@ -382,7 +380,7 @@ class User extends React.Component {
     }
 
     fetchUserInfo() {
-        fetch('/user-info-react.json?username=' + this.props.username)
+        fetch('/user-info.json?username=' + this.props.username)
         .then((response) => response.json())
         .then((data) => {
             this.setState({favDish: data.fav_dish, favCity: data.fav_city, favRest: data.fav_rest});
@@ -445,7 +443,7 @@ class User extends React.Component {
         let header =
                 <div>
                     <p id='msg-para'></p>
-                    <h1>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
+                    <h1 data-username={this.props.username}>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
                     <img className='profile-image' src={this.state.profileImage}/>
                 </div>
 
@@ -519,7 +517,7 @@ class ProfileForm extends React.Component {
 
         $.ajax({
             method: 'POST',
-            url: '/new-update-profile-info',
+            url: '/update-profile-info.json',
             data: payload,
             dataType: 'json',
             cache: false,
@@ -529,7 +527,6 @@ class ProfileForm extends React.Component {
         }).done((data) => {
             if (data) {
                 this.props.onSubmit(data);
-                console.log(data);
             }
             // {fav_city: "Tokyo", fav_dish: "BBQ pork buns", fav_rest: "The Morris", filename: "IMG_5292.jpg"}
         });

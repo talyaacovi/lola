@@ -43,7 +43,7 @@
           {% if not session.get('user_id') %} hidden {% endif %}>
 
           <ul class="nav navbar-nav navbar-right">
-            <li id='profile-page-link'><a id='profile-page' href='/users/react/{{ session.get("username") }}'>Profile</a></li>
+            <li id='profile-page-link'><a id='profile-page' href='/users/{{ session.get("username") }}'>Profile</a></li>
             <!-- <li id='city-page-link'><a href='/cities'>Cities</a></li> -->
             <li id='compare-page-link'><a href='/compare'>Compare</a></li>
             <form action='/logout' id='logout-form' method='POST' class="nav navbar-form navbar-right">
@@ -165,13 +165,13 @@
 
       else if (result == 'False' && window.location.pathname == '/') {
         $('#search-div').hide();
-        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/react/' + usernameForLink + '/favorites">Favorites</a> list to see where locals of these cities are eating!');
+        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where locals of these cities are eating!');
       }
       // document.location.pathname.indexOf("/about/") === 0)
       else if (result == 'False' && window.location.pathname.indexOf('/cities/') === 0) {
         $('#top-restaurants').hide();
         $('#city-locals a').addClass('isDisabled')
-        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/react/' + usernameForLink + '/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
+        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
       }
     }
 
