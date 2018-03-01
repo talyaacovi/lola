@@ -278,7 +278,7 @@ def delete_restaurant():
 
 
 @app.route('/delete-list.json', methods=['POST'])
-def delete_list():
+def delete_user_list():
     """Delete list."""
 
     list_id = request.form.get('list_id')
@@ -679,7 +679,7 @@ def new_user_page_react(username):
     user_dict = {
         'city': user.city.title(),
         'state': user.state,
-        'username': username
+        'username': 12345
     }
 
     return render_template('profile.html', user_dict=user_dict)

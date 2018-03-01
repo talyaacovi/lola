@@ -1,141 +1,8 @@
 "use strict";
 
-
-class ProfilePageContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {userLists: [], isListOpen: false, openListName: '', openListId: null, newListName: '', newListStatus: 'draft', listItems: []};
-        this.fetchUserListsAjax = this.fetchUserListsAjax.bind(this);
-        this.fetchListItemsAjax = this.fetchListItemsAjax.bind(this);
-    }
-
-    componentWillMount() {
-        this.fetchUserListsAjax();
-    }
-
-    // GET USER LISTS USING AJAX
-
-    fetchUserListsAjax() {
-        $.get('/get-lists.json?username=' + this.props.username, (data) => {
-            this.setState({userLists: data.userLists});
-            if (this.props.list_id > 0) {
-                this.setState({isListOpen: true, openListId: this.props.list_id});
-                this.fetchListItemsAjax(this.props.list_id, this.props.listname);
-            }
-        }
-    );
-    }
-
-    fetchListItemsAjax(listid, listname) {
-        $.get('/list-items-react.json?lst_id=' + listid, (data) => {
-            this.setState({listItems: data.restaurants, isListOpen: true, openListId: listid, openListName: listname});
-            history.pushState(null, null, `/users/react/${this.props.username}/${this.state.openListName.toLowerCase()}`);
-        });
-
-
-    }
-
-    updateInputValue(evt) {
-        this.setState({newListName: evt.target.value});
-    }
-
-    createNewList(evt) {
-        evt.preventDefault();
-
-        let listName = this.state.newListName;
-        let listStatus = this.state.newListStatus;
-
-        let payload = new FormData();
-
-        payload.append('list_name', listName);
-        payload.append('status', listStatus);
-
-        fetch('/add-list-react.json', {
-            method: 'POST',
-            body: payload,
-            credentials: 'same-origin'
-        })
-        .then((response) => response.json())
-        .then((data) => {
-                                        if (data) {
-                                            let currLists = this.state.userLists;
-                                            currLists.push(data);
-                                            this.setState({useLists: currLists});
-                                            this.setState({newListName: ''});
-                                        }
-                                        else {
-                                            alert('You already have a list with that name!');
-                                        }
-        });
-    }
-
-
-    // RENDER METHOD
-
-    render() {
-
-        let mainDiv = [];
-
-        for (let i = 0; i < this.state.userLists.length; i++) {
-                    mainDiv.push(<li key={i}><ListLink listid={this.state.userLists[i].list_id} listname={this.state.userLists[i].name} displayListHandler={this.fetchListItemsAjax.bind(this)}/></li>);
-            }
-
-
-        // RENDER HEADING OF PAGE
-
-        let header =
-                <div>
-                    <User username={this.props.username} city={this.props.city} state={this.props.state}/>
-                </div>
-
-        let createListControls;
-
-        // DISPLAY LIST CONTROLS IF USER IS VIEWING THEIR OWN PAGE
-
-        if (viewingOwnPage) {
-            createListControls =
-                    <div>
-                        <div id='create-list'>
-                            <h3>Create a list</h3>
-                            <form className='form-group' onSubmit={this.createNewList.bind(this)}>
-                                <label>Name</label>
-                                <input className='form-control' name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
-                                <button className='btn btn-default'>Create List</button>
-                            </form>
-                        </div>
-                    </div>
-        }
-
-
-        let openListItems
-
-
-        if (this.state.isListOpen) {
-            openListItems =
-                <div>
-                    <List listItems={this.state.listItems} listName={this.state.openListName} username={this.props.username} listid={this.state.openListId} city={this.props.city}/>
-                </div>
-        }
-
-        return (<div>
-                    {header}
-                    <div>
-                        {createListControls}
-                        <h3>Lists</h3>
-                        <ul className='list-unstyled'>
-                            {mainDiv}
-                        </ul>
-                    </div>
-                    <div>
-                        {openListItems}
-                    </div>
-                </div>);
-    }
-}
-
 class ListLink extends React.Component {
-    buttonClickHandler() {
-        this.props.displayListHandler(this.props.listid, this.props.listname);
+    buttonClickHandler(evt) {
+        this.props.onClick(this.props.listname, this.props.listid);
     }
     render() {
         return (<div>
@@ -145,11 +12,81 @@ class ListLink extends React.Component {
     }
 }
 
+class ProfileInfo extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-ReactDOM.render(
-    <ProfilePageContainer list_id={data['list_id']} username={data['username']} listname={data['listname']} city={data['city']} state={data['state']}/>,
-    document.getElementById("root")
-);
+    render() {
+        return (
+                <div className='form-group'>
+                    <ul className='list-unstyled'>
+                        <li data-info='favRest'>Favorite local restaurant: {this.props.favRest}</li>
+                        <li data-info='favDish'>Favorite dish: {this.props.favDish}</li>
+                        <li data-info='favCity'>Favorite food city: {this.props.favCity}</li>
+                    </ul>
+                </div>
+            )
+    }
+}
 
 
+class ProfileForm extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
+    uploadPhoto(evt) {
+        evt.preventDefault();
+
+        let payload = new FormData();
+        // let image = document.querySelector('input[type="file"]').files[0];
+        let image = evt.target.querySelector('input[type="file"]').files[0];
+        let favDish = evt.target.querySelector('input[name="favDish"]').value;
+        let favCity = evt.target.querySelector('input[name="favCity"]').value;
+        let favRest = evt.target.querySelector('input[name="favRest"]').value;
+
+        if (image) {
+            payload.append('image', image);
+        }
+
+        payload.append('favRest', favRest);
+        payload.append('favDish', favDish);
+        payload.append('favCity', favCity);
+        payload.append('username', this.props.username);
+
+        $.ajax({
+            method: 'POST',
+            url: '/update-profile-info.json',
+            data: payload,
+            dataType: 'json',
+            cache: false,
+            processData: false,
+            contentType: false,
+            credentials: 'same-origin'
+        }).done((data) => {
+            if (data) {
+                this.props.onSubmit(data);
+            }
+            // {fav_city: "Tokyo", fav_dish: "BBQ pork buns", fav_rest: "The Morris", filename: "IMG_5292.jpg"}
+        });
+    }
+
+
+    render() {
+        return (
+                <div>
+                    <form onSubmit={this.uploadPhoto.bind(this)} encType='multipart/form-data'>
+                        <input type='file' name='file'></input>
+                        <label>Favorite local restaurant:</label>
+                        <input type="text" className="form-control" name="favRest" defaultValue={this.props.favRest}/>
+                        <label>Favorite dish:</label>
+                        <input type="text" className="form-control" name="favDish" defaultValue={this.props.favDish}/>
+                        <label>Favorite food city:</label>
+                        <input type="text" className="form-control" name="favCity" defaultValue={this.props.favCity}/>
+                        <button className='btn btn-default'>Save Profile</button>
+                    </form>
+                </div>
+            )
+    }
+}

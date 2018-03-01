@@ -9,7 +9,6 @@
 
 $('#email-form-bootstrap').submit(function (evt) {
     evt.preventDefault();
-    debugger;
     let email = evt.target.email.value;
     let from = evt.target.from.value;
     let username = evt.target.username.value;
