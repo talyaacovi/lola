@@ -6,11 +6,11 @@ from flask import Flask, render_template, request, flash, redirect, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug import secure_filename
 from model import *
-from yelp_api import search
+from yelp_api import search, search_hot_new
 from restaurant import *
 from user import *
 from cities import *
-from compare import *
+from discover import *
 from sendgrid import *
 from ig import *
 import fbg as fb
@@ -331,8 +331,8 @@ def do_zipcode_check():
         return 'False'
 
 
-@app.route('/compare')
-def do_comparison():
+@app.route('/discover')
+def do_discover():
     """Show a logged in user the local they are most similar to."""
 
     restaurants = get_user_favorite_restaurants()
@@ -349,8 +349,28 @@ def do_comparison():
         user = User.query.filter_by(user_id=session.get('user_id')).first()
 
         top_catgs = get_user_top_catgs(user.username)
+        top_catgs_test = ['pizza', 'italian', 'burmese', 'newamerican', 'sushi']
 
-        return render_template('compare.html', top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
+        city = user.city
+        state = user.state
+        search_location = city + ', ' + state
+
+        hot_and_new = []
+
+        for catg in top_catgs_test:
+            results = search_hot_new(search_location, catg)
+            for item in results['businesses']:
+                new_dict = {'name': item['name'],
+                            'url': item['url'].split('?')[0],
+                            'image': item['image_url'],
+                            'yelp_id': item['id'],
+                            'address': item['location']['display_address'],
+                            'category': catg}
+                hot_and_new.append(new_dict)
+
+                print item['name'], item['url'].split('?')[0], item['image_url'], item['id'], item['location']['display_address']
+
+        return render_template('discover.html', hot_and_new=hot_and_new, top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')

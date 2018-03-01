@@ -27,12 +27,19 @@
 <h2>These are the top categories in your favorites list:</h2>
     <ol>
         {% for catg in top_catgs %}
-            <li>{{ catg[0] }}</li>
+            <li>{{ catg }}</li>
+        {% endfor %}
+    </ol>
+
+<h2>Here are some hot new restaurants in your top categories:</h2>
+    <ol>
+        {% for rest in hot_and_new %}
+            <li>{{ rest['name'] }} <span style="font-size: 10px">({{ rest['category'] }})</span></li>
         {% endfor %}
     </ol>
 
 <script>
-    let idOfOptionToBold = '#compare-page-link';
+    let idOfOptionToBold = '#discover-page-link';
 </script>
 
 {% endblock %}

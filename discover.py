@@ -22,7 +22,18 @@ def get_user_favorite_restaurants():
 def get_user_top_catgs(username):
     """stuff"""
 
-    fav_catg_lst = db.session.query(Restaurant.yelp_category).join(ListItem).join(List).join(User).filter(User.username == username, List.category_id == 1).group_by(Restaurant.yelp_category).order_by(db.desc(func.count(Restaurant.yelp_category))).all()
+    fav_catg_lst = (db.session.query(Restaurant.yelp_category)
+                    .join(ListItem)
+                    .join(List)
+                    .join(User)
+                    .filter(User.username == username,
+                            List.category_id == 1)
+                    .group_by(Restaurant.yelp_category)
+                    .order_by(db.desc(func.count(Restaurant.yelp_category)))
+                    .limit(5)
+                    .all())
+
+    fav_catg_lst = [x[0] for x in fav_catg_lst]
 
     return fav_catg_lst
 

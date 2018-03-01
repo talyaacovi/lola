@@ -12,6 +12,11 @@ class ListLink extends React.Component {
     }
 }
 
+
+const divStyle = {
+  fontWeight: 'bold'
+};
+
 class ProfileInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -21,9 +26,9 @@ class ProfileInfo extends React.Component {
         return (
                 <div className='form-group'>
                     <ul className='list-unstyled'>
-                        <li data-info='favRest'>Favorite local restaurant: {this.props.favRest}</li>
-                        <li data-info='favDish'>Favorite dish: {this.props.favDish}</li>
-                        <li data-info='favCity'>Favorite food city: {this.props.favCity}</li>
+                        <li data-info='favRest'><span style={divStyle}>Favorite local restaurant:</span> {this.props.favRest}</li>
+                        <li data-info='favDish'><span style={divStyle}>Favorite dish:</span> {this.props.favDish}</li>
+                        <li data-info='favCity'><span style={divStyle}>Favorite food city:</span> {this.props.favCity}</li>
                     </ul>
                 </div>
             )

@@ -10,8 +10,6 @@ SEARCH_PATH = '/v3/businesses/search'
 BUSINESS_PATH = '/v3/businesses/'
 
 
-DEFAULT_TERM = 'pizza'
-DEFAULT_LOCATION = 'San Francisco, CA'
 SEARCH_LIMIT = 5
 
 
@@ -57,7 +55,28 @@ def search(term, location):
     url_params = {
         'term': term.replace(' ', '+'),
         'location': location.replace(' ', '+'),
-        'limit': SEARCH_LIMIT
+        'limit': SEARCH_LIMIT,
+        'categories': 'restaurants'
+    }
+    return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
+
+
+def search_hot_new(location, categories):
+    """Query the Search API by a search term and location.
+    Args:
+        term (str): The search term passed to the API.
+        location (str): The search location passed to the API.
+    Returns:
+        dict: The JSON response from the request.
+    """
+
+    api_key = API_KEY
+
+    url_params = {
+        'location': location.replace(' ', '+'),
+        'limit': 2,
+        'attributes': 'hot_and_new',
+        'categories': categories
     }
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 
