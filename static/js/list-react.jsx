@@ -13,8 +13,6 @@ class List extends React.Component {
         }
     }
 
-
-
     toggleEditMode() {
         this.setState(prevState => ({editMode: !prevState.editMode}));
 
@@ -50,8 +48,6 @@ class List extends React.Component {
         });
     }
 
-
-
     addRestaurant(newRestaurant) {
 
         let payload = new FormData();
@@ -64,7 +60,7 @@ class List extends React.Component {
             body: payload,
             credentials: 'same-origin'
         })
-        .then((response) => response.json()) // resolve is what promise says its going to return
+        .then((response) => response.json())
         .then((data) => {
                                         if (data) {
                                             let currItems = this.props.listitems;
@@ -99,17 +95,14 @@ class List extends React.Component {
         let buttonText;
         let searchControls;
 
-
-
-
         if (this.state.editMode === true) {
             buttonText = 'Save List';
             searchControls =
                     <div>
                         <div id='search-restaurants'>
-                            <h3>Search for a restaurant you love in {this.props.city}!</h3>
+                            <h3>Search for places in {this.props.city}:</h3>
                             <form className='form-group' onSubmit={this.fetchSearchItems.bind(this)}>
-                                <input className='form-control' name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
+                                <input className='form-control profile-form' name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
                                 <button className='btn btn-default'>Search</button>
                             </form>
                         </div>
@@ -124,8 +117,6 @@ class List extends React.Component {
             buttonText = 'Edit List';
         }
 
-
-
         if (viewingOwnPage) {
              listControls =
                         <div id='edit-list'>
@@ -133,17 +124,14 @@ class List extends React.Component {
                         </div>
         }
 
-
         let deleteControl;
 
-        // if (this.state.editMode && this.state.listName != 'favorites') {
         if (this.state.editMode === true && this.props.listname != 'Favorites') {
             deleteControl =
                         <div id='del-list'>
                                 <button onClick={this.deleteListHandler.bind(this)} listid={this.props.listid} className='btn btn-default'>Delete List</button>
                         </div>
         }
-
 
         let sendList =
                 <div id='email-list'>

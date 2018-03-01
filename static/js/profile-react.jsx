@@ -30,7 +30,6 @@ class ProfileInfo extends React.Component {
     }
 }
 
-
 class ProfileForm extends React.Component {
     constructor(props) {
         super(props);
@@ -40,7 +39,6 @@ class ProfileForm extends React.Component {
         evt.preventDefault();
 
         let payload = new FormData();
-        // let image = document.querySelector('input[type="file"]').files[0];
         let image = evt.target.querySelector('input[type="file"]').files[0];
         let favDish = evt.target.querySelector('input[name="favDish"]').value;
         let favCity = evt.target.querySelector('input[name="favCity"]').value;
@@ -68,22 +66,20 @@ class ProfileForm extends React.Component {
             if (data) {
                 this.props.onSubmit(data);
             }
-            // {fav_city: "Tokyo", fav_dish: "BBQ pork buns", fav_rest: "The Morris", filename: "IMG_5292.jpg"}
         });
     }
-
 
     render() {
         return (
                 <div>
                     <form onSubmit={this.uploadPhoto.bind(this)} encType='multipart/form-data'>
-                        <input type='file' name='file'></input>
+                        <input className='profile-form' type='file' name='file'></input>
                         <label>Favorite local restaurant:</label>
-                        <input type="text" className="form-control" name="favRest" defaultValue={this.props.favRest}/>
+                        <input type="text" className="form-control profile-form" name="favRest" defaultValue={this.props.favRest}/>
                         <label>Favorite dish:</label>
-                        <input type="text" className="form-control" name="favDish" defaultValue={this.props.favDish}/>
+                        <input type="text" className="form-control profile-form" name="favDish" defaultValue={this.props.favDish}/>
                         <label>Favorite food city:</label>
-                        <input type="text" className="form-control" name="favCity" defaultValue={this.props.favCity}/>
+                        <input type="text" className="form-control profile-form" name="favCity" defaultValue={this.props.favCity}/>
                         <button className='btn btn-default'>Save Profile</button>
                     </form>
                 </div>

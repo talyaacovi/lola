@@ -27,8 +27,6 @@ class ProfilePageContainer extends React.Component {
         });
     }
 
-
-
     handleClick(listname, listid) {
         if (this.state.isListOpen === true && this.state.openListName === listname) {
             this.setState({ isListOpen: false, openListName: '' })
@@ -79,9 +77,7 @@ class ProfilePageContainer extends React.Component {
                 this.fetchUserLists();
                 this.setState({isListOpen: false, openListId: null, openListName: ''});
             });
-
     }
-
 
     createNewList(evt) {
         evt.preventDefault();
@@ -101,15 +97,15 @@ class ProfilePageContainer extends React.Component {
         })
         .then((response) => response.json())
         .then((data) => {
-                                        if (data) {
-                                            console.log(data);
-                                            let currLists = this.state.userLists;
-                                            currLists.push(data);
-                                            this.setState({listItems: [], userLists: currLists, newListName: '', openListName: data.name, openListId: data.list_id});
-                                        }
-                                        else {
-                                            alert('You already have a list with that name!');
-                                        }
+                        if (data) {
+                            let currLists = this.state.userLists;
+                            currLists.push(data);
+                            this.setState({isListOpen: true, listItems: [], userLists: currLists, newListName: '', openListName: data.name, openListId: data.list_id, createList: false});
+                            history.pushState(null, null, `/users/${this.props.username}/${data.name.toLowerCase()}`);
+                        }
+                        else {
+                            alert('You already have a list with that name!');
+                        }
         });
     }
 
@@ -126,8 +122,8 @@ class ProfilePageContainer extends React.Component {
                         <div id='create-list'>
                             <form className='form-group' onSubmit={this.createNewList.bind(this)}>
                                 <label>Name</label>
-                                <input className='form-control' name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
-                                <button onClick={this.displayCreate} className='btn btn-default'>Submit</button>
+                                <input className='form-control profile-form' name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
+                                <button className='btn btn-default'>Submit</button>
                             </form>
                         </div>
         }
@@ -153,7 +149,6 @@ class ProfilePageContainer extends React.Component {
             </div>
             )
     };
-
 }
 
 let isListOpen;

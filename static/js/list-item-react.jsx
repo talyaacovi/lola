@@ -11,7 +11,6 @@ class ListItem extends React.Component {
         this.props.onClick(item)
     }
 
-
     render() {
         let delButton;
         if (this.props.editing === true) {

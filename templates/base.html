@@ -130,14 +130,15 @@
   </div>
 </div>
 
+<div class='container-fluid'>
+  {% for flash in get_flashed_messages() %}
+    {{ flash }}
+  {% endfor %}
 
-{% for flash in get_flashed_messages() %}
-  {{ flash }}
-{% endfor %}
-
-{% block content %}
-  Put your body here.
-{% endblock %}
+  {% block content %}
+    Put your body here.
+  {% endblock %}
+</div>
 
 <script src='/static/js/logout.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>

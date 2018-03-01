@@ -7,22 +7,29 @@
 <img class='profile-image' src='/static/uploads/{{ similar_image }}'/>
 <img class='profile-image' src='/static/uploads/{{ user_image }}'/>
 
-<p>These are the restaurants you have in common:</p>
+<h3>These are the restaurants you have in common:</h3>
     <ol>
         {% for rests in rests_in_common %}
-            <li>{{ rests.name }}</li>
+            <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
         {% endfor %}
     </ol>
 
 
 {% if not_common %}
-    <p>These are the restaurants that {{ most_similar_user }} likes that you should check out!</p>
+    <h3>These are the restaurants that {{ most_similar_user }} likes that you should check out!</h3>
         <ol>
             {% for rests in not_common %}
-                <li>{{ rests.name }}</li>
+                <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
             {% endfor %}
         </ol>
 {% endif %}
+
+<h2>These are the top categories in your favorites list:</h2>
+    <ol>
+        {% for catg in top_catgs %}
+            <li>{{ catg[0] }}</li>
+        {% endfor %}
+    </ol>
 
 <script>
     let idOfOptionToBold = '#compare-page-link';

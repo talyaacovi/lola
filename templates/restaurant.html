@@ -1,38 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<p id='msg-para'></p>
+<div class='container-fluid'>
+        <p id='msg-para'></p>
 
+        <div>
+            <h1>{{ restaurant.name }}</h1>
+        </div>
+
+        {% if ig_photos %}
+            {% for photo in ig_photos %}
+                <div class='ig-photo col-xs-12 col-md-6 col-lg-4'>
+
+                    {% if photo.url[-3:] == 'mp4' %}
+                        <video width='400' height='400' controls>
+                            <source src='{{ photo.url }}' type='video/mp4'>
+                             Your browser does not support the video tag.
+                        </video>
+                    {% else %}
+                        <img src='{{ photo.url }}'/>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+        {% else %}
+            {% for photo in yelp_photos %}
+                <div class='yelp-photo'>
+                        <img src='{{ photo }}'/>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if ig_photos %}
+            <h2><a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">See More</a></h2>
+        {% endif %}
 <div>
-    <h1>{{ restaurant.name }}</h1>
-</div>
-
-{% if ig_photos %}
-    {% for photo in ig_photos %}
-        <div class='ig-photo'>
-
-            {% if photo.url[-3:] == 'mp4' %}
-                <video width='400' height='400' controls>
-                    <source src='{{ photo.url }}' type='video/mp4'>
-                     Your browser does not support the video tag.
-                </video>
-            {% else %}
-                <img src='{{ photo.url }}'/>
-            {% endif %}
-
-        </div>
-    {% endfor %}
-{% else %}
-    {% for photo in yelp_photos %}
-        <div class='yelp-photo'>
-                <img src='{{ photo }}'/>
-        </div>
-    {% endfor %}
-{% endif %}
-
-{% if ig_photos %}
-    <h2><a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">See More</a></h2>
-{% endif %}
 
 <script>
     let idOfOptionToBold = '';

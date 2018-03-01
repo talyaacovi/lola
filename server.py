@@ -348,7 +348,9 @@ def do_comparison():
 
         user = User.query.filter_by(user_id=session.get('user_id')).first()
 
-        return render_template('compare.html', user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
+        top_catgs = get_user_top_catgs(user.username)
+
+        return render_template('compare.html', top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
@@ -679,7 +681,7 @@ def new_user_page_react(username):
     user_dict = {
         'city': user.city.title(),
         'state': user.state,
-        'username': 12345
+        'username': username
     }
 
     return render_template('profile.html', user_dict=user_dict)

@@ -25,8 +25,6 @@ class User extends React.Component {
         this.setState({newListName: evt.target.value});
     }
 
-
-
     fetchUserProfileImage() {
         fetch('/user-profile-image.json?username=' + this.props.username)
         .then((response) => response.json())
@@ -37,7 +35,6 @@ class User extends React.Component {
 
     toggleEditMode(evt) {
         this.setState(prevState => ({editingProfile: !prevState.editingProfile}));
-
     }
 
     updatePhoto(data) {
@@ -52,7 +49,6 @@ class User extends React.Component {
         let editProfileForm;
 
         if (this.state.editingProfile) {
-            // buttonText = 'Save Profile';
             editProfileForm = <ProfileForm profileImage={this.state.profileImage} favDish={this.state.favDish} favRest={this.state.favRest} favCity={this.state.favCity} onSubmit={this.updatePhoto.bind(this)} username={this.props.username}/>
         }
 
@@ -60,8 +56,6 @@ class User extends React.Component {
             buttonText = 'Edit Profile';
             profileInfo = <ProfileInfo favRest={this.state.favRest} favDish={this.state.favDish} favCity={this.state.favCity}/>
         }
-
-
 
         if (viewingOwnPage && !this.state.editingProfile) {
             editControls =
@@ -71,7 +65,6 @@ class User extends React.Component {
                         </div>
                     </div>
         }
-
 
         let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
@@ -90,5 +83,4 @@ class User extends React.Component {
             </div>
         )
     }
-
 }

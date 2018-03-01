@@ -2,6 +2,7 @@
 
 from model import *
 from flask import session
+from sqlalchemy import func
 
 
 def get_user_favorite_restaurants():
@@ -16,6 +17,14 @@ def get_user_favorite_restaurants():
                       .group_by(Restaurant.rest_id)
                       .all())
     return my_restaurants
+
+
+def get_user_top_catgs(username):
+    """stuff"""
+
+    fav_catg_lst = db.session.query(Restaurant.yelp_category).join(ListItem).join(List).join(User).filter(User.username == username, List.category_id == 1).group_by(Restaurant.yelp_category).order_by(db.desc(func.count(Restaurant.yelp_category))).all()
+
+    return fav_catg_lst
 
 
 def get_most_similar_user(my_restaurants):
