@@ -104,3 +104,7 @@ def get_restaurants_user_added(username):
     return all_rests
 
 
+def check_if_rest_in_db(yelp_id):
+    """check if rest already in DB."""
+
+    return Restaurant.query.filter_by(yelp_id=yelp_id).first()

@@ -365,6 +365,23 @@ def do_discover():
 
         for item in results['businesses']:
             if item['id'] not in rests_user_has_added:
+                # rest_obj = check_if_rest_in_db(item['id'])
+                    # if rest_obj:
+                        # ig_loc_id = rest_obj.ig_loc_id
+                    # elif rest_obj and not rest_obj.ig_loc_id:
+                        # ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
+                        # rest_obj.ig_loc_id = ig_loc_id
+                        # db.session.commit()
+                    # else:
+                        # ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
+                        # restaurant = Restaurant(name=item['name'], lat=item['coordinates']['latitude'], lng=item['coordinates']['longitude'], yelp_id=item['id'],
+                        #                         yelp_url=item['url'].split('?')[0], yelp_category=item['categories'][0]['title'],
+                        #                         yelp_alias=item['categories'][0]['alias'], yelp_photo=item['image_url'],
+                        #                         address=item['location']['address1'], city=item['location']['city'], state=['location']['state'])
+
+                        # db.session.add(restaurant)
+                        # db.session.commit()
+                # finally, create new_dict for that restaurant and add to list
                 ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
                 new_dict = {'name': item['name'],
                             'url': item['url'].split('?')[0],
