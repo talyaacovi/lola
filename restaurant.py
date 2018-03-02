@@ -23,6 +23,7 @@ def add_new_restaurant(yelp_id):
         lng = results['coordinates']['longitude']
         yelp_url = results['url'].split('?')[0]
         yelp_category = results['categories'][0]['title']
+        yelp_alias = results['categories'][0]['alias']
         yelp_photo = results['image_url']
         address = results['location']['address1']
         city = results['location']['city']
@@ -30,8 +31,8 @@ def add_new_restaurant(yelp_id):
 
         restaurant = Restaurant(name=name, lat=lat, lng=lng, yelp_id=yelp_id,
                                 yelp_url=yelp_url, yelp_category=yelp_category,
-                                yelp_photo=yelp_photo, address=address, city=city,
-                                state=state)
+                                yelp_alias=yelp_alias, yelp_photo=yelp_photo,
+                                address=address, city=city, state=state)
 
         db.session.add(restaurant)
         db.session.commit()

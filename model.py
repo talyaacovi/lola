@@ -157,8 +157,6 @@ class Restaurant(db.Model):
     name = db.Column(db.String(128), nullable=False)
     lat = db.Column(db.String(128), nullable=False)
     lng = db.Column(db.String(128), nullable=False)
-    # yelp_rating = db.Column(db.Integer)
-    # yelp_price = db.Column(db.String(64))
     yelp_id = db.Column(db.String(128))
     yelp_url = db.Column(db.String(256))
     yelp_category = db.Column(db.String(128))
@@ -166,8 +164,8 @@ class Restaurant(db.Model):
     address = db.Column(db.String(128))
     city = db.Column(db.String(128))
     state = db.Column(db.String(128))
-
     ig_loc_id = db.Column(db.String(256))
+    yelp_alias = db.Column(db.String(128))
 
     def to_dict(self):
         """Return dict of list item."""
