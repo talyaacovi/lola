@@ -87,3 +87,20 @@ def get_common_rests(rests_in_common_ids):
         rest_objects.append(Restaurant.query.filter_by(rest_id=rest).first())
 
     return rest_objects
+
+
+def get_restaurants_user_added(username):
+    """get all yelp ids for restaurants user has added to any list."""
+
+    all_rests = (db.session.query(Restaurant.yelp_id)
+                           .join(ListItem)
+                           .join(List)
+                           .join(User)
+                           .filter(User.username == username)
+                           .all())
+
+    all_rests = set([item[0] for item in all_rests])
+
+    return all_rests
+
+

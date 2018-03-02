@@ -74,7 +74,7 @@ def search_hot_new(location, categories):
 
     url_params = {
         'location': location.replace(' ', '+'),
-        'limit': 2,
+        'limit': 10,
         'attributes': 'hot_and_new',
         'categories': categories
     }

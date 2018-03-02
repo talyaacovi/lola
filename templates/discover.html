@@ -35,9 +35,9 @@
     <ol>
         {% for rest in hot_and_new %}
             {% if rest['ig_loc_id'] %}
-                <li><a href="https://www.instagram.com/explore/locations/{{ rest['ig_loc_id'] }}/">{{ rest['name'] }}</a> <span style="font-size: 10px">({{ rest['category'] }})</span></li>
+                <li><a href="https://www.instagram.com/explore/locations/{{ rest['ig_loc_id'] }}/">{{ rest['name'] }}</a></li>
             {% else %}
-                <li>{{ rest['name'] }} <span style="font-size: 10px">({{ rest['category'] }})</span></li>
+                <li>{{ rest['name'] }}</li>
             {% endif %}
         {% endfor %}
     </ol>

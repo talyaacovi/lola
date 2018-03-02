@@ -349,29 +349,47 @@ def do_discover():
         user = User.query.filter_by(user_id=session.get('user_id')).first()
 
         top_catgs = get_user_top_catgs(user.username)
-        # catgs, aliases = zip(*top_catgs)
-        # top_catgs_test = ['pizza', 'italian', 'burmese', 'newamerican', 'sushi']
+
+        catgs, aliases = zip(*top_catgs)
+        aliases = str(",".join(aliases))
 
         city = user.city
         state = user.state
         search_location = city + ', ' + state
 
+        results = search_hot_new(search_location, aliases)
+
+        rests_user_has_added = get_restaurants_user_added(user.username)
+
         hot_and_new = []
 
-        for item in top_catgs:
-            catg, alias = item
-            results = search_hot_new(search_location, alias)
-            for item in results['businesses']:
+        for item in results['businesses']:
+            if item['id'] not in rests_user_has_added:
                 ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
                 new_dict = {'name': item['name'],
                             'url': item['url'].split('?')[0],
                             'image': item['image_url'],
                             'yelp_id': item['id'],
                             'address': item['location']['display_address'],
-                            'category': catg,
+                            # 'category': item['categories'][0]['title'],
                             'ig_loc_id': ig_loc_id}
 
                 hot_and_new.append(new_dict)
+
+        # for item in top_catgs:
+        #     catg, alias = item
+        #     results = search_hot_new(search_location, alias)
+        #     for item in results['businesses']:
+        #         ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
+        #         new_dict = {'name': item['name'],
+        #                     'url': item['url'].split('?')[0],
+        #                     'image': item['image_url'],
+        #                     'yelp_id': item['id'],
+        #                     'address': item['location']['display_address'],
+        #                     'category': catg,
+        #                     'ig_loc_id': ig_loc_id}
+
+        #         hot_and_new.append(new_dict)
 
         return render_template('discover.html', hot_and_new=hot_and_new, top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
 
