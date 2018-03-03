@@ -1,49 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<p id='msg-para'></p>
-<h2>You are most similar to {{ most_similar_user }}.</h2>
+<div class='row'>
+    <p id='msg-para'></p>
+    <h2>You are most similar to {{ most_similar_user }}.</h2>
 
-<img class='profile-image' src='/static/uploads/{{ similar_image }}'/>
-<img class='profile-image' src='/static/uploads/{{ user_image }}'/>
+    <img class='profile-image' src='/static/uploads/{{ similar_image }}'/>
+    <img class='profile-image' src='/static/uploads/{{ user_image }}'/>
 
-<h3>These are the restaurants you have in common:</h3>
-    <ol>
-        {% for rests in rests_in_common %}
-            <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
-        {% endfor %}
-    </ol>
-
-
-{% if not_common %}
-    <h3>These are the restaurants that {{ most_similar_user }} likes that you should check out!</h3>
+    <h3>These are the restaurants you have in common:</h3>
         <ol>
-            {% for rests in not_common %}
+            {% for rests in rests_in_common %}
                 <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
             {% endfor %}
         </ol>
-{% endif %}
 
-<h2>These are the top categories in your favorites list:</h2>
-    <ol>
-        {% for catg in top_catgs %}
-            <li>{{ catg[0] }}</li>
-        {% endfor %}
-    </ol>
 
-<h2>Here are some new restaurants in your top categories:</h2>
-    <ol>
-        {% for rest in hot_and_new %}
-            {% if rest['ig_loc_id'] %}
-                <li><a href="https://www.instagram.com/explore/locations/{{ rest['ig_loc_id'] }}/">{{ rest['name'] }}</a></li>
-            {% else %}
-                <li>{{ rest['name'] }}</li>
-            {% endif %}
-        {% endfor %}
-    </ol>
+    {% if not_common %}
+        <h3>These are the restaurants that {{ most_similar_user }} likes that you should check out!</h3>
+            <ol>
+                {% for rests in not_common %}
+                    <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
+                {% endfor %}
+            </ol>
+    {% endif %}
+
+    <h2>These are the top categories in your favorites list:</h2>
+        <ol>
+            {% for catg in top_catgs %}
+                <li>{{ catg[0] }}</li>
+            {% endfor %}
+        </ol>
+
+    <h2>Here are some new restaurants in your top categories:</h2>
+        <ol id="hot-new-rests" data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>
+            {% for rest in hot_and_new %}
+                {% if rest['ig_loc_id'] %}
+                    <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-url='{{ rest["yelp_url"] }}' data-ig='{{ rest["ig_loc_id"] }}'><a href="https://www.instagram.com/explore/locations/{{ rest['ig_loc_id'] }}/" target="_blank">{{ rest['rest_name'] }}</a></li>
+                {% else %}
+                    <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-url='{{ rest["yelp_url"] }}'><a href="{{ rest['yelp_url'] }}/" target="_blank">{{ rest['rest_name'] }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+</div>
+
+<div class='row' id='discover-map'></div>
 
 <script>
     let idOfOptionToBold = '#discover-page-link';
 </script>
+
+<script src="/static/js/city-mapstyles.js"></script>
+<script src='/static/js/discover-map.js'></script>
 
 {% endblock %}

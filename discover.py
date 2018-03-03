@@ -90,7 +90,7 @@ def get_common_rests(rests_in_common_ids):
 
 
 def get_restaurants_user_added(username):
-    """get all yelp ids for restaurants user has added to any list."""
+    """Get all Yelp ids for restaurants user has added to any list."""
 
     all_rests = (db.session.query(Restaurant.yelp_id)
                            .join(ListItem)
@@ -105,6 +105,6 @@ def get_restaurants_user_added(username):
 
 
 def check_if_rest_in_db(yelp_id):
-    """check if rest already in DB."""
+    """Check if restaurant already in DB."""
 
     return Restaurant.query.filter_by(yelp_id=yelp_id).first()

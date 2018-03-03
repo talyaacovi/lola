@@ -2,6 +2,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+from unicodedata import normalize
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -25,8 +26,6 @@ class User(db.Model):
     city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(64), nullable=False)
     zipcode = db.Column(db.String(64), nullable=False)
-    # profile_filename = db.Column(db.String(128))
-    # profile_url = db.Column(db.String(128))
 
     def __repr__(self):
         """Provide helpful representation of user."""
@@ -38,7 +37,7 @@ class User(db.Model):
 
 
 class Profile(db.Model):
-    """Users that have created an account for the local favorites site."""
+    """Profile image and information for Users."""
 
     __tablename__ = 'profiles'
 
@@ -179,12 +178,14 @@ class Restaurant(db.Model):
                 'lng': self.lng,
                 'address': self.address,
                 'city': self.city,
-                'state': self.state}
+                'state': self.state,
+                'ig_loc_id': self.ig_loc_id,
+                'yelp_alias': self.yelp_alias}
 
     def __repr__(self):
         """Provide helpful representation of restaurant."""
 
-        return "<Rest id={} name={}>".format(self.rest_id, self.name)
+        return "<Rest id={} name={}>".format(self.rest_id, normalize('NFKD', self.name).encode('ascii', 'ignore'))
 
 
 class Zipcode(db.Model):

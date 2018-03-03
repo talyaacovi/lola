@@ -27,10 +27,6 @@
     display: none;
 }
 
-/*.form-group > form {
-  width: 25%;
-}*/
-
 .not-active {
   pointer-events: none;
   cursor: default;
@@ -42,7 +38,7 @@
     padding: 0 0 10px 0;
 }
 
-.yelp-photo{
+.yelp-photo {
   display: inline;
 }
 
@@ -84,6 +80,10 @@ body, html, .container-fluid {
     height: 500px;
 }
 
+#discover-map {
+    height: 400px;
+}
+
 #view-controls {
   padding-left: 0;
   padding-bottom: 10px;
@@ -123,4 +123,11 @@ input.profile-form {
 
 .profile-image {
   height: 300px;
+}
+
+/*STYLES FOR DISCOVER PAGE*/
+
+#hot-new-rests > li {
+ float: left;
+ clear: both;
 }

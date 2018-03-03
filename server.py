@@ -25,7 +25,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
-# Can comment out below line to avoid jinja errors if variable not defined
 app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
@@ -89,7 +88,7 @@ def signup_user():
 
     set_session_info(user)
 
-    # create default Favorites list
+    # create default 'Favorites' list
     add_fav_list(user.user_id, 'Favorites', 'draft', 1)
 
     # create default profile image
@@ -122,30 +121,6 @@ def do_check_email():
         return 'False'
 
 
-# @app.route('/users/<username>')
-# def user_page(username):
-#     """User profile page."""
-
-#     user = get_user(username)
-
-#     return render_template('profile.html', city=user.city.title(), lsts=user.lists, user=user)
-
-
-# @app.route('/users/react/<username>')
-# def user_page_react(username):
-#     """User profile page."""
-
-#     user = get_user(username)
-
-#     user_dict = {
-#         'city': user.city.title(),
-#         'state': user.state,
-#         'username': username
-#     }
-
-#     return render_template('profile-react.html', user_dict=user_dict)
-
-
 @app.route('/get-lists.json')
 def get_user_lists():
     """Get lists for a user to display on their profile page."""
@@ -164,24 +139,6 @@ def get_user_lists():
 
     # return dictionary of list objects.
     return jsonify(userDict)
-
-
-# @app.route('/add-list', methods=['POST'])
-# def add_new_list():
-#     """Add list to database in draft status."""
-
-#     name = request.form.get('list-name')
-#     status = request.form.get('status')
-#     user_id = session['user_id']
-
-#     lst = add_list(name, status, user_id)
-
-#     if lst:
-#         return redirect('/users/{}/react/lists/{}'.format(lst.user.username, lst.name))
-
-#     else:
-#         flash('You already have a list with this name!')
-#         return redirect('/users/{}'.format(session['username']))
 
 
 @app.route('/add-list.json', methods=['POST'])
@@ -203,55 +160,6 @@ def add_new_list():
         return 'null'
 
 
-# @app.route('/search-results.json')
-# def do_search():
-#     """Get search results using Yelp API."""
-
-#     search_term = request.args.get('term')
-#     city = session['city'].title()
-#     state = session['state'].title()
-#     search_location = city + ', ' + state
-
-#     results = search(search_term, search_location)
-#     business_results = results['businesses']
-
-#     results_dict = {'rests': []}
-
-#     for item in business_results:
-#         results_dict['rests'].append({'name': item['name'],
-#                                       'id': item['id'],
-#                                       'location': item['location']['display_address'][0]})
-
-#     return jsonify(results_dict)
-
-
-# @app.route('/add-restaurant.json', methods=['POST'])
-# def add_restaurant():
-#     """Add Restaurant to Database."""
-
-#     lst_id = request.form.get('list')
-#     yelp_id = request.form.get('id')
-
-#     rest_id = add_new_restaurant(yelp_id)
-
-#     lst_item = add_list_item(rest_id, lst_id, session['user_id'])
-
-#     if lst_item:
-
-#         results_dict = {}
-#         results_dict['name'] = lst_item.restaurant.name
-#         results_dict['yelp_id'] = lst_item.restaurant.yelp_id
-#         results_dict['item_id'] = lst_item.item_id
-#         results_dict['yelp_category'] = lst_item.restaurant.yelp_category
-#         results_dict['yelp_url'] = lst_item.restaurant.yelp_url
-#         results_dict['yelp_photo'] = lst_item.restaurant.yelp_photo
-
-#         return jsonify(results_dict)
-
-#     else:
-#         return ''
-
-
 @app.route('/del-restaurant.json', methods=['POST'])
 def delete_restaurant():
     """Remove restaurant from a list."""
@@ -264,17 +172,6 @@ def delete_restaurant():
     restaurant_dict['yelp_id'] = restaurant.yelp_id
 
     return jsonify(restaurant_dict)
-
-
-# @app.route('/users/<username>/lists/<listname>')
-# def display_list(username, listname):
-#     """Display list."""
-
-#     lst = get_list(username, listname)
-
-#     lst_items = get_list_items(lst.list_id)
-
-#     return render_template('list.html', lst=lst, lst_items=lst_items, username=username)
 
 
 @app.route('/delete-list.json', methods=['POST'])
@@ -364,8 +261,10 @@ def do_discover():
         hot_and_new = []
 
         for item in results['businesses']:
+            print item['id']
             if item['id'] not in rests_user_has_added:
                 rest_obj = check_if_rest_in_db(item['id'])
+                print rest_obj
                 if rest_obj and rest_obj.ig_loc_id:
                     print 'hot and new restaurant exists with a location ID'
                     ig_loc_id = rest_obj.ig_loc_id
@@ -375,80 +274,36 @@ def do_discover():
                     rest_obj.ig_loc_id = ig_loc_id
                     db.session.commit()
                 else:
+                    print 'hot and new restaurant not in DB, have to add'
                     ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
-                    restaurant = Restaurant(name=item['name'],
-                                            lat=item['coordinates']['latitude'],
-                                            lng=item['coordinates']['longitude'],
-                                            yelp_id=item['id'],
-                                            yelp_url=item['url'].split('?')[0],
-                                            yelp_category=item['categories'][0]['title'],
-                                            yelp_alias=item['categories'][0]['alias'],
-                                            yelp_photo=item['image_url'],
-                                            address=item['location']['address1'],
-                                            city=item['location']['city'],
-                                            state=item['location']['state'],
-                                            ig_loc_id=ig_loc_id)
+                    rest_obj = Restaurant(name=item['name'],
+                                          lat=item['coordinates']['latitude'],
+                                          lng=item['coordinates']['longitude'],
+                                          yelp_id=item['id'],
+                                          yelp_url=item['url'].split('?')[0],
+                                          yelp_category=item['categories'][0]['title'],
+                                          yelp_alias=item['categories'][0]['alias'],
+                                          yelp_photo=item['image_url'],
+                                          address=item['location']['address1'],
+                                          city=item['location']['city'],
+                                          state=item['location']['state'],
+                                          ig_loc_id=ig_loc_id)
 
-                    db.session.add(restaurant)
+                    db.session.add(rest_obj)
                     db.session.commit()
-                # finally, create new_dict for that restaurant and add to list
-                # ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
-                new_dict = {'name': item['name'],
-                            'url': item['url'].split('?')[0],
-                            'image': item['image_url'],
-                            'yelp_id': item['id'],
-                            'address': item['location']['display_address'],
-                            # 'category': item['categories'][0]['title'],
-                            'ig_loc_id': ig_loc_id}
+
+                new_dict = rest_obj.to_dict()
+                print new_dict
 
                 hot_and_new.append(new_dict)
 
-        # for item in top_catgs:
-        #     catg, alias = item
-        #     results = search_hot_new(search_location, alias)
-        #     for item in results['businesses']:
-        #         ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
-        #         new_dict = {'name': item['name'],
-        #                     'url': item['url'].split('?')[0],
-        #                     'image': item['image_url'],
-        #                     'yelp_id': item['id'],
-        #                     'address': item['location']['display_address'],
-        #                     'category': catg,
-        #                     'ig_loc_id': ig_loc_id}
+        location = get_city_lat_lng(user.state, user.city)
 
-        #         hot_and_new.append(new_dict)
-
-        return render_template('discover.html', hot_and_new=hot_and_new, top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
+        return render_template('discover.html', location=location, hot_and_new=hot_and_new, top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')
         return redirect('/users/{}/favorites'.format(session['username']))
-
-
-# @app.route('/users/<username>/react-lists/<listname>')
-# def list_react(username, listname):
-#     """React!"""
-
-#     lst = get_list(username, listname)
-
-#     return render_template('list-react.html', lst_id=lst.list_id, username=username, lst=lst)
-
-
-# @app.route('/users/react/<username>/<listname>')
-# def list_react(username, listname):
-#     """React!"""
-
-#     user = get_user(username)
-#     lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
-#     user_dict = {
-#         'listname': listname,
-#         'list_id': lst.list_id,
-#         'city': user.city.title(),
-#         'state': user.state,
-#         'username': username
-#     }
-
-#     return render_template('profile-react.html', user_dict=user_dict)
 
 
 @app.route('/list-items.json')
@@ -650,26 +505,6 @@ def get_user_info():
     return jsonify(profile_info)
 
 
-# @app.route('/update-profile-info', methods=['POST'])
-# def update_profile_info():
-#     """Update user profile info."""
-
-#     favRest = request.form.get('favRest')
-#     favDish = request.form.get('favDish')
-#     favCity = request.form.get('favCity')
-#     username = request.form.get('username')
-
-#     user = User.query.filter_by(username=username).first()
-#     user_profile = user.profiles[0]
-#     user_profile.fav_rest = favRest
-#     user_profile.fav_dish = favDish
-#     user_profile.fav_city = favCity
-
-#     db.session.commit()
-
-#     return jsonify(user.profiles[0].to_dict())
-
-
 @app.route('/user-profile-image.json')
 def get_user_profile_image():
     """Get user profile info."""
@@ -682,28 +517,9 @@ def get_user_profile_image():
 
 
 def allowed_file(filename):
+    """Check if uploaded profile image is an allowed file type."""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-# @app.route('/upload-profile-image', methods=['POST'])
-# def upload_profile_image():
-#     """User profile page."""
-
-#     username = request.form.get('username')
-#     file = request.files['image']
-#     user = User.query.filter_by(username=username).first()
-
-#     if file and allowed_file(file.filename):
-#         filename = secure_filename(file.filename)
-#         user.profiles[0].image_fn = filename
-#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#         db.session.commit()
-
-#         return jsonify(filename)
-
-#     else:
-#         return ''
 
 
 @app.route('/update-profile-info.json', methods=['POST'])
