@@ -186,4 +186,4 @@ def get_ranking(yelp_id, city, state):
                              .all())
     restaurants = [item[0] for item in restaurants]
 
-    return restaurants.index(yelp_id)
+    return restaurants.index(yelp_id) + 1

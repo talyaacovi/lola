@@ -9,21 +9,16 @@ import fbg as fb
 def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address, rest_city):
     """Get Instagram Location ID based on restaurant name and Yelp lat/lng."""
 
-    print 'in get location function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-
     #############################################
     # SUBPROCESS TO RUN COMMAND AND READ OUTPUT #
     #############################################
 
     loc_id = fb.request(rest_name, rest_lat, rest_lng)
     if loc_id:
-        print 'location ID found from Facebook Graph API!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
         return loc_id
 
     else:
-        print 'location ID being searched using IG scraper!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
         string = 'instagram-scraper --search-location ' + rest_address + ' ' + rest_name
-        print string
         p = subprocess.Popen(string, stdout=subprocess.PIPE, shell=True)  # TAKE OUT shell=True
 
         # REGEX PATTERNS:
@@ -49,7 +44,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
                     restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
                     restaurant.ig_loc_id = locId.group(2)
                     db.session.commit()
-                    print 'location ID found from Instagram scraper!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
                     return locId.group(2)
 
                 elif (address.group(2) == rest_address or city.group(2) == rest_city):
@@ -57,7 +51,6 @@ def get_instagram_location(rest_id, rest_name, rest_lat, rest_lng, rest_address,
                     restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
                     restaurant.ig_loc_id = locId.group(2)
                     db.session.commit()
-                    print 'location ID found from Instagram scraper!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
                     return locId.group(2)
 
             else:

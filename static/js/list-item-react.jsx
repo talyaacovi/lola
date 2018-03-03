@@ -24,7 +24,7 @@ class ListItem extends React.Component {
                         <h3><a href={ this.props.rest_url }>{ this.props.rest }</a></h3>
 
                         <p>{ this.props.category }</p>
-                        <a href={ this.props.url }>Yelp</a>
+                        <a href={ this.props.url } target='_blank'>Yelp</a>
 
                     </div>
                     <div>
