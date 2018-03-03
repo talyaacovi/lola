@@ -4,6 +4,7 @@ from model import *
 from yelp_api import business
 from ig import *
 from thread import *
+from sqlalchemy import func
 
 
 def add_new_restaurant(yelp_id):
@@ -169,3 +170,20 @@ def get_list_items_email(lst_items):
     restDict = {'restaurants': restList}
 
     return restDict
+
+
+def get_ranking(yelp_id, city, state):
+    """Get ranking of restaurant in that city."""
+
+    restaurants = (db.session.query(Restaurant.yelp_id)
+                             .join(ListItem)
+                             .join(List)
+                             .filter(Restaurant.state == state,
+                                     Restaurant.city == city,
+                                     List.category_id == 1)
+                             .group_by(Restaurant.yelp_id)
+                             .order_by(db.desc(func.count(ListItem.rest_id)))
+                             .all())
+    restaurants = [item[0] for item in restaurants]
+
+    return restaurants.index(yelp_id)

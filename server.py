@@ -261,20 +261,15 @@ def do_discover():
         hot_and_new = []
 
         for item in results['businesses']:
-            print item['id']
             if item['id'] not in rests_user_has_added:
                 rest_obj = check_if_rest_in_db(item['id'])
-                print rest_obj
                 if rest_obj and rest_obj.ig_loc_id:
-                    print 'hot and new restaurant exists with a location ID'
                     ig_loc_id = rest_obj.ig_loc_id
                 elif rest_obj and not rest_obj.ig_loc_id:
-                    print 'hot and new restaurant exists but without a location ID'
                     ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
                     rest_obj.ig_loc_id = ig_loc_id
                     db.session.commit()
                 else:
-                    print 'hot and new restaurant not in DB, have to add'
                     ig_loc_id = fb.request(item['name'], str(item['coordinates']['latitude']), str(item['coordinates']['longitude']))
                     rest_obj = Restaurant(name=item['name'],
                                           lat=item['coordinates']['latitude'],
@@ -293,7 +288,6 @@ def do_discover():
                     db.session.commit()
 
                 new_dict = rest_obj.to_dict()
-                print new_dict
 
                 hot_and_new.append(new_dict)
 
@@ -486,12 +480,14 @@ def show_restaurant_details(yelp_id):
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
     ig_photos = restaurant.photos
 
+    ranking = get_ranking(restaurant.yelp_id, restaurant.city, restaurant.state)
+
     if not ig_photos:
         results = business(yelp_id)
         yelp_photos = results['photos']
-        return render_template('restaurant.html', ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
+        return render_template('restaurant.html', ranking=ranking, ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
 
-    return render_template('restaurant.html', ig_photos=ig_photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
+    return render_template('restaurant.html', ranking=ranking, ig_photos=ig_photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
 
 
 @app.route('/user-info.json')
