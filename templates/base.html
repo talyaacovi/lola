@@ -132,7 +132,9 @@
 
 <div class='container-fluid'>
   {% for flash in get_flashed_messages() %}
-    {{ flash }}
+    {% if flash != 'You must add at least 20 restaurants to your favorites list to access this feature!' %}
+      {{ flash }}
+    {% endif %}
   {% endfor %}
 
   {% block content %}
@@ -158,6 +160,8 @@
 
 
     let usernameForLink = '{{ session.get("username") }}';
+    let flashMsg = '{{ get_flashed_messages() }}';
+    console.log(flashMsg);
 
     function checkIfActive(result) {
       if (result == 'True') {
@@ -166,13 +170,19 @@
 
       else if (result == 'False' && window.location.pathname == '/') {
         $('#search-div').hide();
-        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where locals of these cities are eating!');
+        $('#view-controls').hide();
+        $('#homepage-alert').show().removeClass('alert-success').addClass('alert-warning').append('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where locals of these cities are eating!');
       }
       // document.location.pathname.indexOf("/about/") === 0)
       else if (result == 'False' && window.location.pathname.indexOf('/cities/') === 0) {
         $('#top-restaurants').hide();
+        $('#email-list').hide();
+        $('#click-msg').hide();
         $('#city-locals a').addClass('isDisabled')
-        $('#msg-para').html('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
+        $('#city-alert').show().append('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
+      }
+      else if (flashMsg === '[&#39;You must add at least 20 restaurants to your favorites list to access this feature!&#39;]') {
+        $('#profile-alert').show().append('You must add at least 20 restaurants to your favorites list to access this feature!');
       }
     }
 

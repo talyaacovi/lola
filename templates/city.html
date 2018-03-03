@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class='container-fluid'>
+<div>
     <p id='msg-para'></p>
+
+    <div id="city-alert" class="alert alert-warning alert-dismissible" role="alert" hidden>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
     <div class='row'>
           <div class='main-city-header col-xs-offset-3 col-xs-6'>
             <h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}, {{ state.upper() }}</h1>
@@ -25,7 +30,7 @@
 
     <div class='row'>
           <h2>Top 10 Favorite Local Restaurants</h2>
-          <p>(Click to view on map)</p>
+          <p id='click-msg'>(Click to view on map)</p>
           <div id='top-restaurants' class='col-xs-4'>
               <ol id='top-restaurants-list'>
               {% for item in restaurant_tuples %}
