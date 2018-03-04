@@ -103,7 +103,7 @@ class List extends React.Component {
                             <h3>Search for places in {this.props.city}:</h3>
                             <form className='form-group' onSubmit={this.fetchSearchItems.bind(this)}>
                                 <input className='form-control profile-form' name='term' value={this.state.inputValue} onChange={this.updateInputValue.bind(this)}></input>
-                                <button className='btn btn-default'>Search</button>
+                                {/*<button className='btn btn-default'>Search</button>*/}
                             </form>
                         </div>
                         <div id='results-div'>

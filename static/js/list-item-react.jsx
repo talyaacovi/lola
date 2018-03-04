@@ -14,23 +14,17 @@ class ListItem extends React.Component {
     render() {
         let delButton;
         if (this.props.editing === true) {
-            delButton = <button className='del-btn btn btn-default' onClick={this.deleteItemHandler} item-id={this.props.itemid}>Remove Restaurant</button>;
+            delButton = <div><button className='del-btn btn btn-default' onClick={this.deleteItemHandler} item-id={this.props.itemid}>Remove</button></div>;
         }
         return (<div data-yelp-id={ this.props.yelpid } data-item-id={ this.props.itemid }>
-                    <div className='yelp-img'>
+                    <div className='yelp-img' style={{ verticalAlign: 'text-top' }}>
                         <img src={ this.props.image }/>
+
                     </div>
                     <div className='yelp-info'>
-                        <h3><a href={ this.props.rest_url }>{ this.props.rest }</a></h3>
-
-                        <p>{ this.props.category }</p>
-                        <a href={ this.props.url } target='_blank'>Yelp</a>
-
+                        <p><a href={ this.props.rest_url }>{ this.props.rest }</a> - <span style={{ fontSize: 10 }}>{ this.props.category }</span></p>
                     </div>
-                    <div>
-                        {delButton}
-                    </div>
-
+                    {delButton}
                 </div>
             );
     }

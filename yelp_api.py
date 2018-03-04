@@ -2,6 +2,7 @@
 
 import os
 import requests
+from urllib import quote
 
 API_KEY = os.environ['YELP_API_KEY']
 
@@ -28,7 +29,7 @@ def request(host, path, api_key, url_params=None):
     url_params = url_params or {}
     # url = '{0}{1}'.format(host, quote(path.encode('utf8')))
     # url = 'https://api.yelp.com/v3/businesses/search'
-    url = '{}{}'.format(host, path)
+    url = '{}{}'.format(host, quote(path.encode('utf8')))
     # to authenticate API calls with the API key,
     # set the authorization HTTP header value as Bearer API_KEY
     headers = {

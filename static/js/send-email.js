@@ -65,5 +65,6 @@ $('#city-email-form-bootstrap').submit(function (evt) {
 
 function successMessage(result) {
     $('#emailModal').modal('hide');
-    $('#msg-para').text(result);
+    // $('#msg-para').text(result);
+    $('#email-alert').show().append(result);
 }

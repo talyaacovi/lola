@@ -38,14 +38,12 @@ function loginMessage(result) {
         $('#profile-page').attr('href', '/users/' + result.user);
         if (result.isActive === 'True') {
             isActive = true; // global variable defined in base.html
-            $('#homepage-alert').show();
-            $('#homepage-alert').append('You have successfully logged in!');
+            $('#homepage-alert').show().append('You have successfully logged in!');
         }
         else {
             $('#search-div').hide();
             $('#view-controls').hide();
-            $('#homepage-alert').show();
-            $('#homepage-alert').append('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/favorites">Favorites</a> list to access more content.');
+            $('#homepage-alert').show().append('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/favorites">Favorites</a> list to access more content.');
         }
     }
     else if (result == 'Incorrect') {
@@ -191,8 +189,7 @@ function signupUser(result) {
         $('#search-div').hide();
         $('#icons').hide();
         $('#view-controls').hide();
-        $('#homepage-alert').show();
-        $('#homepage-alert').append('Your account has been created! Please add at least 5 restaurants to your <a href="/users/' + result + '/favorites">Favorites</a> list to access more content.');
+        $('#homepage-alert').show().append('Your account has been created! Please add at least 5 restaurants to your <a href="/users/' + result + '/favorites">Favorites</a> list to access more content.');
 
     }
 

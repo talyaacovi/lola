@@ -6,39 +6,35 @@
 
         <div>
             <h1>{{ restaurant.name }}</h1>
-            <h4>Ranked #{{ ranking }} in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
+            {% if ranking %}
+                <h4>Ranked #{{ ranking }} in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
+            {% else %}
+                <h4>This restaurant is not yet ranked in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
+            {% endif %}
             <ul class="list-unstyled">
                 <li><b>Address: </b>{{ restaurant.address }}</li>
                 <li><b>Category: </b>{{ restaurant.yelp_category }}</li>
                 <li><em>Read reviews on <a href="{{ restaurant.yelp_url }}" target="_blank">Yelp</a></em></li>
-                {% if ig_photos %}
+                {% if ig_loc_id %}
                     <li><em>See photos on <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">Instagram</a></em></li>
                 {% endif %}
             </ul>
         </div>
 
-        {% if ig_photos %}
-            {% for i in range(3) %}
-                <div class='ig-photo col-xs-12 col-md-6 col-lg-4'>
+        {% for i in range(3) %}
+            <div class='ig-photo col-xs-12 col-md-6 col-lg-4'>
 
-                    {% if ig_photos[i].url[-3:] == 'mp4' %}
-                        <video width='400' height='400' controls>
-                            <source src='{{ ig_photos[i].url }}' type='video/mp4'>
-                             Your browser does not support the video tag.
-                        </video>
-                    {% else %}
-                        <img src='{{ ig_photos[i].url }}'/>
-                    {% endif %}
+                {% if photos[i][-3:] == 'mp4' %}
+                    <video width='400' height='400' controls>
+                        <source src='{{ photos[i] }}' type='video/mp4'>
+                         Your browser does not support the video tag.
+                    </video>
+                {% else %}
+                    <img src='{{ photos[i] }}'/>
+                {% endif %}
 
-                </div>
-            {% endfor %}
-        {% else %}
-            {% for photo in yelp_photos %}
-                <div class='yelp-photo'>
-                        <img src='{{ photo }}'/>
-                </div>
-            {% endfor %}
-        {% endif %}
+            </div>
+        {% endfor %}
 
 <div>
 

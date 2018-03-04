@@ -9,7 +9,7 @@ class SearchItem extends React.Component {
         return (<div data-yelp-id={ this.props.yelpid }>
                     <p>{ this.props.rest }</p>
                     <p>{ this.props.address }</p>
-                    <button className='btn btn-default' onClick={this.buttonClickHandler.bind(this)} data-yelp-id={ this.props.yelpid } className='add-btn'>Add Restaurant</button>
+                    <button className='btn btn-default add-btn' onClick={this.buttonClickHandler.bind(this)} data-yelp-id={ this.props.yelpid }>Add</button>
                 </div>
             );
     }

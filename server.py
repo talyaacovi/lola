@@ -478,16 +478,15 @@ def show_restaurant_details(yelp_id):
     """Details page for a restaurant with Instagram photos."""
 
     restaurant = Restaurant.query.filter_by(yelp_id=yelp_id).first()
-    ig_photos = restaurant.photos
+    photos = [item.url for item in restaurant.photos]
 
     ranking = get_ranking(restaurant.yelp_id, restaurant.city, restaurant.state)
 
-    if not ig_photos:
+    if not photos:
         results = business(yelp_id)
-        yelp_photos = results['photos']
-        return render_template('restaurant.html', ranking=ranking, ig_photos=ig_photos, yelp_photos=yelp_photos, restaurant=restaurant)
+        photos = results['photos']
 
-    return render_template('restaurant.html', ranking=ranking, ig_photos=ig_photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
+    return render_template('restaurant.html', ranking=ranking, photos=photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
 
 
 @app.route('/user-info.json')

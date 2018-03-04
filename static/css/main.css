@@ -1,5 +1,6 @@
 .yelp-img img {
-    height: 146px;
+    height: 10rem;
+    width: 15rem;
 }
 
 .yelp-img, .yelp-info {
@@ -43,8 +44,9 @@
 }
 
 .yelp-photo > img {
-  height: 500px;
-  width: 500px;
+  height: 400px;
+  width: 400px;
+  padding: 0 0 10px 0;
 }
 
 .isDisabled {
