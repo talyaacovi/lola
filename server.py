@@ -15,6 +15,7 @@ from sendgrid import *
 from ig import *
 import fbg as fb
 import json
+from random import sample
 
 
 UPLOAD_FOLDER = 'static/uploads'
@@ -40,6 +41,15 @@ def index():
     return render_template('homepage.html', all_locations=all_locations)
 
 
+@app.route('/search')
+def city_search():
+    """Display homepage with all locations for which locals have made lists."""
+
+    all_locations = get_cities()
+
+    return render_template('search.html', all_locations=all_locations)
+
+
 @app.route('/login-user', methods=['POST'])
 def login_user():
     """Log user in to their account."""
@@ -53,7 +63,9 @@ def login_user():
             user = User.query.filter_by(email=email).first()
             set_session_info(user)
             is_active = check_active(user.username)
-            return jsonify({'msg': 'Success', 'user': user.username, 'isActive': is_active})
+            return jsonify({'msg': 'Success',
+                            'user': user.username,
+                            'isActive': is_active})
         else:
             return 'Incorrect'
     else:
@@ -196,7 +208,7 @@ def search_city():
         return redirect('/cities/{}/{}'.format(state.lower(), city.lower()))
 
     else:
-        flash('Sorry, no lists yet! Invite your friends that live in ' + city + ' to create some!')
+        flash('Sorry, no lists have been created for that city yet!')
         return redirect('/')
 
 
@@ -240,8 +252,10 @@ def do_discover():
         not_common_ids = most_similar_user_dict.get('uncommon')
         similar_image = most_similar_user_dict.get('photo')
 
+        percentage = int((len(rests_in_common_ids) / float(20)) * 100)
+
         rests_in_common = get_common_rests(rests_in_common_ids)
-        not_common = get_common_rests(not_common_ids)
+        not_common = sample(get_common_rests(not_common_ids), 5)
 
         user = User.query.filter_by(user_id=session.get('user_id')).first()
 
@@ -293,7 +307,18 @@ def do_discover():
 
         location = get_city_lat_lng(user.state, user.city)
 
-        return render_template('discover.html', location=location, hot_and_new=hot_and_new, top_catgs=top_catgs, user_image=user.profiles[0].image_fn, similar_image=similar_image, rests_in_common=rests_in_common, most_similar_user=most_similar_user, not_common=not_common)
+        return render_template('discover.html',
+                               percentage=percentage,
+                               location=location,
+                               hot_and_new=hot_and_new,
+                               top_catgs=top_catgs,
+                               user_image=user.profiles[0].image_fn,
+                               similar_image=similar_image,
+                               rests_in_common=rests_in_common,
+                               most_similar_user=most_similar_user,
+                               not_common=not_common,
+                               city=city,
+                               state=state)
 
     else:
         flash('You must add at least 20 restaurants to your favorites list to access this feature!')

@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class='container-fluid'>
+
 <div class='row'>
     <p id='msg-para'></p>
-    <h2>You are most similar to {{ most_similar_user }}.</h2>
+    <h2>You are most similar to <a href='/users/{{ most_similar_user }}'>{{ most_similar_user }}</a>.</h2>
 
     <img class='profile-image' src='/static/uploads/{{ similar_image }}'/>
     <img class='profile-image' src='/static/uploads/{{ user_image }}'/>
 
-    <h3>These are the restaurants you have in common:</h3>
+<!--     <h3>These are the restaurants you have in common:</h3>
         <ol>
             {% for rests in rests_in_common %}
                 <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
             {% endfor %}
         </ol>
-
+ -->
+    <h3>{{ percentage }}% of your favorites in {{ city.title() }} are the same!</h3>
 
     {% if not_common %}
-        <h3>These are the restaurants that {{ most_similar_user }} likes that you should check out!</h3>
+        <p>Here are some restaurants that {{ most_similar_user }} likes that you should check out:</p>
             <ol>
                 {% for rests in not_common %}
                     <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
@@ -48,6 +51,7 @@
 </div>
 
 <div class='row' id='discover-map'></div>
+</div>
 
 <script>
     let idOfOptionToBold = '#discover-page-link';

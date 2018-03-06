@@ -15,17 +15,7 @@ SEARCH_LIMIT = 5
 
 
 def request(host, path, api_key, url_params=None):
-    """Given your API_KEY, send a GET request to the API.
-    Args:
-        host (str): The domain host of the API.
-        path (str): The path of the API after the domain.
-        API_KEY (str): Your API Key.
-        url_params (dict): An optional set of query parameters in the request.
-    Returns:
-        dict: The JSON response from the request.
-    Raises:
-        HTTPError: An error occurs from the HTTP request.
-    """
+    """Make request to Yelp Fusion API."""
     url_params = url_params or {}
     # url = '{0}{1}'.format(host, quote(path.encode('utf8')))
     # url = 'https://api.yelp.com/v3/businesses/search'
@@ -43,13 +33,7 @@ def request(host, path, api_key, url_params=None):
 
 
 def search(term, location):
-    """Query the Search API by a search term and location.
-    Args:
-        term (str): The search term passed to the API.
-        location (str): The search location passed to the API.
-    Returns:
-        dict: The JSON response from the request.
-    """
+    """Query the Search endpoint of the Yelp Fusion API."""
 
     api_key = API_KEY
 
@@ -63,13 +47,7 @@ def search(term, location):
 
 
 def search_hot_new(location, categories):
-    """Query the Search API by a search term and location.
-    Args:
-        term (str): The search term passed to the API.
-        location (str): The search location passed to the API.
-    Returns:
-        dict: The JSON response from the request.
-    """
+    """Query the Search endpoint of Yelp Fusion API with 'hot and new' flag."""
 
     api_key = API_KEY
 
@@ -83,13 +61,7 @@ def search_hot_new(location, categories):
 
 
 def business(business_id):
-    """Query the Business API using the Yelp ID
-    Args:
-        term (str): The search term passed to the API.
-        location (str): The search location passed to the API.
-    Returns:
-        dict: The JSON response from the request.
-    """
+    """Query the Business endpoint of the Yelp Fusion API."""
 
     api_key = API_KEY
 

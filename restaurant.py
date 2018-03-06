@@ -44,7 +44,12 @@ def add_new_restaurant(yelp_id):
 def add_list_item(rest_id, lst_id, user_id):
     """Add list item to DB."""
 
-    if not ListItem.query.join(List).filter(List.user_id == user_id, ListItem.rest_id == rest_id, List.list_id == lst_id).all():
+    if not (ListItem.query.join(List)
+                          .filter(List.user_id == user_id,
+                                  ListItem.rest_id == rest_id,
+                                  List.list_id == lst_id)
+                          .all()):
+
         lst_item = ListItem(list_id=lst_id, rest_id=rest_id)
 
         db.session.add(lst_item)
@@ -74,7 +79,9 @@ def get_list(username, listname):
     """Get list object from DB"""
 
     user = User.query.filter_by(username=username).first()
-    lst = List.query.filter(List.name == listname, List.user_id == user.user_id).first()
+    lst = (List.query.filter(List.name == listname,
+                             List.user_id == user.user_id)
+                     .first())
 
     return lst
 
@@ -146,7 +153,7 @@ def add_fav_list(user_id, name, status, category_id):
 
 
 def get_list_items_react(lst_id):
-    """get list items for react."""
+    """Get list items for React version of page."""
 
     lst_items = ListItem.query.filter(ListItem.list_id == lst_id).all()
 
@@ -160,7 +167,7 @@ def get_list_items_react(lst_id):
 
 
 def get_list_items_email(lst_items):
-    """get restaurants for email."""
+    """Get restaurants for email."""
 
     restList = []
     for item in lst_items:

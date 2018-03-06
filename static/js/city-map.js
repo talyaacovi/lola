@@ -3,7 +3,6 @@
 function initMap() {
 
     // get latitude and longitude for the city
-
     let city = {lat: $('#city').data('lat'), lng: $('#city').data('lng')};
 
     // google map with city as center
@@ -27,9 +26,7 @@ function initMap() {
     for (let i = 0; i < restArray.length; i++) {
         let lat = restArray[i].dataset.lat;
         let lng = restArray[i].dataset.lng;
-        let url = restArray[i].dataset.yelp;
         let yelp_id = restArray[i].dataset.yelpId;
-
 
         // create map marker for the specific restaurant
         marker = new google.maps.Marker({
@@ -42,18 +39,21 @@ function initMap() {
         // define contents for info window
         html = (
               '<div class="window-content">' +
-                    '<p><a href="/restaurants/' + yelp_id + '">' + restArray[i].firstElementChild.innerText + '</a></p>' +
+                    '<a href="/restaurants/' +
+                    yelp_id + '">' +
+                    restArray[i].firstElementChild.innerText +
+                    '</a>' +
               '</div>');
 
         restaurant = restArray[i];
 
+        // check if user is active before adding listeners to markers
         if (isActive) {
+                // call function to bind info window to map
                 bindInfoWindow(marker, map, infoWindow, html);
+                // call function to change map center when restaurant is clicked
                 changeMapCenter(restaurant, marker, map, infoWindow, html);
             }
-        // call function to bind info window to map
-
-
     }
 
     // function adds event listener to markers, closes any opened when one is
@@ -67,14 +67,16 @@ function initMap() {
         });
     }
 
+    // function adds event listener to restaurant list items, closes any opened
+    // when one is clicked, sets content based on passed in html, opens info
+    // window with new content on the marker that was clicked, and resets the
+    // map center.
     function changeMapCenter(restaurant, marker, map, infoWindow, html) {
         restaurant.addEventListener('click', function () {
             infoWindow.close();
             infoWindow.setContent(html);
             infoWindow.open(map, marker);
 
-            // let newLat = parseFloat(evt.target.dataset.lat);
-            // let newLng = parseFloat(evt.target.dataset.lng);
             newLat = parseFloat(restaurant.getAttribute('data-lat'));
             newLng = parseFloat(restaurant.getAttribute('data-lng'));
 
@@ -82,14 +84,7 @@ function initMap() {
             map.setCenter(newCenter);
             map.setZoom(14);
         });
-
     }
-
 }
 
-
-
-
 google.maps.event.addDomListener(window, 'load', initMap);
-
-

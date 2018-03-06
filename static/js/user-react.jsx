@@ -1,5 +1,6 @@
 "use strict";
 
+// instructions for creating a User component
 class User extends React.Component {
     constructor(props) {
         super(props);
@@ -66,11 +67,11 @@ class User extends React.Component {
                     </div>
         }
 
-        let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
+        // let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
                 <div>
                     <p id='msg-para'></p>
-                    <h1 data-username={this.props.username}>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
+                    {/*<h1 data-username={this.props.username}>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>*/}
                     <img className='profile-image' src={this.state.profileImage}/>
                 </div>
 

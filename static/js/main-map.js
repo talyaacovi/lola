@@ -2,7 +2,7 @@
 
 function initMap() {
 
-    // google map with united states as center
+    // google map with United States as center
     window.map = new google.maps.Map(document.querySelector('#main-map'), {
         center: {lat: 42, lng: -95},
         zoom: 4.3,
@@ -43,11 +43,10 @@ function initMap() {
 
         inactiveHtml = (
               '<div class="window-content">' +
-                    '<p>' + cityArray[i].innerText + '</p>' +
+                    '<span>' + cityArray[i].innerText + '</span>' +
               '</div>');
 
         // call function to bind info window to map
-
         bindInfoWindow(marker, map, infoWindow, activeHtml, inactiveHtml);
 
     }
@@ -58,7 +57,9 @@ function initMap() {
     function bindInfoWindow(marker, map, infoWindow, activeHtml, inactiveHtml) {
         google.maps.event.addListener(marker, 'click', function () {
             infoWindow.close();
-            // infoWindow.setContent(html);
+            // if the user is active, set info window contents to activeHTML
+            // which includes links, otherwise set info window contents to
+            // inactiveHTML which does not include links
             if (isActive) {
                 infoWindow.setContent(activeHtml);
             }
@@ -71,11 +72,7 @@ function initMap() {
 
 }
 
-
-
-
 google.maps.event.addDomListener(window, 'load', initMap);
-
 
 document.getElementById('map-view-btn').addEventListener('click', function(evt) {
     $('#main-map').show();

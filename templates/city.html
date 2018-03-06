@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div>
+<div class='container-fluid'>
     <p id='msg-para'></p>
 
     <div id="city-alert" class="alert alert-warning alert-dismissible" role="alert" hidden>
@@ -18,32 +18,37 @@
           </div>
     </div>
 
-    <div class='row'>
-          <div id='city-locals'>
-              <h2>Meet The Locals</h2>
-              <ul class='list-unstyled'>
-                {% for user in all_users %}
-                <li>
-                    <a href='/users/{{ user.username }}'>{{ user.username }}</a>
-                    <br>
-                </li>
-                {% endfor %}
-              </ul>
-          </div>
-    </div>
+
+
 
     <div class='row'>
-          <h2>Top 10 Favorite Local Restaurants</h2>
-          <p id='click-msg'>(Click to view on map)</p>
-          <div id='top-restaurants' class='col-xs-4'>
-              <ol id='top-restaurants-list'>
-              {% for item in restaurant_tuples %}
-                  <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>
-                    <p style="display: inline;">{{ item[0].name }}</p>
-                    <img src='/static/img/star.png'/><p style="display: inline;">{{item[1]}}</p>
-                  </li>
-              {% endfor %}
-              </ol>
+          <div class='col-xs-6'>
+              <h2>Top 10 Favorite Local Restaurants</h2>
+              <p id='click-msg'>(Click to view on map)</p>
+              <div id='top-restaurants'>
+                  <ol id='top-restaurants-list'>
+                  {% for item in restaurant_tuples %}
+                      <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>{{ item[0].name }}
+                        <span><i style='display: inline;' class="material-icons">favorite_border</i><strong style='font-size: 12px;'>{{ item[1] }}</strong></span>
+                        <!-- <img src='/static/img/star.png'/><p style="display: inline;">{{item[1]}}</p> -->
+                      </li>
+                  {% endfor %}
+                  </ol>
+              </div>
+          </div>
+
+          <div class='col-xs-6'>
+                <div id='city-locals'>
+                    <h2>Meet The Locals</h2>
+                    <ul class='list-unstyled'>
+                      {% for user in all_users %}
+                      <li>
+                          <a href='/users/{{ user.username }}'>{{ user.username }}</a>
+                          <br>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                </div>
           </div>
     </div>
 

@@ -6,7 +6,7 @@ from sqlalchemy import func
 
 
 def get_user_favorite_restaurants():
-    """stuff."""
+    """Get restaurant ids for the favorites list of a specific user."""
 
     my_restaurants = (db.session.query(Restaurant.rest_id)
                       .join(ListItem)
@@ -20,15 +20,17 @@ def get_user_favorite_restaurants():
 
 
 def get_user_top_catgs(username):
-    """stuff"""
+    """Get the top 5 categories from the favorites list of a specific user."""
 
-    fav_catgs = (db.session.query(Restaurant.yelp_category, Restaurant.yelp_alias)
+    fav_catgs = (db.session.query(Restaurant.yelp_category,
+                                  Restaurant.yelp_alias)
                            .join(ListItem)
                            .join(List)
                            .join(User)
                            .filter(User.username == username,
                                    List.category_id == 1)
-                           .group_by(Restaurant.yelp_category, Restaurant.yelp_alias)
+                           .group_by(Restaurant.yelp_category,
+                                     Restaurant.yelp_alias)
                            .order_by(db.desc(func.count(Restaurant.yelp_category)))
                            .limit(5)
                            .all())
@@ -37,7 +39,7 @@ def get_user_top_catgs(username):
 
 
 def get_most_similar_user(my_restaurants):
-    """more stuff!"""
+    """Find the most similar user based on overlapping favorites."""
 
     my_restaurants_list = list(map(lambda x: x[0], my_restaurants))
 
@@ -80,7 +82,7 @@ def get_most_similar_user(my_restaurants):
 
 
 def get_common_rests(rests_in_common_ids):
-    """More more stuff!"""
+    """Create list of all the overlapping restaurants between similar users."""
 
     rest_objects = []
     for rest in rests_in_common_ids:
@@ -105,6 +107,6 @@ def get_restaurants_user_added(username):
 
 
 def check_if_rest_in_db(yelp_id):
-    """Check if restaurant already in DB."""
+    """Check if a restaurant already exists in the DB."""
 
     return Restaurant.query.filter_by(yelp_id=yelp_id).first()

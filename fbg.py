@@ -9,16 +9,8 @@ graph = facebook.GraphAPI(access_token=API_KEY)
 
 
 def request(query, lat, lng, distance='1600'):
-    """Facebook helper function"""
-
-    print 'in my FB helper function'
-    print lat, type(lat)
-    print lng, type(lng)
-    print distance, type(distance)
-    search_query = '/search?q=' + query + '&type=place&center=' + lat + ',' + lng + '&' + distance
-    print search_query
+    """Get location ID for a place by querying Facebook Graph API."""
 
     data = graph.request('/search?q=' + query + '&type=place&center=' + lat + ',' + lng + '&distance=' + distance)
     if data['data']:
-        print data['data'][0]['id']
         return data['data'][0]['id']

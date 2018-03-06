@@ -1,0 +1,48 @@
+.navbar {
+    background-color: transparent;
+}
+
+.navbar-default {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    background-image: url("/static/img/pizza2.jpg");
+    background-size: 110%;
+    background-color: rgba(255,255,255,0.6);
+    /*background-repeat: no-repeat;*/
+    background-blend-mode: lighten;
+}
+
+body {
+    font-size: 18px;
+}
+
+p {
+    text-align: center;
+    color: #f50057;
+    width: 60%;
+    margin: auto;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: #f50057;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #f50057;
+}
+
+.container {
+    height: 90%;
+}
+
+.content {
+    height: 100%;
+}
+
+.row-first {
+  height: 33%;
+}

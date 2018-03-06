@@ -36,14 +36,19 @@ function loginMessage(result) {
         $('#loginModal').modal('hide');
         $('#icons').hide();
         $('#profile-page').attr('href', '/users/' + result.user);
+
         if (result.isActive === 'True') {
             isActive = true; // global variable defined in base.html
             $('#homepage-alert').show().append('You have successfully logged in!');
+            $('.row-first').hide();
         }
         else {
             $('#search-div').hide();
+            $('#city-div').hide();
             $('#view-controls').hide();
-            $('#homepage-alert').show().append('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/favorites">Favorites</a> list to access more content.');
+            $('.row-first').hide();
+            $('#main-map').show();
+            $('#inactive-homepage-alert').show().append('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/favorites">Favorites</a> list to access more content.');
         }
     }
     else if (result == 'Incorrect') {
@@ -177,10 +182,8 @@ $('#signup-form-bootstrap').submit(function (evt) {
 });
 
 function signupUser(result) {
-    // let message = $('#msg-para');
 
     if (result) {
-        // message.append('Your account has been created.');
         $('.logged-out-toggle').hide();
         $('.logged-in-toggle').show();
         $('#main-home-div').show();
@@ -200,26 +203,3 @@ function signupUser(result) {
 
     }
 }
-
-
-
-
-/////////////////////////////////////////////////
-////////////////// user logout //////////////////
-/////////////////////////////////////////////////
-
-
-// function logoutUser(result) {
-//     $('#msg-para').html(result);
-//     $('.logged-out-toggle').show();
-//     $('.logged-in-toggle').hide();
-//     $('#create-list').hide();
-//     // $('#signup-msg').show();
-//     // $('#home').show();
-// }
-
-// $('#logout-form').submit(function (evt) {
-//     evt.preventDefault();
-//     $.post('/logout', logoutUser);
-// });
-

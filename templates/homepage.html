@@ -2,8 +2,10 @@
 
 {% block content %}
 
+<link rel='stylesheet' type='text/css' href='/static/css/home.css'>
 
-<!-- <div class='container-fluid'> -->
+<div class='container'>
+    <div class='content'>
 <!-- <div> -->
     <p id='msg-para'></p>
 
@@ -11,14 +13,21 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
 
-    <div class='row row-first'>
+    <div id="inactive-homepage-alert" class="alert alert-warning alert-dismissible" role="alert" hidden>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
-    <div class='row row-first'>
-        <div class="col-xs-offset-3 col-xs-6">
-            <h1 id='main-header'>Where do the locals eat?</h1>
+
+    <div class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
+    </div>
+    <div id='main-home' class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
+        <div class="col-lg-offset-3 col-lg-6 col-xs-12">
+            <h1 id='main-header' style='font-family: Pacifico, cursive; font-size: 9em; color: #f50057;'>Lola</h1>
+            <div style='width: 100%;'>
+            <p>the foodie friend you wish you had in every city to find out where the locals eat</p>
+            </div>
         </div>
     </div>
-    <div class='row row-first'>
+    <div class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
     </div>
 
 
@@ -29,12 +38,12 @@
 
 
         <div id='view-controls' class="col-xs-12 col-lg-12">
-            <button class='btn btn-default btn-sm active' id='map-view-btn'>Map View</button>
-            <button class='btn btn-default btn-sm' id='list-view-btn'>List View</button>
+            <button class='btn btn-default btn-sm active' id='list-view-btn'>List View</button>
+            <button class='btn btn-default btn-sm' id='map-view-btn'>Map View</button>
             <button class='btn btn-default btn-sm' id='search-btn'>Search</button>
         </div>
 
-        <div id='city-div' hidden>
+        <div id='city-div'>
             <ul class='list-unstyled'>
                 {% for location in all_locations %}
                     <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
@@ -45,7 +54,7 @@
             </ul>
         </div>
 
-        <div id='main-map' class="col-xs-12"></div>
+        <div id='main-map' class="col-xs-12" hidden></div>
         <div id='search-div' class='form-group' hidden>
             <h3>Search for a city</h3>
 
@@ -60,15 +69,16 @@
         </div>
     </div>
     {% if not session.get('user_id') %}
-        <div id='icons' class='row'>
+<!--         <div id='icons' class='row'>
             <div class="col-xs-offset-4 col-xs-4">
                 <img src='/static/img/donut.png'/>
                 <img src='/static/img/fries.png'/>
                 <img src='/static/img/hamburger.png'/>
             </div>
-        </div>
+        </div> -->
     {% endif %}
-<!-- </div> -->
+</div>
+</div>
 
 
 <script>
@@ -84,7 +94,7 @@
     let idOfOptionToBold = '';
 </script>
 
-<script src="/static/js/main-mapstyles.js"></script>
+<script src="/static/js/new-mapstyles.js"></script>
 <script src='/static/js/main-map.js'></script>
 
 {% endblock %}

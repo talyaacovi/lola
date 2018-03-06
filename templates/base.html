@@ -4,8 +4,12 @@
     <title></title>
     <script src='http://code.jquery.com/jquery-3.2.1.min.js'></script>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css'>
-    <link rel='stylesheet' type='text/css' href='/static/css/main.css'>
     <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDznN8sa3CGq-S-mYT2yPNB58B5S3me6lg&libraries=places'></script>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Give+You+Glory|Pacifico|Reenie+Beanie|Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <link rel='stylesheet' type='text/css' href='/static/css/main.css'>
 
 </head>
 <body>
@@ -25,13 +29,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Lola</a>
+      <!-- <a class="navbar-brand" href="/">Lola</a> -->
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <div class='logged-out-toggle'
           {% if session.get('user_id') %} hidden {% endif %}>
-
           <ul class="nav navbar-nav navbar-right">
             <li><a href='#' data-toggle='modal' data-target='#loginModal'>Login</a></li>
             <li><a href='#' data-toggle='modal' data-target='#signupModal'>Signup</a></li>
@@ -41,12 +44,12 @@
     <!-- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> -->
         <div class='logged-in-toggle'
           {% if not session.get('user_id') %} hidden {% endif %}>
-
+          <a class="navbar-brand" href="/">Lola</a>
           <ul class="nav navbar-nav navbar-right">
             <li id='profile-page-link'><a id='profile-page' href='/users/{{ session.get("username") }}'>Profile</a></li>
             <li id='discover-page-link'><a href='/discover'>Discover</a></li>
             <form action='/logout' id='logout-form' method='POST' class="nav navbar-form navbar-right">
-                <input type="submit" class="btn btn-default" value='Logout'>
+                <input type="submit" class="btn btn-default logout-btn" value='Logout'>
             </form>
           </ul>
         </div>
@@ -129,9 +132,9 @@
   </div>
 </div>
 
-<div class='container-fluid'>
+<!-- <div class='container-fluid'> -->
   {% for flash in get_flashed_messages() %}
-    {% if flash != 'You must add at least 20 restaurants to your favorites list to access this feature!' %}
+    {% if flash != 'You must add at least 20 restaurants to your favorites list to access this feature!'  and flash != 'Sorry, no lists have been created for that city yet!'%}
       {{ flash }}
     {% endif %}
   {% endfor %}
@@ -139,7 +142,7 @@
   {% block content %}
     Put your body here.
   {% endblock %}
-</div>
+<!-- </div> -->
 
 <script src='/static/js/logout.js'></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
@@ -160,7 +163,6 @@
 
     let usernameForLink = '{{ session.get("username") }}';
     let flashMsg = '{{ get_flashed_messages() }}';
-    console.log(flashMsg);
 
     function checkIfActive(result) {
       if (result == 'True') {
@@ -169,7 +171,9 @@
 
       else if (result == 'False' && window.location.pathname == '/') {
         $('#search-div').hide();
+        $('#city-div').hide();
         $('#view-controls').hide();
+        $('#main-map').show();
         $('#homepage-alert').show().removeClass('alert-success').addClass('alert-warning').append('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where locals of these cities are eating!');
       }
       // document.location.pathname.indexOf("/about/") === 0)
@@ -180,9 +184,13 @@
         $('#city-locals a').addClass('isDisabled')
         $('#city-alert').show().append('Add at least 5 restaurants to your <a href="/users/' + usernameForLink + '/favorites">Favorites</a> list to see where these locals are eating, and which spots made it in the top 10!');
       }
-      else if (flashMsg === '[&#39;You must add at least 20 restaurants to your favorites list to access this feature!&#39;]') {
-        $('#profile-alert').show().append('You must add at least 20 restaurants to your favorites list to access this feature!');
-      }
+    }
+
+    if (flashMsg === '[&#39;You must add at least 20 restaurants to your favorites list to access this feature!&#39;]') {
+      $('#profile-alert').show().append('Add 20 restaurants to your favorites list to access this feature!');
+    }
+    else if (flashMsg === '[&#39;Sorry, no lists have been created for that city yet!&#39;]') {
+      $('#homepage-alert').show().append('Sorry, no lists have been created for that city yet!');
     }
 
 </script>

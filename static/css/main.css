@@ -1,64 +1,58 @@
-.yelp-img img {
-    height: 10rem;
-    width: 15rem;
+
+/*STYLING FOR HOMEPAGE*/
+
+.material-icons {
+  font-size: 12px;
 }
 
-.yelp-img, .yelp-info {
-  display: inline-block;
+.btn-default {
+  background-color: transparent;
+  color: #f50057;
+  border-color: #f50057;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 2px 12px;
 }
 
-#logout-form, #logout-div, #logout {
-    display: inline;
+.logout-btn {
+  background-color: transparent;
+  color: #f50057;
+  border-color: #f50057;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 2px 12px;
 }
 
-#city-map {
-    height: 400px;
+.navbar {
+  background-color: #fff3e0;
+
 }
 
-#city-div {
-  margin-top: 20px;
+.navbar-default .navbar-nav > .active > a {
+  color: #f50057;
+  background-color: #ffe0b2;
 }
 
-#username-length, #username-taken, #username-correct, #zipcode-valid, #zipcode-invalid {
-    display: none;
-    font-size: 0.75em;
+.navbar-default .navbar-nav > li > a {
+  font-weight: bold;
+  font-size: 18px;
+  color: #f50057;
 }
 
-#signup-div {
-    display: none;
+.navbar-default .navbar-brand {
+  font-weight: bold;
+  font-size: 24px;
+  color: #f50057;
+  font-family: Pacifico, cursive;
 }
 
-.not-active {
-  pointer-events: none;
-  cursor: default;
+.navbar-default {
+    border-color: transparent;
 }
 
-.ig-photo img {
-    height: 400px;
-    width: 400px;
-    padding: 0 0 10px 0;
+body {
+  font-family: Roboto, sans-serif;
 }
-
-.yelp-photo {
-  display: inline;
-}
-
-.yelp-photo > img {
-  height: 400px;
-  width: 400px;
-  padding: 0 0 10px 0;
-}
-
-.isDisabled {
-  color: currentColor;
-  cursor: not-allowed;
-  opacity: 0.5;
-  text-decoration: none;
-  pointer-events: none;
-}
-
-
-/*STYLES FOR HOMEPAGE*/
 
 #main-header {
   text-align: center;
@@ -66,8 +60,12 @@
   margin-bottom: 6px;
 }
 
+.main-city-header {
+  text-align: center;
+}
+
 body, html, .container-fluid {
-  height: 100%;
+  height: 90%;
 }
 
 .container-fluid {
@@ -79,7 +77,7 @@ body, html, .container-fluid {
 }
 
 #main-map {
-    height: 500px;
+    height: 600px;
 }
 
 #discover-map {
@@ -94,6 +92,14 @@ body, html, .container-fluid {
 .city-link {
   font-size: 18px;
   margin-top: 10px;
+}
+
+.isDisabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+  pointer-events: none;
 }
 
 
@@ -114,9 +120,18 @@ body, html, .container-fluid {
  clear: both;
 }
 
+#city-map {
+    height: 400px;
+}
+
+#city-div {
+  margin-top: 20px;
+}
+
 /*STYLES FOR PROFILE PAGE*/
+
 input.profile-form {
-  width: 25%;
+  width: 50%;
 }
 
 #edit-list {
@@ -125,6 +140,39 @@ input.profile-form {
 
 .profile-image {
   height: 300px;
+  border-radius: 50%;
+  padding: 24px;
+}
+
+.yelp-img img {
+    height: 10rem;
+    width: 15rem;
+}
+
+.yelp-img, .yelp-info {
+  display: inline-block;
+}
+
+.list-link {
+  font-size: 16px;
+}
+
+/*.lists, .list-items {
+  padding-top: 9rem;
+}*/
+
+.profile-info > li {
+  font-size: 16px;
+}
+
+.list-items {
+  height: 640px;
+  overflow: scroll;
+}
+
+#email-list, #edit-list {
+  display: inline-block;
+  margin-right: 1%;
 }
 
 /*STYLES FOR DISCOVER PAGE*/
@@ -132,4 +180,46 @@ input.profile-form {
 #hot-new-rests > li {
  float: left;
  clear: both;
+}
+
+/*STYLES FOR RESTAURANT PAGE*/
+
+.ig-photo img {
+    height: 400px;
+    width: 400px;
+    padding: 0 0 10px 0;
+}
+
+.yelp-photo {
+  display: inline;
+}
+
+.yelp-photo > img {
+  height: 400px;
+  width: 400px;
+  padding: 0 0 10px 0;
+}
+
+/*STYLES FOR SIGNUP, LOGIN, LOGOUT*/
+
+#logout-form, #logout-div, #logout {
+    display: inline;
+}
+
+#username-length,
+#username-taken,
+#username-correct,
+#zipcode-valid,
+#zipcode-invalid {
+    display: none;
+    font-size: 0.75em;
+}
+
+#signup-div {
+    display: none;
+}
+
+.not-active {
+  pointer-events: none;
+  cursor: default;
 }

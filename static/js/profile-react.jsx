@@ -1,22 +1,26 @@
 "use strict";
 
+// instructions for creating a ListLink component
 class ListLink extends React.Component {
     buttonClickHandler(evt) {
         this.props.onClick(this.props.listname, this.props.listid);
     }
+
     render() {
         return (<div>
-                    <a onClick={this.buttonClickHandler.bind(this)} data-list-id={this.props.listid}>{this.props.listname}</a>
+                    <a className='list-link' onClick={this.buttonClickHandler.bind(this)}
+                        data-list-id={this.props.listid}>{this.props.listname}
+                    </a>
                 </div>
             );
     }
 }
 
-
 const divStyle = {
   fontWeight: 'bold'
 };
 
+// instructions for creating a ProfileInfo component
 class ProfileInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +29,7 @@ class ProfileInfo extends React.Component {
     render() {
         return (
                 <div className='form-group'>
-                    <ul className='list-unstyled'>
+                    <ul className='list-unstyled profile-info'>
                         <li data-info='favRest'><span style={divStyle}>Favorite local restaurant:</span> {this.props.favRest}</li>
                         <li data-info='favDish'><span style={divStyle}>Favorite dish:</span> {this.props.favDish}</li>
                         <li data-info='favCity'><span style={divStyle}>Favorite food city:</span> {this.props.favCity}</li>
@@ -35,6 +39,7 @@ class ProfileInfo extends React.Component {
     }
 }
 
+// instructions for creating a ProfileForm component
 class ProfileForm extends React.Component {
     constructor(props) {
         super(props);

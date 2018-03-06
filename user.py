@@ -6,7 +6,7 @@ from sqlalchemy import func
 
 
 def check_email(user_email):
-    """checks if email already exists in DB when user logs in or signs up."""
+    """Check if email already exists in DB when user logs in or signs up."""
 
     user = User.query.filter_by(email=user_email).first()
     if user:
@@ -14,7 +14,7 @@ def check_email(user_email):
 
 
 def check_password(user_email, user_password):
-    """checks pw"""
+    """Check password when user logs in."""
 
     password = User.query.filter_by(email=user_email).first().password
     if password == user_password:
@@ -72,7 +72,7 @@ def get_user_location(username):
 
 
 def register_user(email, password, username, zipcode):
-    """Add user."""
+    """Add a new user."""
 
     city = Zipcode.query.filter_by(zipcode=zipcode).first().city
     state = Zipcode.query.filter_by(zipcode=zipcode).first().state
@@ -87,7 +87,7 @@ def register_user(email, password, username, zipcode):
 
 
 def default_profile_info(user_id):
-    """Add user."""
+    """Set default profile info for a new user."""
 
     profile = Profile(user_id=user_id, image_fn='default.png')
 
@@ -113,7 +113,7 @@ def check_active(username):
 
 
 def check_user_id(user_id):
-    """Check if user is active."""
+    """Check if user has at least 5 restaurants in Favorites list."""
 
     favorites = (db.session.query(ListItem.item_id)
                            .join(List)
