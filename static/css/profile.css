@@ -1,0 +1,71 @@
+body {
+    /*background-image: url('/static/img/pizza2.jpg');*/
+    /*background-color: rgba(255,255,255,0.6);*/
+    background-color: #fcf8e3;
+    /*background-blend-mode: lighten;*/
+}
+
+.navbar {
+    background-color: transparent;
+}
+
+.navbar-default {
+    background-image: url('/static/img/pizza2.jpg');
+    /*border-color: transparent;*/
+}
+
+.main {
+    background-color: #fcf8e3;
+    border-radius: 25px;
+    padding: 2%;
+}
+
+h1, h2, h3 {
+    color: #f50057;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.profile-city {
+    font-family: 'Bungee Shade';
+    color: #C84736;
+    border-bottom: 4px solid;
+}
+
+.btn-default {
+    color: #fcf8e3;
+    background-color: #C84736;
+    border-color: #C84736;
+    font-size: 14px;
+    border-color: #C84736;
+}
+
+.btn-default:hover {
+    background-color: #f50057;
+    color: #fcf8e3;
+}
+
+.list-items {
+    border-left: 2px dotted #C84736;
+}
+
+.create-list {
+    margin-top: 10px;
+}
+
+.save-btn {
+    margin-top: 10px;
+}
+
+.discover-image {
+    height: 200px;
+    border-radius: 25px;
+}
+
+.font-emphasis {
+    font-family: 'Bungee Shade';
+    color: #C84736;
+    border-bottom: 4px solid;
+}

@@ -40,6 +40,9 @@ function loginMessage(result) {
         if (result.isActive === 'True') {
             isActive = true; // global variable defined in base.html
             $('#homepage-alert').show().append('You have successfully logged in!');
+            // debugger;
+            // $('body').addClass('home-background');
+            $('.main').addClass('main-background');
             $('.row-first').hide();
         }
         else {

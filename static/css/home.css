@@ -7,17 +7,31 @@
     border-color: transparent;
 }
 
+#main-header {
+    font-family: 'Bungee Shade', cursive;
+    font-size: 9em;
+    color: #f50057;
+    background-color: #fcf8e3;
+}
+
+
 body {
-    font-family: Roboto, sans-serif;
+    font-family: Muli, sans-serif;
     background-image: url("/static/img/pizza2.jpg");
     background-size: 110%;
     background-color: rgba(255,255,255,0.6);
     /*background-repeat: no-repeat;*/
     background-blend-mode: lighten;
+    font-size: 18px;
 }
 
-body {
-    font-size: 18px;
+.home-header {
+    color: #f50057;
+}
+
+.logged-out-toggle {
+    text-align: center;
+    padding-top: 3%;
 }
 
 p {
@@ -35,14 +49,55 @@ p {
     background-color: #f50057;
 }
 
-.container {
-    height: 90%;
-}
-
-.content {
-    height: 100%;
-}
-
 .row-first {
-  height: 33%;
+  height: 22%;
+}
+
+.home-background {
+    background-color: #fcf8e3;
+}
+
+.main-background {
+    background-color: #fcf8e3;
+}
+
+.main {
+    height: 460px;
+    /*border-radius: 25px;*/
+}
+
+.home-nav {
+    background-color: transparent;
+    background-image: url('/static/img/pizza2.jpg');
+}
+
+.btn-default {
+    color: #fcf8e3;
+    background-color: #C84736;
+    border-color: #C84736;
+    font-size: 14px;
+    border-color: #C84736;
+    border-radius: 6px;
+}
+
+.btn-default:hover {
+    background-color: #f50057;
+    color: #fcf8e3;
+}
+
+.alert-success {
+    margin-top: 10px;
+    background-color: transparent;
+    border-color: #3c763d;
+}
+
+.main-home-div {
+    height: 100%;
+    /*border-radius: 25px;*/
+}
+
+.font-emphasis {
+    font-family: 'Bungee Shade';
+    color: #C84736;
+    border-bottom: 4px solid;
 }

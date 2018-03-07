@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class='container-fluid'>
+<div class='container'>
         <p id='msg-para'></p>
 
-        <div>
+        <div class='row'>
             <h1>{{ restaurant.name }}</h1>
             {% if ranking %}
                 <h4>Ranked #{{ ranking }} in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
@@ -21,20 +21,22 @@
             </ul>
         </div>
 
-        {% for i in range(3) %}
-            <div class='ig-photo col-xs-12 col-md-6 col-lg-4'>
+        <div class='row'>
+            {% for i in range(3) %}
+                <div class='ig-photo col-xs-12 col-md-6 col-lg-4'>
 
-                {% if photos[i][-3:] == 'mp4' %}
-                    <video width='400' height='400' controls>
-                        <source src='{{ photos[i] }}' type='video/mp4'>
-                         Your browser does not support the video tag.
-                    </video>
-                {% else %}
-                    <img src='{{ photos[i] }}'/>
-                {% endif %}
+                    {% if photos[i][-3:] == 'mp4' %}
+                        <video width='400' height='400' controls>
+                            <source src='{{ photos[i] }}' type='video/mp4'>
+                             Your browser does not support the video tag.
+                        </video>
+                    {% else %}
+                        <img class='img-responsive' src='{{ photos[i] }}'/>
+                    {% endif %}
 
-            </div>
-        {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
 
 <div>
 

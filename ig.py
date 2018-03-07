@@ -75,10 +75,10 @@ def get_instagram_photos(rest_id, location):
         results = json.load(json_data)
         for result in results:
             url = result['urls'][0]
-            photo = Photo(rest_id=rest_id, url=url)
-
-            db.session.add(photo)
-            db.session.commit()
+            if url[-3:] == 'jpg':
+                photo = Photo(rest_id=rest_id, url=url)
+                db.session.add(photo)
+                db.session.commit()
 
     os.system('rm ig_photos/' + location + '.json')
 

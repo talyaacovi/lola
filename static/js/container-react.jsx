@@ -92,7 +92,7 @@ class ProfilePageContainer extends React.Component {
                 credentials: 'same-origin'
             }).then((response) => response.json())
             .then((data) => {
-                document.getElementById('msg-para').innerHTML = data;
+                $('#restaurant-alert').show().append(data);
                 history.pushState(null, null, `/users/${this.props.username}`);
                 this.fetchUserLists();
                 this.setState({isListOpen: false, openListId: null, openListName: ''});
@@ -144,7 +144,7 @@ class ProfilePageContainer extends React.Component {
 
         if (viewingOwnPage && this.state.createList === false) {
             createButton =
-                        <div>
+                        <div className='create-list'>
                                 <button onClick={this.displayCreate} className='btn btn-default'>Create New List</button>
                         </div>
         }
@@ -170,11 +170,13 @@ class ProfilePageContainer extends React.Component {
         return (
             <div>
                 <div className='row'>
-                    <h1 data-username={this.props.username}>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>
+                    <div className='col-xs-12 col-lg-12'>
+                        <h1 style={{ display: 'inline' }} data-username={this.props.username}>{this.props.username}, a local of <a href={cityUrl}><span className='profile-city'>{this.props.city}</span></a>.</h1>
+                        <User onNewList={this.updateUserLists} username={this.props.username} state={this.props.state} city={this.props.city}/>
+                        {/*<div className='lists'>*/}
+                    </div>
                 </div>
                 <div className='row col-xs-12 col-lg-4'>
-                    <User onNewList={this.updateUserLists} username={this.props.username} state={this.props.state} city={this.props.city}/>
-                    {/*<div className='lists'>*/}
                         <h2>Lists</h2>
                             {this.state.userLists.map( (list) => {
                                 return <ListLink key={list.list_id} onClick={this.handleClick} listid={list.list_id} listname={list.name} />

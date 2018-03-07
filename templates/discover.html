@@ -1,57 +1,61 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class='container-fluid'>
 
-<div class='row'>
-    <p id='msg-para'></p>
-    <h2>You are most similar to <a href='/users/{{ most_similar_user }}'>{{ most_similar_user }}</a>.</h2>
+<link rel='stylesheet' type='text/css' href='/static/css/profile.css'>
 
-    <img class='profile-image' src='/static/uploads/{{ similar_image }}'/>
-    <img class='profile-image' src='/static/uploads/{{ user_image }}'/>
+<div class='container'>
 
-<!--     <h3>These are the restaurants you have in common:</h3>
-        <ol>
-            {% for rests in rests_in_common %}
-                <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
-            {% endfor %}
-        </ol>
- -->
-    <h3>{{ percentage }}% of your favorites in {{ city.title() }} are the same!</h3>
+    <div class='row'>
+        <p id='msg-para'></p>
+        <div class='col-xs-6'>
+            <h2>You are most similar to <a href='/users/{{ most_similar_user }}'><span class='font-emphasis'>{{ most_similar_user }}</span></a>.</h2>
 
-    {% if not_common %}
-        <p>Here are some restaurants that {{ most_similar_user }} likes that you should check out:</p>
-            <ol>
-                {% for rests in not_common %}
-                    <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
-                {% endfor %}
-            </ol>
-    {% endif %}
+            <img class='discover-image' src='/static/uploads/{{ similar_image }}'/>
+  <!--           <img class='profile-image' src='/static/uploads/{{ user_image }}'/> -->
 
-    <h2>These are the top categories in your favorites list:</h2>
-        <ol>
-            {% for catg in top_catgs %}
-                <li>{{ catg[0] }}</li>
-            {% endfor %}
-        </ol>
+            <h3>{{ percentage }}% of your favorites in {{ city.title() }} are the same!</h3>
 
-    <h2>Here are some new restaurants in your top categories:</h2>
-        <p>(Click to view on map)</p>
-        <ol id="hot-new-rests" data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>
-            {% for rest in hot_and_new %}
-                {% if rest['ig_loc_id'] %}
-                    <!-- <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-url='{{ rest["yelp_url"] }}' data-ig='{{ rest["ig_loc_id"] }}'><a href="https://www.instagram.com/explore/locations/{{ rest['ig_loc_id'] }}/" target="_blank">{{ rest['rest_name'] }}</a></li> -->
-                    <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-id='{{ rest["yelp_id"] }}' data-ig='{{ rest["ig_loc_id"] }}'>{{ rest['rest_name'] }}</li>
-                {% else %}
-                    <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-id='{{ rest["yelp_id"] }}'>{{ rest['rest_name'] }}</li>
-                    <!-- <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-url='{{ rest["yelp_url"] }}'><a href="{{ rest['yelp_url'] }}/" target="_blank">{{ rest['rest_name'] }}</a></li> -->
-                {% endif %}
-            {% endfor %}
-        </ol>
+            {% if not_common %}
+                <p>Here are some restaurants that {{ most_similar_user }} likes that you should check out:</p>
+                    <ol>
+                        {% for rests in not_common %}
+                            <li><a href="/restaurants/{{ rests.yelp_id }}">{{ rests.name }}</a></li>
+                        {% endfor %}
+                    </ol>
+            {% endif %}
+
+        </div>
+
+        <div class='col-xs-6'>
+            <div>
+                <h2>Top categories in your <a href="/users/{{ session.get('username') }}/favorites"><span class='font-emphasis'>favorites</span></a>.</h2>
+                    <ol>
+                        {% for catg in top_catgs %}
+                            <li>{{ catg[0] }}</li>
+                        {% endfor %}
+                    </ol>
+
+                <h3>Here are some new restaurants in your top categories:</h3>
+                    <p>(Click to view on map)</p>
+                    <ol id="hot-new-rests" data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>
+                        {% for rest in hot_and_new %}
+                            {% if rest['ig_loc_id'] %}
+                                <!-- <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-url='{{ rest["yelp_url"] }}' data-ig='{{ rest["ig_loc_id"] }}'><a href="https://www.instagram.com/explore/locations/{{ rest['ig_loc_id'] }}/" target="_blank">{{ rest['rest_name'] }}</a></li> -->
+                                <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-id='{{ rest["yelp_id"] }}' data-ig='{{ rest["ig_loc_id"] }}'>{{ rest['rest_name'] }}</li>
+                            {% else %}
+                                <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-id='{{ rest["yelp_id"] }}'>{{ rest['rest_name'] }}</li>
+                                <!-- <li data-lat='{{ rest["lat"] }}' data-lng='{{ rest["lng"] }}' data-yelp-url='{{ rest["yelp_url"] }}'><a href="{{ rest['yelp_url'] }}/" target="_blank">{{ rest['rest_name'] }}</a></li> -->
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+            </div>
+            <div id='discover-map'></div>
+        </div>
+    </div>
 </div>
 
-<div class='row' id='discover-map'></div>
-</div>
+
 
 <script>
     let idOfOptionToBold = '#discover-page-link';

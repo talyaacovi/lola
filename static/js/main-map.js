@@ -77,7 +77,7 @@ google.maps.event.addDomListener(window, 'load', initMap);
 document.getElementById('map-view-btn').addEventListener('click', function(evt) {
     $('#main-map').show();
     $('#city-div').hide();
-    $('#search-div').hide();
+    // $('#search-div').hide();
     $('#map-view-btn').addClass('active');
     $('#list-view-btn').removeClass('active');
     $('#search-btn').removeClass('active');
@@ -86,7 +86,7 @@ document.getElementById('map-view-btn').addEventListener('click', function(evt) 
 document.getElementById('list-view-btn').addEventListener('click', function(evt) {
     $('#city-div').show();
     $('#main-map').hide();
-    $('#search-div').hide();
+    // $('#search-div').hide();
     $('#list-view-btn').addClass('active');
     $('#map-view-btn').removeClass('active');
     $('#search-btn').removeClass('active');

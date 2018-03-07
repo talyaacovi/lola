@@ -69,18 +69,20 @@ class User extends React.Component {
 
         // let cityUrl = '/cities/' + this.props.state.toUpperCase() + '/' + this.props.city.toLowerCase();
         let header =
-                <div>
-                    <p id='msg-para'></p>
+                <div style={{ display: 'inline-block', float: 'left', height: 120, marginRight: 25 }}>
                     {/*<h1 data-username={this.props.username}>{this.props.username}, a local of <a href={cityUrl}>{this.props.city}</a>.</h1>*/}
                     <img className='profile-image' src={this.state.profileImage}/>
                 </div>
 
         return (
-            <div>
+            <div style={{ display: 'inline-block', float: 'right' }}>
                 { header }
-                { editProfileForm }
-                { profileInfo }
-                { editControls }
+
+                <div style={{ display: 'inline-block', float: 'left' }}>
+                    { editProfileForm }
+                    { profileInfo }
+                    { editControls }
+                </div>
             </div>
         )
     }

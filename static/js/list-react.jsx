@@ -72,6 +72,8 @@ class List extends React.Component {
                                             let currItems = this.props.listitems;
                                             currItems.push(data);
                                             this.props.onUpdate(currItems);
+                                            $('#restaurant-alert').show();
+                                            $('.tsitsi').empty().append(data.rest_name + ' has been added to your list.');
 
                                         }
                                         else {
@@ -118,12 +120,13 @@ class List extends React.Component {
         // to Save List, otherwise display button text Edit List
         let buttonText;
         let searchControls;
+        let searchMsg;
 
         if (this.state.editMode === true && this.props.listitems.length < 20) {
             buttonText = 'Save List';
             searchControls =
                     <div>
-                        <div id='search-restaurants'>
+                        <div id='search-restaurants col-xs-4'>
                             <h3>Search for places in {this.props.city}:</h3>
                             <form className='form-group' onSubmit={this.fetchSearchItems.bind(this)}>
                                 <input className='form-control profile-form'
@@ -148,7 +151,7 @@ class List extends React.Component {
 
         else if (this.state.editMode === true && this.props.listitems.length >= 20) {
             buttonText = 'Save List';
-            searchControls = <div>
+            searchMsg = <div>
                                 <p><em>You have reached the maximum of 20 restaurants per list.</em></p>
                             </div>
         }
@@ -180,25 +183,30 @@ class List extends React.Component {
                 </div>
 
         return (
-                <div className='col-xs-12 col-lg-4 list-items'>
-                    <h2 id='list_name'>{this.props.listname}</h2>
-                    {sendList}
-                    {listControls}
-                    {deleteControl}
-                    {searchControls}
-                    <div id='list-items'>
-                        {this.props.listitems.map( (rest, i) => {
-                            return <ListItem onClick={this.removeItem}
-                                        editing={this.state.editMode}
-                                        key={'rest_' + i}
-                                        yelpid={rest.yelp_id}
-                                        itemid={rest.item_id}
-                                        rest={rest.rest_name}
-                                        category={rest.yelp_category}
-                                        url={rest.yelp_url}
-                                        rest_url={'/restaurants/' + rest.yelp_id}
-                                        image={rest.image} />
-                        })}
+                <div>
+                    <div className='col-xs-12 col-lg-5 list-items'>
+                        <h2 id='list_name'>{this.props.listname}</h2>
+                        {sendList}
+                        {listControls}
+                        {deleteControl}
+                        {searchMsg}
+                        <div id='list-items'>
+                            {this.props.listitems.map( (rest, i) => {
+                                return <ListItem onClick={this.removeItem}
+                                            editing={this.state.editMode}
+                                            key={'rest_' + i}
+                                            yelpid={rest.yelp_id}
+                                            itemid={rest.item_id}
+                                            rest={rest.rest_name}
+                                            category={rest.yelp_category}
+                                            url={rest.yelp_url}
+                                            rest_url={'/restaurants/' + rest.yelp_id}
+                                            image={rest.image} />
+                            })}
+                        </div>
+                    </div>
+                    <div className='col-xs-12 col-lg-3'>
+                        {searchControls}
                     </div>
                 </div>
             )

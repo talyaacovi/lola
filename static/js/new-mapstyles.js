@@ -36,7 +36,10 @@ const MAPSTYLES = [
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "color": "#f50057"
+        "color": "#c84736"
+      },
+      {
+        "weight": 1.5
       }
     ]
   },
@@ -45,7 +48,7 @@ const MAPSTYLES = [
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#dc1c30"
+        "color": "#dc9630"
       }
     ]
   },
@@ -71,9 +74,6 @@ const MAPSTYLES = [
     "featureType": "landscape.natural",
     "elementType": "geometry",
     "stylers": [
-      {
-        "color": "#c84736"
-      },
       {
         "visibility": "on"
       }

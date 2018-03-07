@@ -4,11 +4,9 @@
 
 <link rel='stylesheet' type='text/css' href='/static/css/home.css'>
 
-<div class='container'>
-    <div class='content'>
-<!-- <div> -->
-    <p id='msg-para'></p>
+<div class='main container'>
 
+<!-- ALERTS!!! -->
     <div id="homepage-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
@@ -17,67 +15,77 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
 
-    <div class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
-    </div>
-    <div id='main-home' class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
-        <div class="col-lg-offset-3 col-lg-6 col-xs-12">
-            <h1 id='main-header' style='font-family: Pacifico, cursive; font-size: 9em; color: #f50057;'>Lola</h1>
-            <div style='width: 100%;'>
-            <p>the foodie friend you wish you had in every city to find out where the locals eat</p>
-            </div>
-        </div>
-    </div>
+<!-- ROW -->
+
     <div class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
     </div>
 
+<!-- PRE-LOGIN ROW -->
+
+    <div id='main-home' class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
+        <div class="col-lg-offset-3 col-lg-6 col-xs-12">
+            <h1 id='main-header'>Lola</h1>
+            <div style='width: 100%; background-color: #fcf8e3'>
+                <p><b>the foodie friend you wish you had in every city to find out where the locals eat</b></p>
+            </div>
+            <div class='logged-out-toggle'>
+                <button class='btn-default' data-toggle='modal' data-target='#loginModal'>Login</button>
+                <button class='btn-default' data-toggle='modal' data-target='#signupModal'>Signup</button>
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- ROW -->
+
+    <div class='row row-first' {% if session.get('user_id') %} hidden {% endif %}>
+
+    </div>
+
+<!-- POST-LOGIN ROW -->
 
     <div class='row row-second' id='main-home-div'
         {% if not session.get('user_id') %} hidden {% endif %}>
     <!-- search for a city which uses Google Places autocomplete -->
 
+        <div class="col-xs-12 col-lg-12">
+            <h1 class='home-header'>View lists made by <span class='font-emphasis'>locals</span>.</h1>
+            <div id='view-controls'>
+                <button class='btn btn-default btn-sm' id='map-view-btn'>Map View</button>
+                <button class='btn btn-default btn-sm' id='list-view-btn'>List View</button>
+<!--                 <button class='btn btn-default btn-sm' id='search-btn'>Search</button> -->
+            </div>
 
+            <div id='city-div' hidden>
+                <ul class='list-unstyled'>
+                    {% for location in all_locations %}
+                        <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
+                            <h3 class='city-link'><a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a></h3>
+                        <!-- <br> -->
+                        </li>
+                    {% endfor %}
+                </ul>
 
-        <div id='view-controls' class="col-xs-12 col-lg-12">
-            <button class='btn btn-default btn-sm active' id='list-view-btn'>List View</button>
-            <button class='btn btn-default btn-sm' id='map-view-btn'>Map View</button>
-            <button class='btn btn-default btn-sm' id='search-btn'>Search</button>
-        </div>
+                <div id='search-div' class='form-group'>
+                    <h3>Search for a city</h3>
 
-        <div id='city-div'>
-            <ul class='list-unstyled'>
-                {% for location in all_locations %}
-                    <li data-lat='{{ location.get("lat") }}' data-lng='{{ location.get("lng") }}' data-city='{{ location.get("city").lower() }}' data-state='{{ location.get("state").lower() }}'>
-                        <h3 class='city-link'><a href='/cities/{{ location.get("state").lower() }}/{{ location.get("city").lower() }}'>{{ location.get("city").title() }}, {{ location.get("state") }}</a></h3>
-                    <!-- <br> -->
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div id='main-map' class="col-xs-12" hidden></div>
-        <div id='search-div' class='form-group' hidden>
-            <h3>Search for a city</h3>
-
-            <form action='/search-city'>
-                <div class='form-group'>
-                    <input style="width: 25%" class='form-control' id='autocomplete' type='text' name='city-name' required>
+                    <form action='/search-city'>
+                        <div class='form-group'>
+                            <input style="width: 25%" class='form-control' id='autocomplete' type='text' name='city-name' required>
+                        </div>
+                        <div class='form-group'>
+                            <button class='btn btn-default' id='search-city' value='Search'>Search</button>
+                        </div>
+                    </form>
                 </div>
-                <div class='form-group'>
-                    <button class='btn btn-default' id='search-city' value='Search'>Search</button>
-                </div>
-            </form>
+            </div>
+
+            <div id='main-map' class="col-xs-12"></div>
+
         </div>
     </div>
-    {% if not session.get('user_id') %}
-<!--         <div id='icons' class='row'>
-            <div class="col-xs-offset-4 col-xs-4">
-                <img src='/static/img/donut.png'/>
-                <img src='/static/img/fries.png'/>
-                <img src='/static/img/hamburger.png'/>
-            </div>
-        </div> -->
-    {% endif %}
-</div>
+
 </div>
 
 

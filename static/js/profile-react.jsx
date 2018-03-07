@@ -7,8 +7,8 @@ class ListLink extends React.Component {
     }
 
     render() {
-        return (<div>
-                    <a className='list-link' onClick={this.buttonClickHandler.bind(this)}
+        return (<div className='list-link'>
+                    <a onClick={this.buttonClickHandler.bind(this)}
                         data-list-id={this.props.listid}>{this.props.listname}
                     </a>
                 </div>
@@ -19,6 +19,7 @@ class ListLink extends React.Component {
 const divStyle = {
   fontWeight: 'bold'
 };
+
 
 // instructions for creating a ProfileInfo component
 class ProfileInfo extends React.Component {
@@ -90,7 +91,7 @@ class ProfileForm extends React.Component {
                         <input type="text" className="form-control profile-form" name="favDish" defaultValue={this.props.favDish}/>
                         <label>Favorite food city:</label>
                         <input type="text" className="form-control profile-form" name="favCity" defaultValue={this.props.favCity}/>
-                        <button className='btn btn-default'>Save Profile</button>
+                        <button className='btn btn-default save-btn'>Save Profile</button>
                     </form>
                 </div>
             )
