@@ -8,7 +8,7 @@ function initMap() {
     // google map with city as center
     window.map = new google.maps.Map(document.querySelector('#city-map'), {
         center: city,
-        zoom: 12.2,
+        zoom: 13,
         mapTypeControl: false,
         styles: MAPSTYLES
     });
@@ -18,7 +18,7 @@ function initMap() {
     });
 
     // get array of all restaurants in list
-    let restArray = $('#top-restaurants li');
+    let restArray = $('.top-rest-info h3');
     let marker, html, restaurant;
     let newLat, newLng, newCenter;
 
@@ -26,6 +26,7 @@ function initMap() {
     for (let i = 0; i < restArray.length; i++) {
         let lat = restArray[i].dataset.lat;
         let lng = restArray[i].dataset.lng;
+        let name = restArray[i].dataset.name;
         let yelp_id = restArray[i].dataset.yelpId;
 
         // create map marker for the specific restaurant
@@ -41,7 +42,7 @@ function initMap() {
               '<div class="window-content">' +
                     '<a href="/restaurants/' +
                     yelp_id + '">' +
-                    restArray[i].firstElementChild.innerText +
+                    name +
                     '</a>' +
               '</div>');
 

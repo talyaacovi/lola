@@ -158,7 +158,7 @@ class ProfilePageContainer extends React.Component {
                             <form className='form-group' onSubmit={this.createNewList.bind(this)}>
                                 <label>Name</label>
                                 <input className='form-control profile-form' name='list-name' value={this.state.newListName} onChange={this.updateInputValue.bind(this)} required></input>
-                                <button className='btn btn-default'>Submit</button>
+                                <button className='btn btn-default create-btn'>Submit</button>
                             </form>
                         </div>
         }

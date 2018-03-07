@@ -14,6 +14,22 @@
   padding: 2px 12px;
 }
 
+.btn-default:active {
+  background-color: #f50057;
+  color: #fcf8e3;
+}
+
+
+.btn-default:focus {
+  background-color: #f50057;
+  color: #fcf8e3;
+}
+
+.btn-default:hover {
+  background-color: #f50057;
+  color: #fcf8e3;
+}
+
 #logout-btn {
   background-color: transparent;
   color: #C84736;
@@ -34,14 +50,14 @@
 }
 
 .navbar-default .navbar-nav > .active > a {
-  color: #f50057;
-  background-color: #ffe0b2;
+  color: #C84736;
+  background-color: #fcf8e3;
 }
 
 .navbar-default .navbar-nav > li > a {
   font-weight: bold;
   font-size: 18px;
-  color: #f50057;
+  color: #C84736;
   /*background-color: #fcf8e3;*/
   /*border: solid #fcf8e3*/
 }
@@ -110,9 +126,10 @@ body {
   padding-bottom: 10px;
 }
 
-.city-link {
+.city-link > a {
   font-size: 18px;
   margin-top: 10px;
+  color: #00695c;
 }
 
 .isDisabled {
@@ -142,7 +159,7 @@ body {
 }
 
 #city-map {
-    height: 400px;
+    height: 500px;
 }
 
 #city-div {
@@ -197,6 +214,7 @@ body {
 .list-items {
   height: 640px;
   overflow: scroll;
+  border-left: 2px dotted #C84736;
 }
 
 #email-list, #edit-list, #del-list {

@@ -127,7 +127,7 @@ class List extends React.Component {
             searchControls =
                     <div>
                         <div id='search-restaurants col-xs-4'>
-                            <h3>Search for places in {this.props.city}:</h3>
+                            <h2>Search:</h2>
                             <form className='form-group' onSubmit={this.fetchSearchItems.bind(this)}>
                                 <input className='form-control profile-form'
                                     name='term'
@@ -205,7 +205,7 @@ class List extends React.Component {
                             })}
                         </div>
                     </div>
-                    <div className='col-xs-12 col-lg-3'>
+                    <div className='col-xs-12 col-lg-3 search-items'>
                         {searchControls}
                     </div>
                 </div>

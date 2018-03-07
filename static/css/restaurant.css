@@ -1,0 +1,12 @@
+h4, li {
+    color: #00695c;
+}
+
+a {
+    color: #f50057;
+}
+
+a:hover {
+    color: #f50057;
+    text-decoration: underline;
+}

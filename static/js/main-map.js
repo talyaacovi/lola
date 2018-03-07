@@ -78,25 +78,25 @@ document.getElementById('map-view-btn').addEventListener('click', function(evt) 
     $('#main-map').show();
     $('#city-div').hide();
     // $('#search-div').hide();
-    $('#map-view-btn').addClass('active');
-    $('#list-view-btn').removeClass('active');
-    $('#search-btn').removeClass('active');
+    // $('#map-view-btn').addClass('active');
+    // $('#list-view-btn').removeClass('active');
+    // $('#search-btn').removeClass('active');
 });
 
 document.getElementById('list-view-btn').addEventListener('click', function(evt) {
     $('#city-div').show();
     $('#main-map').hide();
     // $('#search-div').hide();
-    $('#list-view-btn').addClass('active');
-    $('#map-view-btn').removeClass('active');
-    $('#search-btn').removeClass('active');
+    // $('#list-view-btn').addClass('active');
+    // $('#map-view-btn').removeClass('active');
+    // $('#search-btn').removeClass('active');
 });
 
-document.getElementById('search-btn').addEventListener('click', function(evt) {
-    $('#search-div').show();
-    $('#main-map').hide();
-    $('#city-div').hide();
-    $('#search-btn').addClass('active');
-    $('#map-view-btn').removeClass('active');
-    $('#list-view-btn').removeClass('active');
-});
+// document.getElementById('search-btn').addEventListener('click', function(evt) {
+//     $('#search-div').show();
+//     $('#main-map').hide();
+//     $('#city-div').hide();
+//     $('#search-btn').addClass('active');
+//     $('#map-view-btn').removeClass('active');
+//     $('#list-view-btn').removeClass('active');
+// });

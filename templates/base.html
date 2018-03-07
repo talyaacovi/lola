@@ -46,6 +46,7 @@
           {% if not session.get('user_id') %} hidden {% endif %}>
           <a class="navbar-brand" href="/">LOLA</a>
           <ul class="nav navbar-nav navbar-right">
+            <li id='visit-page-link'><a id='visit-page' href='/'>Visit</a></li>
             <li id='profile-page-link'><a id='profile-page' href='/users/{{ session.get("username") }}'>Profile</a></li>
             <li id='discover-page-link'><a href='/discover'>Discover</a></li>
             <li><form action='/logout' id='logout-form' method='POST' class="nav navbar-form navbar-right">

@@ -42,7 +42,8 @@ function loginMessage(result) {
             $('#homepage-alert').show().append('You have successfully logged in!');
             // debugger;
             // $('body').addClass('home-background');
-            $('.main').addClass('main-background');
+            $('body').addClass('main-background');
+            $('.navbar').addClass('home-nav');
             $('.row-first').hide();
         }
         else {
@@ -52,6 +53,9 @@ function loginMessage(result) {
             $('.row-first').hide();
             $('#main-map').show();
             $('#inactive-homepage-alert').show().append('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/favorites">Favorites</a> list to access more content.');
+            $('body').addClass('main-background');
+            $('.navbar').addClass('home-nav');
+            $('.row-first').hide();
         }
     }
     else if (result == 'Incorrect') {

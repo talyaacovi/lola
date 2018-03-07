@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class='container'>
-        <p id='msg-para'></p>
+<link rel='stylesheet' type='text/css' href='/static/css/profile.css'>
+<link rel='stylesheet' type='text/css' href='/static/css/restaurant.css'>
 
+<div class='container'>
         <div class='row'>
-            <h1>{{ restaurant.name }}</h1>
-            {% if ranking %}
-                <h4>Ranked #{{ ranking }} in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
-            {% else %}
-                <h4>This restaurant is not yet ranked in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
-            {% endif %}
-            <ul class="list-unstyled">
-                <li><b>Address: </b>{{ restaurant.address }}</li>
-                <li><b>Category: </b>{{ restaurant.yelp_category }}</li>
-                <li><em>Read reviews on <a href="{{ restaurant.yelp_url }}" target="_blank">Yelp</a></em></li>
-                {% if ig_loc_id %}
-                    <li><em>See photos on <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">Instagram</a></em></li>
+            <div class='col-xs-12'>
+                <h1>{{ restaurant.name }}</h1>
+                {% if ranking %}
+                    <h4>Ranked #{{ ranking }} in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
+                {% else %}
+                    <h4>This restaurant is not yet ranked in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
                 {% endif %}
-            </ul>
+                <ul class="list-unstyled">
+                    <li><b>Address: </b>{{ restaurant.address }}</li>
+                    <li><b>Category: </b>{{ restaurant.yelp_category }}</li>
+                    <li><em>Read reviews on <a href="{{ restaurant.yelp_url }}" target="_blank">Yelp</a></em></li>
+                    {% if ig_loc_id %}
+                        <li><em>See photos on <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">Instagram</a></em></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
 
         <div class='row'>

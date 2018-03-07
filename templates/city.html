@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<link rel='stylesheet' type='text/css' href='/static/css/profile.css'>
+<link rel='stylesheet' type='text/css' href='/static/css/city.css'>
+
 <div class='container'>
-    <p id='msg-para'></p>
 
     <div id="city-alert" class="alert alert-warning alert-dismissible" role="alert" hidden>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -12,54 +14,77 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
 
+<!-- HEADER ROW -->
+
     <div class='row'>
           <div class='main-city-header col-xs-offset-3 col-xs-6'>
-            <h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'>{{ city.title() }}, {{ state.upper() }}</h1>
+            <h1 id='city' data-lat='{{ location.lat }}' data-lng='{{ location.lng }}'><span class='font-emphasis'>{{ city.title() }}, {{ state.upper() }}</span></h1>
           </div>
     </div>
 
 
-
+<!-- RESTAURANTS ROW -->
 
     <div class='row'>
-          <div class='col-xs-6'>
-              <h2>Top 10 Favorite Local Restaurants</h2>
-              <p id='click-msg'>(Click to view on map)</p>
-              <div id='top-restaurants'>
-                  <ol id='top-restaurants-list'>
-                  {% for item in restaurant_tuples %}
-                      <li data-yelp-id='{{ item[0].yelp_id }}' data-lat='{{ item[0].lat }}' data-lng='{{ item[0].lng }}' data-yelp='{{ item[0].yelp_url }}'>{{ item[0].name }}
-                        <span><i style='display: inline;' class="material-icons">favorite_border</i><strong style='font-size: 12px;'>{{ item[1] }}</strong></span>
-                        <!-- <img src='/static/img/star.png'/><p style="display: inline;">{{item[1]}}</p> -->
-                      </li>
-                  {% endfor %}
-                  </ol>
-              </div>
+          <div class='col-xs-12 title'>
+              <h2>Favorite Local Restaurants</h2>
           </div>
+    </div>
+    <div class='row'>
+          <div class='col-xs-12' id='email-list'>
+              <button class='btn btn-default' id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
+              <a style='display: block;' href="#city-map">View on map</a>
+          </div>
+    </div>
+              <!-- <p id='click-msg'>(Click to view on map)</p> -->
+              <!-- <div id='top-restaurants'> -->
 
-          <div class='col-xs-6'>
+      {% for i in range(restaurant_tuples|length) %}
+        <div class='row top-restaurants-item'>
+            <div class='col-xs-12 top-rest-info'>
+                <h3 class='rest_name' data-yelp-id='{{ restaurant_tuples[i][0].yelp_id }}' data-lat='{{ restaurant_tuples[i][0].lat }}' data-lng='{{ restaurant_tuples[i][0].lng }}' data-yelp='{{ restaurant_tuples[i][0].yelp_url }}' data-name='{{ restaurant_tuples[i][0].name }}'>{{ i + 1 }}. <a href='/restaurants/{{ restaurant_tuples[i][0].yelp_id }}'>{{ restaurant_tuples[i][0].name }}</a></h3>
+                <span>
+                    <i class="material-icons">favorite_border</i>
+                    <strong>{{ restaurant_tuples[i][1] }}</strong>
+                </span>
+            </div>
+        </div>
+        <div class='row'>
+            {% for j in range(3) %}
+                <div class='rest_photo col-xs-12 col-md-6 col-lg-4'>
+                    <img class='img-responsive' src='{{ restaurant_tuples[i][0].photos[j].url }}'/>
+                </div>
+            {% endfor %}
+        </div>
+      {% endfor %}
+
+
+<!-- MAP ROW -->
+
+    <div class='row'>
+          <div class='col-xs-12'>
+                <!-- <h3>view on map:</h3> -->
+                <div id='city-map'></div>
+          </div>
+    </div>
+
+
+<!-- LOCALS ROW -->
+    <div class='row'>
+          <div class='col-xs-12'>
                 <div id='city-locals'>
                     <h2>Meet The Locals</h2>
                     <ul class='list-unstyled'>
                       {% for user in all_users %}
                       <li>
-                          <a href='/users/{{ user.username }}'>{{ user.username }}</a>
-                          <br>
+                          <img class='all-users' src='/static/uploads/{{ user.profiles[0].image_fn }}'/>
+                          <a style='display: block;' href='/users/{{ user.username }}'>{{ user.username }}</a>
+                          <!-- <br> -->
                       </li>
                       {% endfor %}
                     </ul>
                 </div>
           </div>
-    </div>
-
-    <div class='row'>
-          <div id='email-list'>
-              <button class='btn btn-default' id='email-list' data-toggle='modal' data-target='#emailModal'>Send List</button>
-          </div>
-    </div>
-
-    <div class='row'>
-          <div id='city-map'></div>
     </div>
 
 </div>
@@ -99,7 +124,7 @@
 <script src='/static/js/send-email.js'></script>
 
 <script>
-    let idOfOptionToBold = '';
+    let idOfOptionToBold = '#visit-page-link';
 </script>
 
 {% endblock %}

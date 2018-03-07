@@ -1,0 +1,48 @@
+.rest_photo {
+    height: 39rem;
+    width: 39rem;
+    /*margin-right: 2.5%;*/
+}
+
+.img-responsive {
+    height: 100%;
+    width: 100%;
+}
+
+/*.title {
+    padding-left: 0;
+}*/
+
+.rest_name {
+    display: inline-block;
+}
+
+.material-icons {
+    font-size: 24px;
+    display: inline;
+    color: #f50057;
+}
+
+strong {
+    font-size: 24px;
+    color: #f50057;
+}
+
+a {
+    color: #f50057;
+}
+
+a:hover {
+    color: #f50057;
+    text-decoration: underline;
+}
+
+#city-map {
+    margin-top: 5%;
+}
+
+.all-users {
+    height: 100px;
+    width: 100px;
+    border-radius: 25px;
+}

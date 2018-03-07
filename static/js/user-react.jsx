@@ -78,7 +78,7 @@ class User extends React.Component {
             <div style={{ display: 'inline-block', float: 'right' }}>
                 { header }
 
-                <div style={{ display: 'inline-block', float: 'left' }}>
+                <div style={{ display: 'inline-block', float: 'left', maxWidth: 180, maxHeight: 100 }}>
                     { editProfileForm }
                     { profileInfo }
                     { editControls }

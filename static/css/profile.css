@@ -17,7 +17,7 @@ body {
 .main {
     background-color: #fcf8e3;
     border-radius: 25px;
-    padding: 2%;
+    /*padding: 2%;*/
 }
 
 h1, h2, h3 {
@@ -47,12 +47,12 @@ a:hover {
     color: #fcf8e3;
 }
 
-.list-items {
-    border-left: 2px dotted #C84736;
-}
-
 .create-list {
     margin-top: 10px;
+}
+
+#create-list {
+    margin-top: 5%;
 }
 
 .save-btn {
@@ -68,4 +68,32 @@ a:hover {
     font-family: 'Bungee Shade';
     color: #C84736;
     border-bottom: 4px solid;
+}
+
+/*.navbar > .container .navbar-brand {
+    margin-left: 0;
+}
+
+.navbar-right {
+    margin-right: 0;
+}*/
+
+.navbar-default .navbar-brand:hover {
+    color: #f50057;
+}
+
+.del-btn {
+    margin: 1% 0;
+}
+
+.create-btn {
+    margin-top: 10px;
+}
+
+label {
+    color: #f50057;
+}
+
+.profile-form {
+    width: 70%;
 }

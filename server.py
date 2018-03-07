@@ -411,7 +411,6 @@ def send_user_list():
     username = request.form.get('username')
     lst_items = request.form.getlist('lst_items[]')
     lst_name = request.form.get('lst_name')
-    print to_email, from_name, username, lst_items, lst_name
 
     location = get_user_location(username)
 
