@@ -1,7 +1,7 @@
 # summary
 
 Lola is the foodie friend you wish you had in every city.
-The app helps travelers answer the question 'Where do the locals eat?,' and lets
+The app helps travelers answer the question __Where do the locals eat?__ and lets
 locals keep track of their favorite restaurants.
 
 ![Lola Homepage](/static/img/README/home.png)
@@ -26,8 +26,8 @@ API.
 ![City page map](/static/img/README/city2.png)
 
 Any list on the site can be shared via email using the SendGrid API -- this is
-especially helpful for anyone who has a 'recommendations' email in their inbox
-that they have to find and forward whenever someone is visiting and asks for tips!
+especially helpful for anyone who has an old, unmaintained email in their inbox
+that they have to find and forward whenever someone is visiting and asks for recommendations!
 
 ![Email list](/static/img/README/email.png)
 
@@ -39,8 +39,7 @@ Instagram, and a link directly into the Instagram feed for that location.
 Find out which fellow local you are most similar to, what your top categories are,
 and get recommendations for new restaurants based on both!
 
-![Discover local page](/static/img/README/discover.png)
-![Discover new page](/static/img/README/discover2.png)
+![Discover page](/static/img/README/discover3.png)
 
 ***
 
