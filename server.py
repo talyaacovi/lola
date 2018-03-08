@@ -245,7 +245,8 @@ def do_discover():
     """Show a logged in user the local they are most similar to."""
 
     restaurants = get_user_favorite_restaurants()
-    if len(restaurants) >= 20:
+
+    if len(restaurants) >= 20 and User.query.count() > 1:
         most_similar_user_dict = get_most_similar_user(restaurants)
         most_similar_user = most_similar_user_dict.get('name')
         rests_in_common_ids = most_similar_user_dict.get('rest_ids')
