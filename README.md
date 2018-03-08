@@ -1,9 +1,10 @@
-#summary
+# summary
 
 Lola is the foodie friend you wish you had in every city.
 The app helps travelers answer the question 'Where do the locals eat?,' and lets
 locals keep track of their favorite restaurants.
 
+![Lola Homepage](/static/img/README/home.png)
 
 After signing up with their zipcode, new users are prompted to add at least
 5 restaurants to the default 'Favorites' list before unlocking more site content.
@@ -24,20 +25,23 @@ Instagram, and a link directly into the Instagram feed for that location.
 
 ***
 
-#technologies
+# technologies
 
-⋅⋅*Python
-⋅⋅*PostgreSQL + SQLAlchemy
-⋅⋅*Flask + Jinja
-⋅⋅*ReactJS
-⋅⋅*JavaScript
-⋅⋅*jQuery
-⋅⋅*Bootstrap + CSS + HTML
+* Python
+* PostgreSQL + SQLAlchemy
+* Flask + Jinja
+* ReactJS
+* JavaScript
+* jQuery
+* Bootstrap + CSS + HTML
 
-#APIs
+# APIs
 
-⋅⋅*Yelp Fusion
-⋅⋅*SendGrid
-⋅⋅*Google Maps
-⋅⋅*Facebook Graph
-⋅⋅*[Instagram Scraper](https://github.com/rarcega/instagram-scraper)
+* Yelp Fusion
+* SendGrid
+* Google Maps
+* Facebook Graph
+* [Instagram Scraper](https://github.com/rarcega/instagram-scraper)
+
+(dependencies are listed in requirements.txt)
+
