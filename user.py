@@ -19,11 +19,12 @@ def check_password(user_email, user_password):
 
     password = User.query.filter_by(email=user_email).first().password
 
-    if bcrypt.checkpw(user_password.encode('utf-8'), password.encode('utf-8')):
+    if password == user_password:
         return True
 
-    # if password == user_password:
-        # return True
+    else:
+        if bcrypt.checkpw(user_password.encode('utf-8'), password.encode('utf-8')):
+            return True
 
 
 def check_username(username):

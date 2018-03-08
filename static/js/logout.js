@@ -55,7 +55,6 @@ function loginMessage(result) {
             $('#inactive-homepage-alert').show().append('You have successfully logged in! Please add at least 5 restaurants to your <a href="/users/' + result.user + '/favorites">Favorites</a> list to access more content.');
             $('body').addClass('main-background');
             $('.navbar').addClass('home-nav');
-            $('.row-first').hide();
         }
     }
     else if (result == 'Incorrect') {
@@ -131,20 +130,21 @@ function checkUsernameLength() {
 ////////////////// UNDER CONSTRUCTION: zipcode validation
 
 
-$('#zipcode').on('blur', function (evt) {
+$('#SignupZipcode').on('blur', function (evt) {
     let zipcode = evt.target.value;
     $.get('/check-zipcode', {'zipcode': zipcode}, zipcodeMessage);
 });
 
 function zipcodeMessage (result) {
     if (result == 'True') {
-        $('#zipcode-invalid').hide();
-        $('#zipcode-valid').attr('style', 'display: inline');
+        $('#SignupZipcode').parent('div').removeClass('has-error');
+        $('#SignupZipcode').parent('div').addClass('has-success');
+        $('#zipcodeHelpBlock').text('');
         zipcodeValid = true;
     }
     else if (result == 'False') {
-        $('#zipcode-valid').hide();
-        $('#zipcode-invalid').attr('style', 'display: inline');
+        $('#SignupZipcode').parent('div').addClass('has-error');
+        $('#zipcodeHelpBlock').text('Please enter a valid zipcode.');
         zipcodeValid = false;
     }
 }
@@ -193,15 +193,20 @@ function signupUser(result) {
     if (result) {
         $('.logged-out-toggle').hide();
         $('.logged-in-toggle').show();
-        $('#main-home-div').show();
         $('#signupModal').modal('hide');
         $('#profile-page').attr('href', '/users/' + result);
         $('#search-div').hide();
+        $('#city-div').hide();
         $('#icons').hide();
+        $('.row-first').hide();
+        $('#main-map').show();
         $('#view-controls').hide();
-        $('#homepage-alert').show().append('Your account has been created! Please add at least 5 restaurants to your <a href="/users/' + result + '/favorites">Favorites</a> list to access more content.');
+        $('#inactive-homepage-alert').show().append('Your account has been created! Please add at least 5 restaurants to your <a href="/users/' + result + '/favorites">Favorites</a> list to access more content.');
+        $('body').addClass('main-background');
+        $('.navbar').addClass('home-nav');
 
     }
+
 
     else {
         $('#signupModal').modal('hide');

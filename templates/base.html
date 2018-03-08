@@ -73,7 +73,7 @@
         <h4 class="modal-title" id="myModalLabel">Login</h4>
       </div>
       <div class="modal-body">
-        <p class="modal-title" id="loginModalMsg"></p>
+        <p class="modal-title" id="loginModalMsg" style='width: 100%;'></p>
         <form id='login-form' method='POST' action='/login-form'>
           <div class="form-group">
             <label for="Email">Email address</label>
@@ -103,7 +103,7 @@
         <h4 class="modal-title" id="myModalLabel">Signup</h4>
       </div>
       <div class="modal-body">
-        <p class="modal-title" id="signupModalMsg"></p>
+        <p class="modal-title" id="signupModalMsg" style='width: 100%;'></p>
         <form id='signup-form-bootstrap' method='POST'>
           <div class="form-group has-feedback">
             <label for="Email">Email address</label>
@@ -117,12 +117,11 @@
             <label for="Username">Username</label>
             <input type="username" name='username' class="form-control" id="SignupUsername" placeholder="Username" required>
             <span id="usernameHelpBlock" class="help-block"></span>
-<!--             <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-            <span id="inputSuccess2Status" class="sr-only">(success)</span> -->
           </div>
           <div class="form-group has-feedback">
             <label for="Zipcode">Zipcode</label>
             <input type="zipcode" name='zipcode' class="form-control" id="SignupZipcode" placeholder="Zipcode" required>
+            <span id="zipcodeHelpBlock" class="help-block"></span>
           </div>
           <button type="submit" class="btn btn-default" id="submit-signup">Submit</button>
         </form>
