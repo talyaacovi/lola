@@ -131,23 +131,23 @@ function checkUsernameLength() {
 ////////////////// UNDER CONSTRUCTION: zipcode validation
 
 
-// $('#zipcode').on('blur', function (evt) {
-//     let zipcode = evt.target.value;
-//     $.get('/check-zipcode', {'zipcode': zipcode}, zipcodeMessage);
-// });
+$('#zipcode').on('blur', function (evt) {
+    let zipcode = evt.target.value;
+    $.get('/check-zipcode', {'zipcode': zipcode}, zipcodeMessage);
+});
 
-// function zipcodeMessage (result) {
-//     if (result == 'True') {
-//         $('#zipcode-invalid').hide();
-//         $('#zipcode-valid').attr('style', 'display: inline');
-//         zipcodeValid = true;
-//     }
-//     else if (result == 'False') {
-//         $('#zipcode-valid').hide();
-//         $('#zipcode-invalid').attr('style', 'display: inline');
-//         zipcodeValid = false;
-//     }
-// }
+function zipcodeMessage (result) {
+    if (result == 'True') {
+        $('#zipcode-invalid').hide();
+        $('#zipcode-valid').attr('style', 'display: inline');
+        zipcodeValid = true;
+    }
+    else if (result == 'False') {
+        $('#zipcode-valid').hide();
+        $('#zipcode-invalid').attr('style', 'display: inline');
+        zipcodeValid = false;
+    }
+}
 
 
 ////////////////// email validation

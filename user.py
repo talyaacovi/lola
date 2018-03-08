@@ -3,6 +3,7 @@
 from model import *
 from flask import session
 from sqlalchemy import func
+import bcrypt
 
 
 def check_email(user_email):
@@ -17,8 +18,12 @@ def check_password(user_email, user_password):
     """Check password when user logs in."""
 
     password = User.query.filter_by(email=user_email).first().password
-    if password == user_password:
+
+    if bcrypt.checkpw(user_password.encode('utf-8'), password.encode('utf-8')):
         return True
+
+    # if password == user_password:
+        # return True
 
 
 def check_username(username):
@@ -77,7 +82,11 @@ def register_user(email, password, username, zipcode):
     city = Zipcode.query.filter_by(zipcode=zipcode).first().city
     state = Zipcode.query.filter_by(zipcode=zipcode).first().state
 
-    user = User(email=email, password=password, username=username,
+    pw = password
+    hashed = bcrypt.hashpw(pw.encode('utf8'), bcrypt.gensalt())
+    print hashed
+
+    user = User(email=email, password=hashed, username=username,
                 city=city, state=state, zipcode=zipcode)
 
     db.session.add(user)
