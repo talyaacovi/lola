@@ -22,7 +22,7 @@ Travelers can view a ranked list of top restaurants in a particular city based o
 the knowledge and popular vote of locals, with locations plotted using the Google Maps
 API.
 
-![City page list](/static/img/README/city.png)
+![City page list](/static/img/README/city3.png)
 ![City page map](/static/img/README/city2.png)
 
 Any list on the site can be shared via email using the SendGrid API -- this is
