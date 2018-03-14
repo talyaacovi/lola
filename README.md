@@ -6,7 +6,7 @@ locals keep track of their favorite restaurants.
 
 ![Lola Homepage](/static/img/README/home.png)
 
-visit [lolaeats](http://www.lolaeats.com) to sign up and start creating lists
+visit [lolaeats](https://www.lolaeats.com) to sign up and start creating lists
 of your favorite local restaurants!
 
 ***
