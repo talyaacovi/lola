@@ -188,8 +188,8 @@ def get_ranking(yelp_id, city, state):
                              .filter(Restaurant.state == state,
                                      Restaurant.city == city,
                                      List.category_id == 1)
-                             .group_by(Restaurant.yelp_id)
-                             .order_by(db.desc(func.count(ListItem.rest_id)))
+                             .group_by(Restaurant.yelp_id, Restaurant.name)
+                             .order_by(db.desc(func.count(ListItem.rest_id)), Restaurant.name)
                              .all())
     restaurants = [item[0] for item in restaurants]
     if yelp_id in restaurants:

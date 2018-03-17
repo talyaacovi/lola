@@ -52,7 +52,7 @@ def count_restaurants_by_city(state, city):
                                      User.city == city.upper(),
                                      List.category_id == 1)
                              .group_by(Restaurant.rest_id)
-                             .order_by(db.desc(func.count(ListItem.rest_id)))
+                             .order_by(db.desc(func.count(ListItem.rest_id)), Restaurant.name)
                              .limit(10).all())
 
     return restaurants
