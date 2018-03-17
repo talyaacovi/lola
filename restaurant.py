@@ -196,3 +196,19 @@ def get_ranking(yelp_id, city, state):
         return restaurants.index(yelp_id) + 1
 
     return None
+
+def check_lists(rest_id, user_id):
+    """Get lists for a user that don't already contain specific restaurant."""
+
+    user_lists = User.query.filter(User.user_id == user_id).first().lists
+    # user_lists = User.query.filter(User.user_id == 33).first().lists
+
+    lsts_to_add = []
+    for lst in user_lists:
+        rest_ids = [x.rest_id for x in lst.list_items]
+        print rest_ids
+        print rest_id
+        if rest_id not in rest_ids:
+            lsts_to_add.append(lst.name)
+
+    return lsts_to_add

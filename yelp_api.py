@@ -41,7 +41,7 @@ def search(term, location):
         'term': term.replace(' ', '+'),
         'location': location.replace(' ', '+'),
         'limit': SEARCH_LIMIT,
-        'categories': 'restaurants'
+        'categories': 'restaurants,food,nightlife'
     }
     return request(API_HOST, SEARCH_PATH, api_key, url_params=url_params)
 

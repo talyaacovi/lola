@@ -6,14 +6,15 @@
 
 <div class='container'>
         <div class='row'>
-            <div class='col-xs-12'>
+            <div class='col-xs-10'>
                 <h1>{{ restaurant.name }}</h1>
+
                 {% if ranking %}
                     <h4>Ranked #{{ ranking }} in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
                 {% else %}
                     <h4>This restaurant is not yet ranked in <a href="/cities/{{ restaurant.state.upper() }}/{{ restaurant.city.lower() }}">{{ restaurant.city }}, {{ restaurant.state }}</a></h4>
                 {% endif %}
-                <ul class="list-unstyled">
+                <ul class="list-unstyled" style='display: inline-block'>
                     <li><b>Address: </b>{{ restaurant.address }}</li>
                     <li><b>Category: </b>{{ restaurant.yelp_category }}</li>
                     <li><em>Read reviews on <a href="{{ restaurant.yelp_url }}" target="_blank">Yelp</a></em></li>
@@ -21,6 +22,19 @@
                         <li><em>See photos on <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">Instagram</a></em></li>
                     {% endif %}
                 </ul>
+            </div>
+            <div class='col-xs-2'>
+                {% if display_btn %}
+                    <div class='add-rest'>
+                        <p>Add to a list</p>
+                        <select class="form-control">
+                        {% for lst in lsts_to_add %}
+                            <option>{{ lst }}</option>
+                        {% endfor %}
+                        </select>
+                        <button class='btn btn-default add-rest-btn'>Add</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
 

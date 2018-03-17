@@ -10,3 +10,8 @@ a:hover {
     color: #f50057;
     text-decoration: underline;
 }
+
+.add-rest {
+	float: right;
+	margin-top: 20px;
+}

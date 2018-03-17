@@ -511,7 +511,17 @@ def show_restaurant_details(yelp_id):
         results = business(yelp_id)
         photos = results['photos']
 
-    return render_template('restaurant.html', ranking=ranking, photos=photos, restaurant=restaurant, ig_loc_id=restaurant.ig_loc_id)
+    display_btn = restaurant.city.upper() == session.get('city') and restaurant.state == session.get('state')
+    lsts_to_add = check_lists(restaurant.rest_id, session.get('user_id'))
+
+    print lsts_to_add
+
+    return render_template('restaurant.html', ranking=ranking,
+                                              display_btn=display_btn, 
+                                              photos=photos, 
+                                              restaurant=restaurant, 
+                                              ig_loc_id=restaurant.ig_loc_id,
+                                              lsts_to_add=lsts_to_add)
 
 
 @app.route('/user-info.json')
@@ -611,7 +621,7 @@ def new_list_react(username, listname):
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
-    # app.debug = True
+    app.debug = True
     connect_to_db(app)
     # Use the DebugToolbar
     # DebugToolbarExtension(app)
