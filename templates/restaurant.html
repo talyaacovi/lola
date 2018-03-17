@@ -6,7 +6,7 @@
 
 <div class='container'>
         <div class='row'>
-            <div class='col-xs-10'>
+            <div class='col-xs-9'>
                 <h1>{{ restaurant.name }}</h1>
 
                 {% if ranking %}
@@ -22,17 +22,18 @@
                         <li><em>See photos on <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">Instagram</a></em></li>
                     {% endif %}
                 </ul>
-            </div>
-            <div class='col-xs-2'>
                 {% if display_btn %}
                     <div class='add-rest'>
-                        <p>Add to a list</p>
-                        <select class="form-control">
-                        {% for lst in lsts_to_add %}
-                            <option>{{ lst }}</option>
-                        {% endfor %}
-                        </select>
-                        <button class='btn btn-default add-rest-btn'>Add</button>
+                        <form id='add-from-details' action='/add-restaurant' method='POST'>
+                            <label>Add to a list: </label>
+                            <select class="form-control">
+                            {% for lst in lsts_to_add %}
+                                <option data-list-id='{{ lst[1] }}'>{{ lst[0].title() }}</option>
+                            {% endfor %}
+                            </select>
+                            <input type='text' hidden name='yelp_id' value='{{ restaurant.yelp_id }}'>
+                            <button class='btn btn-default add-rest-btn'>Add</button>
+                        </form>
                     </div>
                 {% endif %}
             </div>
@@ -60,5 +61,6 @@
 <script>
     let idOfOptionToBold = '';
 </script>
+<script src='/static/js/restaurant-details.js'></script>
 
 {% endblock %}

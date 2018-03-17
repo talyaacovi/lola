@@ -206,9 +206,7 @@ def check_lists(rest_id, user_id):
     lsts_to_add = []
     for lst in user_lists:
         rest_ids = [x.rest_id for x in lst.list_items]
-        print rest_ids
-        print rest_id
         if rest_id not in rest_ids:
-            lsts_to_add.append(lst.name)
+            lsts_to_add.append((lst.name, lst.list_id))
 
     return lsts_to_add

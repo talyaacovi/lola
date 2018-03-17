@@ -390,6 +390,36 @@ def add_restaurant():
         return 'null'
 
 
+@app.route('/add-restaurant', methods=['POST'])
+def add_from_restaurant_details():
+    """Add restaurant to database and specific list of logged-in user."""
+
+    # get List ID and the Yelp ID of the restaurant the user wants to add.
+
+    lst_id = request.form.get('lst_id')
+    yelp_id = request.form.get('yelp_id')
+
+    # add_new_restaurant function queries the restaurants table for an entry
+    # with that Yelp ID and if it doesn't exist, creates it in table.
+    # it returns the Restaurant ID.
+
+    rest_id = add_new_restaurant(yelp_id)
+
+    # add_list_item function takes the Restaurant ID, List ID, and User ID
+    # and creates a new List Item if the user has not already added that item
+    # to their list.
+    # returns new ListItem object, or None
+
+    lst_item = add_list_item(rest_id, lst_id, session['user_id'])
+
+    if lst_item:
+
+        return jsonify(lst_item.to_dict())
+
+    else:
+        return 'null'
+
+
 @app.route('/delete-restaurant.json', methods=['POST'])
 def delete_restaurant_react():
     """Delete restaurant from specific list of logged-in user."""

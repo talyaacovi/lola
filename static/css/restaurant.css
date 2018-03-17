@@ -12,6 +12,14 @@ a:hover {
 }
 
 .add-rest {
-	float: right;
-	margin-top: 20px;
+	margin-bottom: 1%;
+}
+
+.add-rest select {
+	display: inline;
+	width: 20%;
+}
+
+.add-rest-btn {
+	display: inline;
 }
