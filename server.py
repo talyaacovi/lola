@@ -394,21 +394,11 @@ def add_restaurant():
 def add_from_restaurant_details():
     """Add restaurant to database and specific list of logged-in user."""
 
-    # get List ID and the Yelp ID of the restaurant the user wants to add.
-
-    lst_id = request.form.get('lst_id')
+    lst_id = request.form.get('list_id')
+    print lst_id
     yelp_id = request.form.get('yelp_id')
 
-    # add_new_restaurant function queries the restaurants table for an entry
-    # with that Yelp ID and if it doesn't exist, creates it in table.
-    # it returns the Restaurant ID.
-
-    rest_id = add_new_restaurant(yelp_id)
-
-    # add_list_item function takes the Restaurant ID, List ID, and User ID
-    # and creates a new List Item if the user has not already added that item
-    # to their list.
-    # returns new ListItem object, or None
+    rest_id = Restaurant.query.filter(Restaurant.yelp_id == yelp_id).first().rest_id
 
     lst_item = add_list_item(rest_id, lst_id, session['user_id'])
 
@@ -541,13 +531,14 @@ def show_restaurant_details(yelp_id):
         results = business(yelp_id)
         photos = results['photos']
 
-    display_btn = restaurant.city.upper() == session.get('city') and restaurant.state == session.get('state')
-    lsts_to_add = check_lists(restaurant.rest_id, session.get('user_id'))
-
-    print lsts_to_add
+    check_city = restaurant.city.upper() == session.get('city') and restaurant.state == session.get('state')
+    
+    lsts_to_add = []
+    if check_city:
+        # fix so only displays lists with <20 items
+        lsts_to_add = check_lists(restaurant.rest_id, session.get('user_id'))
 
     return render_template('restaurant.html', ranking=ranking,
-                                              display_btn=display_btn, 
                                               photos=photos, 
                                               restaurant=restaurant, 
                                               ig_loc_id=restaurant.ig_loc_id,

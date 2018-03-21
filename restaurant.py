@@ -201,12 +201,11 @@ def check_lists(rest_id, user_id):
     """Get lists for a user that don't already contain specific restaurant."""
 
     user_lists = User.query.filter(User.user_id == user_id).first().lists
-    # user_lists = User.query.filter(User.user_id == 33).first().lists
 
     lsts_to_add = []
     for lst in user_lists:
         rest_ids = [x.rest_id for x in lst.list_items]
-        if rest_id not in rest_ids:
+        if rest_id not in rest_ids and len(rest_ids) < 20:
             lsts_to_add.append((lst.name, lst.list_id))
 
     return lsts_to_add

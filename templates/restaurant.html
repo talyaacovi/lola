@@ -22,13 +22,13 @@
                         <li><em>See photos on <a href="https://www.instagram.com/explore/locations/{{ ig_loc_id }}/" target="_blank">Instagram</a></em></li>
                     {% endif %}
                 </ul>
-                {% if display_btn %}
+                {% if lsts_to_add %}
                     <div class='add-rest'>
                         <form id='add-from-details' action='/add-restaurant' method='POST'>
                             <label>Add to a list: </label>
-                            <select class="form-control">
+                            <select id='list-id' class='form-control'>
                             {% for lst in lsts_to_add %}
-                                <option data-list-id='{{ lst[1] }}'>{{ lst[0].title() }}</option>
+                                <option value='{{ lst[1] }}'>{{ lst[0].title() }}</option>
                             {% endfor %}
                             </select>
                             <input type='text' hidden name='yelp_id' value='{{ restaurant.yelp_id }}'>
