@@ -403,7 +403,6 @@ def add_from_restaurant_details():
     lst_item = add_list_item(rest_id, lst_id, session['user_id'])
 
     if lst_item:
-
         return jsonify(lst_item.to_dict())
 
     else:
